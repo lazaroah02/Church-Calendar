@@ -16,6 +16,24 @@ files = [
 tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
 
 [[package]]
+name = "dj-rest-auth"
+version = "7.0.1"
+description = "Authentication and Registration in Django Rest Framework"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "dj-rest-auth-7.0.1.tar.gz", hash = "sha256:3f8c744cbcf05355ff4bcbef0c8a63645da38e29a0fdef3c3332d4aced52fb90"},
+]
+
+[package.dependencies]
+Django = ">=4.2,<6.0"
+djangorestframework = ">=3.13.0"
+
+[package.extras]
+with-social = ["django-allauth[socialaccount] (>=64.0.0)"]
+
+[[package]]
 name = "django"
 version = "5.2.1"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
@@ -35,6 +53,28 @@ tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
+
+[[package]]
+name = "django-allauth"
+version = "65.8.0"
+description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication."
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "django_allauth-65.8.0.tar.gz", hash = "sha256:9da589d99d412740629333a01865a90c95c97e0fae0cde789aa45a8fda90e83b"},
+]
+
+[package.dependencies]
+asgiref = ">=3.8.1"
+Django = ">=4.2.16"
+
+[package.extras]
+mfa = ["fido2 (>=1.1.2)", "qrcode (>=7.0.0)"]
+openid = ["python3-openid (>=3.0.8)"]
+saml = ["python3-saml (>=1.15.0,<2.0.0)"]
+socialaccount = ["pyjwt[crypto] (>=1.7)", "requests (>=2.0.0)", "requests-oauthlib (>=0.3.0)"]
+steam = ["python3-openid (>=3.0.8)"]
 
 [[package]]
 name = "django-filter"
@@ -114,4 +154,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "ef156f869605e55d3084fadf70ecf97e90436d7cb013c1699778b98efa3436b3"
+content-hash = "446990d3ef743ee1ad03196a67005fe724c253a802931e3ca153e8c96df31c21"
