@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # Local Apps
     'events',
+    'authentication',
     
     # Third-party Apps
     'rest_framework',
@@ -129,6 +130,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'authentication.CustomUser'
 
 # REST Framework settings
 REST_FRAMEWORK = {
@@ -138,5 +140,11 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ]
+        'rest_framework.authentication.SessionAuthentication'
+    ],
+
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'authentication.serializers.CustomUserDetailsSerializer',
 }
