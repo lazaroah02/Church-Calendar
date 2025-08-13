@@ -1,10 +1,10 @@
 from django.urls import path
-from events.views import Events
+from liga.views import Ligas
 from rest_framework import routers
 
 router = routers.SimpleRouter()
 
-router.register("", Events, basename = "events")
+router.register("", Ligas, basename="ligas")
 
 urlpatterns = []
 

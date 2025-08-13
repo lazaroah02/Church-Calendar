@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from events.models import Event
-from events.serializers import EventsSerializer
+from event.models import Event
+from event.serializers import EventsSerializer
 
 
 class Events(viewsets.ReadOnlyModelViewSet):
@@ -9,4 +9,3 @@ class Events(viewsets.ReadOnlyModelViewSet):
     '''
     queryset = Event.objects.all()
     serializer_class = EventsSerializer
-
