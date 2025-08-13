@@ -6,4 +6,5 @@ urlpatterns = [
     path('api/events/', include('event.urls')),
     path('api/ligas/', include('liga.urls')),
     path('api/auth/', include('authentication.urls')),
+    path('api/users/', include('user.urls')),
 ]

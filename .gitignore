@@ -3,5 +3,8 @@ env
 db.sqlite3
 
 # backend media
-services/backend/store/media
-services/backend/store/staticfiles
+backend/app/media
+backend/app/staticfiles
+
+# backend logs
+backend/app/logs

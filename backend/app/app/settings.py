@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,11 +44,13 @@ INSTALLED_APPS = [
     'event',
     'authentication',
     'liga',
+    'user',
 
     # Third-party Apps
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -153,6 +156,178 @@ REST_FRAMEWORK = {
 
 }
 
-REST_AUTH_SERIALIZERS = {
+REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'authentication.serializers.CustomUserDetailsSerializer',
+}
+
+
+# Logging configuration
+LOG_DIR = Path(BASE_DIR) / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+
+apps = [
+    'event',
+    'authentication',
+    'liga',
+    'user',
+]
+
+# Create individual log folders per app
+for app in apps:
+    (LOG_DIR / app).mkdir(exist_ok=True)
+
+IS_TESTING = 'test' in sys.argv
+
+if IS_TESTING:
+    # In test mode, suppress all file logging
+    null_handler_config = {
+        "class": "logging.NullHandler",
+    }
+
+    handlers = {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "level": "CRITICAL",  # Only critical errors will be shown in console during tests
+        },
+        "debug_file": null_handler_config,
+        "info_file": null_handler_config,
+        "warning_file": null_handler_config,
+        "error_file": null_handler_config,
+    }
+
+    for app in apps:
+        handlers[f"{app}_debug"] = null_handler_config
+        handlers[f"{app}_info"] = null_handler_config
+        handlers[f"{app}_warning"] = null_handler_config
+        handlers[f"{app}_error"] = null_handler_config
+
+else:
+    # Handlers for development and production
+    handlers = {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "level": "DEBUG",
+        },
+        "debug_file": {
+            "class": "logging.FileHandler",
+            "filename": LOG_DIR / "debug.log",
+            "formatter": "verbose",
+            "level": "DEBUG",
+        },
+        "info_file": {
+            "class": "logging.FileHandler",
+            "filename": LOG_DIR / "info.log",
+            "formatter": "verbose",
+            "level": "INFO",
+        },
+        "warning_file": {
+            "class": "logging.FileHandler",
+            "filename": LOG_DIR / "warning.log",
+            "formatter": "verbose",
+            "level": "WARNING",
+        },
+        "error_file": {
+            "class": "logging.FileHandler",
+            "filename": LOG_DIR / "error.log",
+            "formatter": "verbose",
+            "level": "ERROR",
+        },
+        **{
+            f"{app}_debug": {
+                "class": "logging.FileHandler",
+                "filename": LOG_DIR / app / "debug.log",
+                "formatter": "verbose",
+                "level": "DEBUG",
+            }
+            for app in apps
+        },
+        **{
+            f"{app}_info": {
+                "class": "logging.FileHandler",
+                "filename": LOG_DIR / app / "info.log",
+                "formatter": "verbose",
+                "level": "INFO",
+            }
+            for app in apps
+        },
+        **{
+            f"{app}_warning": {
+                "class": "logging.FileHandler",
+                "filename": LOG_DIR / app / "warning.log",
+                "formatter": "verbose",
+                "level": "WARNING",
+            }
+            for app in apps
+        },
+        **{
+            f"{app}_error": {
+                "class": "logging.FileHandler",
+                "filename": LOG_DIR / app / "error.log",
+                "formatter": "verbose",
+                "level": "ERROR",
+            }
+            for app in apps
+        },
+    }
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "[{levelname}] {message}",
+            "style": "{",
+        },
+    },
+
+    "handlers": handlers,
+
+    "loggers": {
+        # Default Django error logging
+        "django": {
+            "handlers": ["console", "error_file"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+        # Logs errors from HTTP requests (e.g., 500 errors)
+        "django.request": {
+            "handlers": ["console", "error_file"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        # Handles HTTP request logs like "GET /path"
+        "django.server": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # General system logger
+        "system_logger": {
+            "handlers": ["console", "debug_file", "info_file", "warning_file", "error_file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        # One logger per application
+        **{
+            app: {
+                "handlers": [
+                    "console",
+                    f"{app}_debug",
+                    f"{app}_info",
+                    f"{app}_warning",
+                    f"{app}_error",
+                ],
+                "level": "DEBUG",
+                "propagate": False,
+            }
+            for app in apps
+        }
+    },
 }

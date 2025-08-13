@@ -4,8 +4,16 @@ from django.contrib.auth import get_user_model
 
 
 class CustomUserDetailsSerializer(UserDetailsSerializer):
+    is_staff = serializers.BooleanField(read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
+    is_superuser = serializers.BooleanField(read_only=True)
+    username = serializers.CharField(read_only=True)
+    updated_at = serializers.DateField(read_only=True)
+    created_at = serializers.DateField(read_only=True)
+
     class Meta:
         model = get_user_model()
-        fields = ('id', 'email', 'username', 'first_name', 'last_name',
-                  'description', 'phone_number', 'position')
-
+        fields = ('id', 'email', 'username', 'first_name', 'ligas',
+                  'last_name', 'description', 'phone_number',
+                  'profile_img', 'is_active', 'is_staff',
+                  'is_superuser', 'created_at', 'updated_at')
