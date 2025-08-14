@@ -1,7 +1,8 @@
 from rest_framework import viewsets
 from event.models import Event
-from event.serializers import EventsSerializer
+from event.serializers import EventsSerializer, ManageEventsSerializer
 from django.db.models import Q
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 class Events(viewsets.ReadOnlyModelViewSet):
@@ -15,12 +16,6 @@ class Events(viewsets.ReadOnlyModelViewSet):
         if not self.request.user.is_authenticated:
             return Event.objects.filter(visible=True, is_public=True)
 
-        # if the user is part of the lead team, return all events
-        is_staff = self.request.user.is_staff
-        is_superuser = self.request.user.is_superuser
-        if is_staff or is_superuser:
-            return Event.objects.all()
-
         # return events visibles and public or
         # organized by one of the ligas that he belongs to.
         return Event.objects.filter(
@@ -28,3 +23,13 @@ class Events(viewsets.ReadOnlyModelViewSet):
                 Q(is_public=True) | Q(ligas__in=self.request.user.ligas.all())
                 )
             ).distinct()
+
+
+class ManageEvents(viewsets.ModelViewSet):
+    '''
+    A viewset for managing events.
+    '''
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    serializer_class = ManageEventsSerializer
+    queryset = Event.objects.all()
+
