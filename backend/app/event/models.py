@@ -5,7 +5,7 @@ from liga.models import Liga
 
 class Event(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True, default="")
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255)
@@ -16,10 +16,9 @@ class Event(models.Model):
         null=True,
         blank=True
     )
-    liga = models.ForeignKey(
-        Liga, on_delete=models.CASCADE, null=True, blank=True
-        )
+    ligas = models.ManyToManyField(Liga, blank=True)
     is_public = models.BooleanField(default=True)
+    visible = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -8,8 +8,8 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     is_active = serializers.BooleanField(read_only=True)
     is_superuser = serializers.BooleanField(read_only=True)
     username = serializers.CharField(read_only=True)
-    updated_at = serializers.DateField(read_only=True)
-    created_at = serializers.DateField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = get_user_model()
