@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class LigaConfig(AppConfig):
+class GroupConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'liga'
+    name = 'group'

@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     # Local Apps
     'event',
     'authentication',
-    'liga',
+    'group',
     'user',
 
     # Third-party Apps
@@ -168,7 +168,7 @@ LOG_DIR.mkdir(exist_ok=True)
 apps = [
     'event',
     'authentication',
-    'liga',
+    'group',
     'user',
 ]
 

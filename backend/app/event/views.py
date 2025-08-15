@@ -17,10 +17,10 @@ class Events(viewsets.ReadOnlyModelViewSet):
             return Event.objects.filter(visible=True, is_public=True)
 
         # return events visibles and public or
-        # organized by one of the ligas that he belongs to.
+        # organized by one of the groups that he belongs to.
         return Event.objects.filter(
             Q(visible=True) & (
-                Q(is_public=True) | Q(ligas__in=self.request.user.ligas.all())
+                Q(is_public=True) | Q(groups__in=self.request.user.groups.all())
                 )
             ).distinct()
 

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from liga.models import Liga
+from group.models import Group
 
 EVENT_IMAGES_FOLDER = 'event_images'
 
@@ -26,7 +26,7 @@ class Event(models.Model):
         null=True,
         blank=True
     )
-    ligas = models.ManyToManyField(Liga, blank=True)
+    groups = models.ManyToManyField(Group, blank=True)
     is_public = models.BooleanField(default=True)
     visible = models.BooleanField(default=True)
     is_canceled = models.BooleanField(default=False)

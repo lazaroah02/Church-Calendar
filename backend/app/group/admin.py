@@ -1,6 +1,6 @@
 from django.contrib import admin
-from liga.models import Liga
+from group.models import Group
 
 # Register your models here.
 
-admin.site.register(Liga)
+admin.site.register(Group)

@@ -1,13 +1,13 @@
 from django.db import models
 
-LIGAS_IMAGES_FILDER = 'ligas_images'
+GROUPS_IMAGES_FILDER = 'groups_images'
 
 
-class Liga(models.Model):
+class Group(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
     img = models.ImageField(
-        upload_to=LIGAS_IMAGES_FILDER,
+        upload_to=GROUPS_IMAGES_FILDER,
         blank=True, null=True
         )
 

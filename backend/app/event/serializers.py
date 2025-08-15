@@ -14,7 +14,7 @@ class EventsSerializer(serializers.ModelSerializer):
             "description",
             "location",
             "created_by",
-            "ligas",
+            "groups",
             "is_public",
             "is_canceled",
             "visible",

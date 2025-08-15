@@ -13,7 +13,7 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'email', 'username', 'first_name', 'ligas',
+        fields = ('id', 'email', 'username', 'first_name', 'groups',
                   'last_name', 'description', 'phone_number',
                   'profile_img', 'is_active', 'is_staff',
                   'is_superuser', 'created_at', 'updated_at')
