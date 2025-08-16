@@ -3,6 +3,7 @@ from event.models import Event
 from event.serializers import EventsSerializer, ManageEventsSerializer
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from church_group.models import ChurchGroup, GENERAL_GROUP_NAME
 
 
 class Events(viewsets.ReadOnlyModelViewSet):
@@ -12,16 +13,19 @@ class Events(viewsets.ReadOnlyModelViewSet):
     serializer_class = EventsSerializer
 
     def get_queryset(self):
-        # if user is anonymous, return only public events
+        # if user is anonymous, return only events for group general
         if not self.request.user.is_authenticated:
-            return Event.objects.filter(visible=True, is_public=True)
-
-        # return events visibles and public or
-        # organized by one of the groups that he belongs to.
-        return Event.objects.filter(
-            Q(visible=True) & (
-                Q(is_public=True) | Q(groups__in=self.request.user.groups.all())
+            general_group = ChurchGroup.objects.get(name=GENERAL_GROUP_NAME)
+            return Event.objects.filter(
+                visible=True,
+                groups__in=[general_group]
                 )
+
+        # return events visibles and
+        # organized by one of the groups that the user belongs to.
+        return Event.objects.filter(
+            Q(visible=True) &
+            Q(groups__in=self.request.user.member_groups.all())
             ).distinct()
 
 
@@ -32,4 +36,3 @@ class ManageEvents(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
     serializer_class = ManageEventsSerializer
     queryset = Event.objects.all()
-

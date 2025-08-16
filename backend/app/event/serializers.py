@@ -15,7 +15,6 @@ class EventsSerializer(serializers.ModelSerializer):
             "location",
             "created_by",
             "groups",
-            "is_public",
             "is_canceled",
             "visible",
             "open_to_reservations",

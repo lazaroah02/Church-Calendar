@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from group.models import Group
+from church_group.models import ChurchGroup
 
 EVENT_IMAGES_FOLDER = 'event_images'
 
@@ -26,8 +26,7 @@ class Event(models.Model):
         null=True,
         blank=True
     )
-    groups = models.ManyToManyField(Group, blank=True)
-    is_public = models.BooleanField(default=True)
+    groups = models.ManyToManyField(ChurchGroup, blank=True)
     visible = models.BooleanField(default=True)
     is_canceled = models.BooleanField(default=False)
     open_to_reservations = models.BooleanField(default=True)

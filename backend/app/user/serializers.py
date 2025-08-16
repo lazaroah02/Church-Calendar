@@ -29,7 +29,7 @@ class UserManagmentSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'email', 'username', 'password', 'phone_number', 'description',
-            'first_name', 'last_name', 'profile_img', 'groups',
+            'full_name', 'profile_img', 'member_groups',
             'is_staff', 'is_superuser', 'is_active', 'updated_at', 'created_at'
         ]
 
