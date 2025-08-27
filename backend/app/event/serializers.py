@@ -32,12 +32,12 @@ class ManageEventsSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
 
-        if attrs['created_by'] is None:
+        if attrs.get('created_by') is None:
             attrs['created_by'] = self.context['request'].user
 
         attrs['last_edit_by'] = self.context['request'].user    
 
-        if attrs['start_time'] >= attrs['end_time']:
+        if attrs.get('start_time') and attrs.get('end_time') and attrs.get('start_time') >= attrs.get('end_time'):
             raise serializers.ValidationError("End time must be after start time.")
         return attrs
 
