@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -7,8 +7,12 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useSession } from '@/contexts/authContext';
+import { Link } from 'expo-router';
+import { navigate } from 'expo-router/build/global-state/routing';
 
 export default function TabTwoScreen() {
+  const {signOut} = useSession()
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -24,6 +28,11 @@ export default function TabTwoScreen() {
         <ThemedText type="title">Explore</ThemedText>
       </ThemedView>
       <ThemedText>This app includes example code to help you get started.</ThemedText>
+      <Link style = {{color:"red"}} href="/sign-in">Sign in</Link>
+      <Pressable onPress={() => {
+        signOut()
+        navigate("/sign-in")
+        }}><Text style={{color:"green"}}>Sign out</Text></Pressable>
       <Collapsible title="File-based routing">
         <ThemedText>
           This app has two screens:{' '}

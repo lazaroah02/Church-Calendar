@@ -3,14 +3,28 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
+import { SessionProvider, useSession } from '@/contexts/authContext';
+import { SplashScreenController } from './splash';
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+export default function Root() {
+  // Set up the auth context and render our layout inside of it.
+  return (
+    <SessionProvider>
+      <SplashScreenController />
+      <RootLayout />
+    </SessionProvider>
+  );
+}
+
+
+function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+  const { session } = useSession();
 
   if (!loaded) {
     // Async font loading only occurs in development.
@@ -18,12 +32,15 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <SafeAreaProvider>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Protected guard={!session}>
+          <Stack.Screen name="sign-in" options={{ headerShown: false }}/>
+        </Stack.Protected>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+      <StatusBar style={'auto'} />
+    </SafeAreaProvider>
   );
 }
