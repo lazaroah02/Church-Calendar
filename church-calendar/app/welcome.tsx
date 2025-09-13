@@ -41,14 +41,16 @@ export default function Welcome() {
         <Link
           href="/(tabs)/calendar"
           style={{
-            fontFamily: "InterRegular",
             fontSize: 14,
-            fontWeight: 400,
+            fontWeight: 500,
             opacity: 0.7,
             color:"#fff",
-            textShadowColor: "rgba(0, 0, 0, 0.8)",
-            textShadowOffset: { width: 1, height: 1 },
-            textShadowRadius: 1,
+            textShadowColor: "rgba(0, 0, 0, 0.25)",
+            textShadowOffset: { width: 0, height: 2 },
+            textShadowRadius: 4,
+            fontFamily: "LexendBold",
+            lineHeight: 15,
+            marginTop: 10,
           }}
         >
           Continuar como invitado
@@ -98,10 +100,11 @@ const styles = StyleSheet.create({
   },
   containerwelcomeMessage: {
     alignSelf: "center",
+    textAlign:"center",
     color: "#FFF",
-    fontFamily: "InterRegular",
-    fontSize: 20,
-    fontWeight: 900,
+    fontFamily: "LexendBold",
+    fontSize: 16,
+    fontWeight: 600,
     marginBottom: 10,
   },
   loginButton: {
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
     color: "#442525",
     fontSize: 18,
     fontWeight: "600",
-    fontFamily: "InterMedium",
+    fontFamily: "InterBold",
   },
   registerButton: {
     width: 350,
@@ -143,6 +146,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "600",
-    fontFamily: "InterMedium",
+    fontFamily: "InterBold",
   },
 });

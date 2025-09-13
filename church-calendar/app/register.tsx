@@ -7,7 +7,7 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
 import { useSession } from "@/contexts/authContext";
 import { Label } from "@react-navigation/elements";
@@ -19,10 +19,10 @@ export default function Register() {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
-  const onChange = (event, selectedDate: Date) => {
+  const onChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
     const currentDate = selectedDate;
     setShow(false);
-    setDate(currentDate);
+    if(currentDate) setDate(currentDate);
   };
 
   return (
@@ -57,7 +57,7 @@ export default function Register() {
         </View>
 
         <View>
-          <Label style={styles.label}>Fecha de Nacimiento</Label>
+          <Label style={styles.label} onPress={() => setShow(true)}>Fecha de Nacimiento</Label>
           <Pressable onPress={() => setShow(true)}>
             <Text style={[styles.input, { textAlignVertical: "center" }]}>
               {date.toLocaleDateString()}
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "#fff",
     width: 330,
-    height: 50,
+    height: 45,
     borderRadius: 10,
     paddingHorizontal: 20,
     marginVertical: 10,
@@ -142,9 +142,13 @@ const styles = StyleSheet.create({
   },
   label: {
     alignSelf: "flex-start",
+    color: "#000",
+    fontFamily: "InterMedium",
+    fontSize: 16,
+    fontWeight: 500
   },
   registerButton: {
-    width: 350,
+    width: 330,
     height: 55,
     backgroundColor: "#AD5A00",
     display: "flex",
