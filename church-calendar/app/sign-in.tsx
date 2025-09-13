@@ -1,25 +1,138 @@
-import { router, Link } from 'expo-router';
-import { StatusBar, Text, View } from 'react-native';
+import { router, Link } from "expo-router";
+import {
+  StatusBar,
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  TextInput,
+} from "react-native";
+import { Image } from "expo-image";
 
-import { useSession } from '@/contexts/authContext';
+import { useSession } from "@/contexts/authContext";
 
 export default function SignIn() {
   const { signIn } = useSession();
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Hola</Text>
-      <Text
-      style={{color:"red"}}
-        onPress={() => {
-          signIn();
-          // Navigate after signing in. You may want to tweak this to ensure sign-in is
-          // successful before navigating.
-          router.replace('/');
-        }}>
-        Sign In
-      </Text>
-      <Link href="/(tabs)">Acceder como invitado</Link>
-      <StatusBar barStyle={'dark-content'}/>
+    <View style={{ flex: 1 }}>
+      <View style={{ height: 350, justifyContent: "center", alignItems: "center" }}>
+        <Image
+          source={require("@/assets/images/Logo.png")}
+          style={styles.logo}
+        />
+        <Text style = {styles.title}>La Resurrección Calendar</Text>
+      </View>
+      <View style={styles.form}>
+        <Text style={styles.formTitle}>Iniciar Sesión</Text>
+        <TextInput placeholder="Usuario" style={styles.input} />
+        <TextInput
+          placeholder="Contraseña"
+          secureTextEntry
+          style={styles.input}
+        />
+        <Link
+          href="/"
+          style={{
+            alignSelf: "flex-end",
+            marginRight: 10,
+            fontFamily: "InterRegular",
+            fontSize: 15,
+            fontWeight: 400,
+            opacity: 0.7,
+          }}
+        >
+          Olvidaste tu contraseña?
+        </Link>
+
+        <Pressable
+          style={styles.loginButton}
+          onPress={() => {
+            signIn();
+            router.replace("/");
+          }}
+        >
+          <Text style={styles.logginButtonText}>Iniciar Sesión</Text>
+        </Pressable>
+        <Link
+          href="/(tabs)"
+          style={{
+            fontFamily: "InterRegular",
+            fontSize: 15,
+            fontWeight: 400,
+            opacity: 0.7,
+          }}
+        >
+          Acceder como invitado
+        </Link>
+      </View>
+      <StatusBar barStyle={"dark-content"} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  logo: {
+    width: 122,
+    height: 174
+  },
+  title:{
+    width: 200,
+    textAlign: "center",
+    color: "#442525",
+    fontFamily: "LexendBold",
+    fontSize: 25,
+    fontWeight: 700,
+  },
+  form: {
+    flex: 1,
+    display: "flex",
+    gap: 10,
+    alignItems: "center",
+    backgroundColor: "rgba(236, 161, 0, 1)",
+    padding: 20,
+    borderTopRightRadius: 150,
+    borderTopLeftRadius: 50,
+  },
+  formTitle: {
+    alignSelf: "flex-start",
+    color: "#FFF",
+    fontFamily: "InterMedium",
+    fontSize: 35,
+    fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  input: {
+    backgroundColor: "#fff",
+    width: 341,
+    height: 56,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+    color: "#000",
+    fontFamily: "InterRegular",
+    fontSize: 18,
+    fontWeight: 400,
+  },
+  loginButton: {
+    width: 360,
+    height: 63,
+    backgroundColor: "#fff",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 100,
+    marginVertical: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  logginButtonText: {
+    color: "#442525",
+    fontSize: 20,
+    fontWeight: "600",
+    fontFamily: "InterMedium",
+  },
+});

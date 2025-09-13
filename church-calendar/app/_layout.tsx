@@ -22,7 +22,9 @@ export default function Root() {
 
 function RootLayout() {
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    InterRegular: require('../assets/fonts/Inter-Regular.ttf'),
+    InterMedium: require('../assets/fonts/Inter-Medium.ttf'),
+    LexendBold: require('../assets/fonts/Lexend-Bold.ttf'),
   });
   const { session } = useSession();
 
