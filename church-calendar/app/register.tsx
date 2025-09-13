@@ -1,4 +1,4 @@
-import { router, Link } from "expo-router";
+import { router } from "expo-router";
 import {
   StatusBar,
   Text,
@@ -7,46 +7,73 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { useSession } from "@/contexts/authContext";
 import { Label } from "@react-navigation/elements";
+import { useState } from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function Register() {
   const { signIn } = useSession();
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate: Date) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
   return (
-    <View style={{ flex: 1, backgroundColor: "rgba(236, 161, 0, 1)" }}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+      enableOnAndroid
+      extraScrollHeight={20}
+      style={{ backgroundColor: "rgba(236, 161, 0, 1)" }}
+    >
       <View style={styles.form}>
         <Text style={styles.formTitle}>Crear Cuenta</Text>
+
         <View>
           <Label style={styles.label}>Nombre Completo</Label>
-          <TextInput
-            style={styles.input}
-          />
+          <TextInput style={styles.input} />
         </View>
+
         <View>
-        <Label style={styles.label}>Número de Teléfono</Label>
-        <TextInput style={styles.input} />
+          <Label style={styles.label}>Número de Teléfono</Label>
+          <TextInput style={styles.input} keyboardType="phone-pad" />
         </View>
+
         <View>
           <Label style={styles.label}>Contraseña</Label>
-          <TextInput
-            secureTextEntry
-            style={styles.input}
-          />
+          <TextInput secureTextEntry style={styles.input} />
         </View>
+
         <View>
           <Label style={styles.label}>Repetir Contraseña</Label>
-          <TextInput
-            secureTextEntry
-            style={styles.input}
-          />
+          <TextInput secureTextEntry style={styles.input} />
         </View>
+
         <View>
           <Label style={styles.label}>Fecha de Nacimiento</Label>
-          <TextInput
-            style={styles.input}
-          />
+          <Pressable onPress={() => setShow(true)}>
+            <Text style={[styles.input, { textAlignVertical: "center" }]}>
+              {date.toLocaleDateString()}
+            </Text>
+          </Pressable>
+          {show && (
+            <DateTimePicker
+              testID="datePicker"
+              value={date}
+              mode="date"
+              is24Hour={true}
+              onChange={onChange}
+            />
+          )}
         </View>
+
         <Pressable
           style={styles.registerButton}
           onPress={() => {
@@ -57,23 +84,24 @@ export default function Register() {
           <Text style={styles.registerButtonText}>Crear Cuenta</Text>
         </Pressable>
       </View>
+
       <StatusBar barStyle={"dark-content"} />
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   logo: {
     width: 80,
-    height: 130
+    height: 130,
   },
-  title:{
+  title: {
     width: 200,
     textAlign: "center",
     color: "#442525",
     fontFamily: "LexendBold",
     fontSize: 20,
-    fontWeight: 700,
+    fontWeight: "700",
   },
   form: {
     flex: 1,
@@ -82,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#EAEAEA",
     padding: 30,
-    marginTop:50,
+    marginTop: 50,
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     shadowColor: "#000",
@@ -96,7 +124,7 @@ const styles = StyleSheet.create({
     color: "#442525",
     fontFamily: "InterBold",
     fontSize: 25,
-    fontWeight: 900,
+    fontWeight: "900",
     marginTop: 5,
     marginBottom: 10,
   },
@@ -110,10 +138,10 @@ const styles = StyleSheet.create({
     color: "#000",
     fontFamily: "InterRegular",
     fontSize: 16,
-    fontWeight: 400,
+    fontWeight: "400",
   },
-  label:{
-    alignSelf:"flex-start"
+  label: {
+    alignSelf: "flex-start",
   },
   registerButton: {
     width: 350,

@@ -8,28 +8,48 @@ import {
   TextInput,
 } from "react-native";
 import { Image } from "expo-image";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useSession } from "@/contexts/authContext";
 
 export default function SignIn() {
   const { signIn } = useSession();
+
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ height: 350, justifyContent: "center", alignItems: "center" }}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+      enableOnAndroid
+      extraScrollHeight={20} // opcional: espacio extra al enfocar inputs
+    >
+      <View
+        style={{
+          height: 350,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Image
           source={require("@/assets/images/Logo.png")}
           style={styles.logo}
         />
-        <Text style = {styles.title}>La Resurrección Calendar</Text>
+        <Text style={styles.title}>La Resurrección Calendar</Text>
       </View>
+
       <View style={styles.form}>
         <Text style={styles.formTitle}>Iniciar Sesión</Text>
-        <TextInput placeholder="Nímero de Teléfono" style={styles.input} />
+
+        <TextInput
+          placeholder="Número de Teléfono"
+          keyboardType="phone-pad"
+          style={styles.input}
+        />
         <TextInput
           placeholder="Contraseña"
           secureTextEntry
           style={styles.input}
         />
+
         <Link
           href="/(tabs)/calendar"
           style={{
@@ -39,11 +59,11 @@ export default function SignIn() {
             marginBottom: 10,
             fontFamily: "InterRegular",
             fontSize: 14,
-            fontWeight: 400,
+            fontWeight: "400",
             opacity: 0.7,
           }}
         >
-          Olvidaste tu contraseña?
+          ¿Olvidaste tu contraseña?
         </Link>
 
         <Pressable
@@ -56,23 +76,24 @@ export default function SignIn() {
           <Text style={styles.logginButtonText}>Iniciar Sesión</Text>
         </Pressable>
       </View>
+
       <StatusBar barStyle={"dark-content"} />
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   logo: {
     width: 80,
-    height: 130
+    height: 130,
   },
-  title:{
+  title: {
     width: 200,
     textAlign: "center",
     color: "#442525",
     fontFamily: "LexendBold",
     fontSize: 20,
-    fontWeight: 700,
+    fontWeight: "700",
   },
   form: {
     flex: 1,
@@ -94,7 +115,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontFamily: "InterBold",
     fontSize: 25,
-    fontWeight: 900,
+    fontWeight: "900",
     marginTop: 20,
     marginBottom: 10,
   },
@@ -108,7 +129,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontFamily: "InterRegular",
     fontSize: 16,
-    fontWeight: 400,
+    fontWeight: "400",
   },
   loginButton: {
     width: 350,
