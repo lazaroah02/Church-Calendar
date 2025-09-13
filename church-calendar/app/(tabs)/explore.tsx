@@ -28,10 +28,10 @@ export default function TabTwoScreen() {
         <ThemedText type="title">Explore</ThemedText>
       </ThemedView>
       <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Link style = {{color:"red"}} href="/sign-in">Sign in</Link>
+      <Link style = {{color:"red"}} href="/welcome">Sign in</Link>
       <Pressable onPress={() => {
         signOut()
-        navigate("/sign-in")
+        navigate("/welcome")
         }}><Text style={{color:"green"}}>Sign out</Text></Pressable>
       <Collapsible title="File-based routing">
         <ThemedText>

@@ -24,6 +24,7 @@ function RootLayout() {
   const [loaded] = useFonts({
     InterRegular: require('../assets/fonts/Inter-Regular.ttf'),
     InterMedium: require('../assets/fonts/Inter-Medium.ttf'),
+    InterBold: require('../assets/fonts/Inter-Bold.ttf'),
     LexendBold: require('../assets/fonts/Lexend-Bold.ttf'),
   });
   const { session } = useSession();
@@ -37,9 +38,11 @@ function RootLayout() {
     <SafeAreaProvider>
       <Stack>
         <Stack.Protected guard={!session}>
-          <Stack.Screen name="sign-in" options={{ headerShown: false }}/>
+          <Stack.Screen name="welcome" options={{ headerShown: false }}/>
         </Stack.Protected>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
+          <Stack.Screen name="sign-in" options={{ headerShown: false }}/>
+        <Stack.Screen name="register" options={{ headerShown: false }}/>
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style={'auto'} />

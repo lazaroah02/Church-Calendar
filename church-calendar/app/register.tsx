@@ -7,53 +7,54 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
-import { Image } from "expo-image";
 
 import { useSession } from "@/contexts/authContext";
+import { Label } from "@react-navigation/elements";
 
-export default function SignIn() {
+export default function Register() {
   const { signIn } = useSession();
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ height: 350, justifyContent: "center", alignItems: "center" }}>
-        <Image
-          source={require("@/assets/images/Logo.png")}
-          style={styles.logo}
-        />
-        <Text style = {styles.title}>La Resurrección Calendar</Text>
-      </View>
+    <View style={{ flex: 1, backgroundColor: "rgba(236, 161, 0, 1)" }}>
       <View style={styles.form}>
-        <Text style={styles.formTitle}>Iniciar Sesión</Text>
-        <TextInput placeholder="Nímero de Teléfono" style={styles.input} />
-        <TextInput
-          placeholder="Contraseña"
-          secureTextEntry
-          style={styles.input}
-        />
-        <Link
-          href="/"
-          style={{
-            alignSelf: "flex-end",
-            marginRight: 10,
-            marginTop: -10,
-            marginBottom: 10,
-            fontFamily: "InterRegular",
-            fontSize: 14,
-            fontWeight: 400,
-            opacity: 0.7,
-          }}
-        >
-          Olvidaste tu contraseña?
-        </Link>
-
+        <Text style={styles.formTitle}>Crear Cuenta</Text>
+        <View>
+          <Label style={styles.label}>Nombre Completo</Label>
+          <TextInput
+            style={styles.input}
+          />
+        </View>
+        <View>
+        <Label style={styles.label}>Número de Teléfono</Label>
+        <TextInput style={styles.input} />
+        </View>
+        <View>
+          <Label style={styles.label}>Contraseña</Label>
+          <TextInput
+            secureTextEntry
+            style={styles.input}
+          />
+        </View>
+        <View>
+          <Label style={styles.label}>Repetir Contraseña</Label>
+          <TextInput
+            secureTextEntry
+            style={styles.input}
+          />
+        </View>
+        <View>
+          <Label style={styles.label}>Fecha de Nacimiento</Label>
+          <TextInput
+            style={styles.input}
+          />
+        </View>
         <Pressable
-          style={styles.loginButton}
+          style={styles.registerButton}
           onPress={() => {
             signIn();
             router.replace("/");
           }}
         >
-          <Text style={styles.logginButtonText}>Iniciar Sesión</Text>
+          <Text style={styles.registerButtonText}>Crear Cuenta</Text>
         </Pressable>
       </View>
       <StatusBar barStyle={"dark-content"} />
@@ -79,9 +80,10 @@ const styles = StyleSheet.create({
     display: "flex",
     gap: 10,
     alignItems: "center",
-    backgroundColor: "rgba(236, 161, 0, 1)",
+    backgroundColor: "#EAEAEA",
     padding: 30,
-    borderTopRightRadius: 150,
+    marginTop:50,
+    borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     shadowColor: "#000",
     shadowOffset: { width: 4, height: 4 },
@@ -90,12 +92,12 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   formTitle: {
-    alignSelf: "flex-start",
-    color: "#FFF",
+    alignSelf: "center",
+    color: "#442525",
     fontFamily: "InterBold",
     fontSize: 25,
     fontWeight: 900,
-    marginTop: 20,
+    marginTop: 5,
     marginBottom: 10,
   },
   input: {
@@ -110,10 +112,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 400,
   },
-  loginButton: {
+  label:{
+    alignSelf:"flex-start"
+  },
+  registerButton: {
     width: 350,
     height: 55,
-    backgroundColor: "#fff",
+    backgroundColor: "#AD5A00",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -125,8 +130,8 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
   },
-  logginButtonText: {
-    color: "#442525",
+  registerButtonText: {
+    color: "#fff",
     fontSize: 18,
     fontWeight: "600",
     fontFamily: "InterMedium",
