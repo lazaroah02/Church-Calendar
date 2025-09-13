@@ -39,7 +39,7 @@ export default function Welcome() {
           <Text style={styles.registerButtonText}>Crear Cuenta</Text>
         </Pressable>
         <Link
-          href="/(tabs)"
+          href="/(tabs)/calendar"
           style={{
             fontFamily: "InterRegular",
             fontSize: 14,

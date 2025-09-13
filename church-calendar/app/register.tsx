@@ -51,7 +51,7 @@ export default function Register() {
           style={styles.registerButton}
           onPress={() => {
             signIn();
-            router.replace("/");
+            router.replace("/(tabs)/calendar");
           }}
         >
           <Text style={styles.registerButtonText}>Crear Cuenta</Text>

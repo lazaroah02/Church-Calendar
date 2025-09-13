@@ -31,7 +31,7 @@ export default function SignIn() {
           style={styles.input}
         />
         <Link
-          href="/"
+          href="/(tabs)/calendar"
           style={{
             alignSelf: "flex-end",
             marginRight: 10,
@@ -50,7 +50,7 @@ export default function SignIn() {
           style={styles.loginButton}
           onPress={() => {
             signIn();
-            router.replace("/");
+            router.replace("/(tabs)/calendar");
           }}
         >
           <Text style={styles.logginButtonText}>Iniciar Sesión</Text>
