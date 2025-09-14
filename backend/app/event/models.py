@@ -37,6 +37,9 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ['start_time']
+
 
 class Reservation(models.Model):
     event = models.ForeignKey(
