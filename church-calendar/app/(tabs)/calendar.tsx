@@ -1,18 +1,94 @@
 import { UserTopBar } from "@/components/UserTopBar";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { useMemo, useRef } from "react";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { useMemo, useRef, useState } from "react";
+import {
+  Calendar as CalendarComponent,
+  DateData,
+  LocaleConfig,
+  CalendarUtils,
+} from "react-native-calendars";
+
+LocaleConfig.locales["es"] = {
+  monthNames: [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ],
+  monthNamesShort: [
+    "Ene",
+    "Feb",
+    "Marz",
+    "Abril",
+    "May",
+    "Jun",
+    "Jul",
+    "Agos",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dic",
+  ],
+  dayNames: [
+    "Domingo",
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+  ],
+  dayNamesShort: ["D", "L", "M", "M", "J", "V", "S"],
+  today: "Aujourd'hui",
+};
+
+LocaleConfig.defaultLocale = "es";
 
 export default function Calendar() {
   const sheetRef = useRef<BottomSheet>(null);
+  const [selectedDay, setSelectedDay] = useState<DateData>();
+  const snapPoints = useMemo(() => ["45%", "95%"], []);
+  const today = CalendarUtils.getCalendarDateString(new Date());
 
-  const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
   return (
     <SafeAreaView style={styles.container}>
       <UserTopBar />
-      <Text>Calendar</Text>
+      <CalendarComponent
+        firstDay={1}
+        dayComponent={(date) => {
+          return (
+            <Pressable
+              onPress={() => {
+                setSelectedDay(date.date);
+              }}
+              disabled={date.state === "disabled"}
+              style={[
+                date.state === "disabled" && { opacity: 0.5 },
+                date.date?.dateString === today && {
+                  backgroundColor: "blue",
+                },
+                date.date?.dateString === selectedDay?.dateString && {
+                  backgroundColor: "red",
+                },
+                {width:30, height:30, justifyContent:"center", alignItems:"center"}
+              ]}
+            >
+              <Text>{date.date?.day}</Text>
+            </Pressable>
+          );
+        }}
+      />
       <BottomSheet ref={sheetRef} index={1} snapPoints={snapPoints}>
         <BottomSheetView style={styles.content}>
           <Text style={styles.title}>Martes 9 de Septiembre, 2025</Text>
