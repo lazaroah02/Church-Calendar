@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   formTitle: {
     alignSelf: "center",
     color: "#442525",
-    fontFamily: "InterBold",
+    fontFamily: "InterVariable",
     fontSize: 25,
     fontWeight: "900",
     marginTop: 5,
@@ -136,16 +136,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginVertical: 10,
     color: "#000",
-    fontFamily: "InterRegular",
+    fontFamily: "InterVariable",
     fontSize: 16,
     fontWeight: "400",
   },
   label: {
     alignSelf: "flex-start",
     color: "#000",
-    fontFamily: "InterMedium",
+    fontFamily: "InterVariable",
     fontSize: 16,
-    fontWeight: 500
+    fontWeight: "600",
+    opacity:0.8
   },
   registerButton: {
     width: 330,
@@ -166,6 +167,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "600",
-    fontFamily: "InterMedium",
+    fontFamily: "InterVariable",
   },
 });

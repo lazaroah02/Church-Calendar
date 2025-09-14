@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   containerTitle: {
     alignSelf: "center",
     color: "#FFF",
-    fontFamily: "InterBold",
+    fontFamily: "InterVariable",
     fontSize: 35,
     fontWeight: 900,
     marginTop: 20,
@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
   logginButtonText: {
     color: "#442525",
     fontSize: 18,
-    fontWeight: "600",
-    fontFamily: "InterBold",
+    fontWeight: "bold",
+    fontFamily: "InterVariable",
   },
   registerButton: {
     width: 350,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   registerButtonText: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "600",
-    fontFamily: "InterBold",
+    fontWeight: "bold",
+    fontFamily: "InterVariable",
   },
 });

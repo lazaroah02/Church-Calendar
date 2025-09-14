@@ -1,4 +1,3 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -6,8 +5,6 @@ import 'react-native-reanimated';
 import { SessionProvider, useSession } from '@/contexts/authContext';
 import { SplashScreenController } from './splash';
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function Root() {
   // Set up the auth context and render our layout inside of it.
@@ -22,9 +19,7 @@ export default function Root() {
 
 function RootLayout() {
   const [loaded] = useFonts({
-    InterRegular: require('../assets/fonts/Inter-Regular.ttf'),
-    InterMedium: require('../assets/fonts/Inter-Medium.ttf'),
-    InterBold: require('../assets/fonts/Inter-Bold.ttf'),
+    InterVariable: require('../assets/fonts/Inter-VariableFont.ttf'),
     LexendBold: require('../assets/fonts/Lexend-Bold.ttf'),
   });
   const { session } = useSession();

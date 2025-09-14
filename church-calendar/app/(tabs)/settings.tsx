@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     width: 200,
     textAlign: "center",
     color: "#000",
-    fontFamily: "InterBold",
+    fontFamily: "InterVariable",
     fontSize: 25,
     fontWeight: "700",
   },
@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     fontWeight: "500",
-    fontFamily: "InterMedium",
+    fontFamily: "InterVariable",
   },
 });
