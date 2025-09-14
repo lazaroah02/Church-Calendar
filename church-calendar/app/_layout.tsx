@@ -5,6 +5,7 @@ import 'react-native-reanimated';
 import { SessionProvider, useSession } from '@/contexts/authContext';
 import { SplashScreenController } from './splash';
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Root() {
   // Set up the auth context and render our layout inside of it.
@@ -30,17 +31,19 @@ function RootLayout() {
   }
 
   return (
+    <GestureHandlerRootView>
     <SafeAreaProvider>
       <Stack>
         <Stack.Protected guard={!session}>
-          <Stack.Screen name="welcome" options={{ headerShown: false }}/>
+          <Stack.Screen name="welcome" options={{ headerShown: false, animation: "fade" }}/>
         </Stack.Protected>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
-          <Stack.Screen name="sign-in" options={{ headerShown: false }}/>
-        <Stack.Screen name="register" options={{ headerShown: false }}/>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: "fade" }}/>
+          <Stack.Screen name="sign-in" options={{ headerShown: false, animation: "fade" }}/>
+        <Stack.Screen name="register" options={{ headerShown: false, animation: "fade" }}/>
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style={'auto'} />
     </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
