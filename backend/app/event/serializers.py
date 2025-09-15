@@ -17,6 +17,7 @@ class EventsSerializer(serializers.ModelSerializer):
             "description",
             "location",
             "created_by",
+            "last_edit_by",
             "groups",
             "is_canceled",
             "visible",

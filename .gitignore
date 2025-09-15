@@ -11,3 +11,6 @@ backend/app/logs
 
 django_cache
 __pycache__/
+
+# database
+*.sqlite3
