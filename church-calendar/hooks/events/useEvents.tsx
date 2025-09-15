@@ -1,18 +1,13 @@
 import { getEvents } from "@/services/events/get-events";
 import { useState } from "react";
-import { CalendarUtils } from "react-native-calendars";
 import { useQuery } from "@tanstack/react-query";
 import type { DateString, Event, Interval } from "@/types/event";
+import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
 
 export function useEvents() {
-  const today = new Date();
-  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-  const [interval, setInterval] = useState<Interval>({
-    start_date: CalendarUtils.getCalendarDateString(firstDayOfMonth),
-    end_date: CalendarUtils.getCalendarDateString(lastDayOfMonth),
-  });
+  const [interval, setInterval] = useState<Interval>(
+    getMonthIntervalFromDate(new Date())
+  );
 
   const {
     data,
@@ -32,9 +27,15 @@ export function useEvents() {
   const events: { [date: string]: Event[] } = data || {};
   const [selectedDayEvents, setSelectedDayEvents] = useState<Event[]>([]);
 
-  function getSpecificDayEvents({date, dispatchStateUpdate = false}:{date: DateString, dispatchStateUpdate?: boolean}): Event[] | undefined {
+  function getSpecificDayEvents({
+    date,
+    dispatchStateUpdate = false,
+  }: {
+    date: DateString;
+    dispatchStateUpdate?: boolean;
+  }): Event[] | undefined {
     if (!date) return;
-    const eventsCopy = JSON.parse(JSON.stringify(events))
+    const eventsCopy = JSON.parse(JSON.stringify(events));
     if (dispatchStateUpdate) {
       setSelectedDayEvents(eventsCopy[date] || []);
     }
