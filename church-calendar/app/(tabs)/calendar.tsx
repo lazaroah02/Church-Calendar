@@ -1,5 +1,5 @@
 import { UserTopBar } from "@/components/UserTopBar";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
@@ -10,6 +10,7 @@ import {
   LocaleConfig,
   CalendarUtils,
 } from "react-native-calendars";
+import { useEvents } from "@/hooks/events/useEvents";
 
 LocaleConfig.locales["es"] = {
   monthNames: [
@@ -57,10 +58,17 @@ LocaleConfig.defaultLocale = "es";
 
 export default function Calendar() {
   const sheetRef = useRef<BottomSheet>(null);
-  const [selectedDay, setSelectedDay] = useState<DateData>();
-  const snapPoints = useMemo(() => ["45%", "95%"], []);
   const today = CalendarUtils.getCalendarDateString(new Date());
-
+  const [selectedDay, setSelectedDay] = useState<DateData>({
+    dateString: today,
+    day: new Date().getDate(),
+    month: new Date().getMonth() + 1,
+    year: new Date().getFullYear(),
+    timestamp: new Date().getTime(),
+  });
+  const snapPoints = useMemo(() => ["45%", "95%"], []);
+  const { events, setInterval, selectedDayEvents, getSpecificDayEvents, setSelectedDayEvents } =
+    useEvents();
   return (
     <SafeAreaView style={styles.container}>
       <UserTopBar />
@@ -71,6 +79,7 @@ export default function Calendar() {
             <Pressable
               onPress={() => {
                 setSelectedDay(date.date);
+                setSelectedDayEvents(getSpecificDayEvents(date.date?.dateString));
               }}
               disabled={date.state === "disabled"}
               style={[
@@ -81,20 +90,30 @@ export default function Calendar() {
                 date.date?.dateString === selectedDay?.dateString && {
                   backgroundColor: "red",
                 },
-                {width:30, height:30, justifyContent:"center", alignItems:"center"}
+                {
+                  width: 30,
+                  height: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
               ]}
             >
               <Text>{date.date?.day}</Text>
+              {events[date.date?.dateString] != null && getSpecificDayEvents(date.date?.dateString).splice(0, 2).map((event) => <Text key={event.id}>.</Text>)}
             </Pressable>
           );
         }}
       />
       <BottomSheet ref={sheetRef} index={1} snapPoints={snapPoints}>
         <BottomSheetView style={styles.content}>
-          <Text style={styles.title}>Martes 9 de Septiembre, 2025</Text>
-          <Text>8:00 - 10:00 Reunión de caballeros</Text>
-          <Text>10:00 - 10:40 Escuela Dominical</Text>
-          <Text>10:40 - 1:00 2do Culto Principal</Text>
+          <Text style={styles.title}>{selectedDay.day} de {selectedDay.month}, {selectedDay.year}</Text>
+          {selectedDayEvents != null && selectedDayEvents.length > 0 ? (
+            selectedDayEvents?.map((event) => (
+              <Text key={event.id}>{event.title}</Text>
+            ))
+          ) : (
+            <Text>No hay eventos</Text>
+          )}
         </BottomSheetView>
       </BottomSheet>
     </SafeAreaView>
