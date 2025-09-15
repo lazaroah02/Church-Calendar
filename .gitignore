@@ -8,3 +8,6 @@ backend/app/staticfiles
 
 # backend logs
 backend/app/logs
+
+django_cache
+__pycache__/
