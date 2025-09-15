@@ -67,19 +67,36 @@ export default function Calendar() {
     timestamp: new Date().getTime(),
   });
   const snapPoints = useMemo(() => ["45%", "95%"], []);
-  const { events, setInterval, selectedDayEvents, getSpecificDayEvents, setSelectedDayEvents } =
+  const { events, setInterval, selectedDayEvents, getSpecificDayEvents } =
     useEvents();
   return (
     <SafeAreaView style={styles.container}>
       <UserTopBar />
       <CalendarComponent
         firstDay={1}
+        onMonthChange={(month) => {
+          const start_date = `${month.year}-${month.month
+            .toString()
+            .padStart(2, "0")}-01`;
+          const end_date = `${month.year}-${month.month
+            .toString()
+            .padStart(2, "0")}-${new Date(
+            month.year,
+            month.month,
+            0
+          ).getDate()}`;
+          setInterval({ start_date, end_date });
+        }}
         dayComponent={(date) => {
           return (
             <Pressable
               onPress={() => {
+                if (date.date == null) return;
                 setSelectedDay(date.date);
-                setSelectedDayEvents(getSpecificDayEvents(date.date?.dateString));
+                getSpecificDayEvents({
+                  date: date.date.dateString,
+                  dispatchStateUpdate: true,
+                });
               }}
               disabled={date.state === "disabled"}
               style={[
@@ -99,14 +116,20 @@ export default function Calendar() {
               ]}
             >
               <Text>{date.date?.day}</Text>
-              {events[date.date?.dateString] != null && getSpecificDayEvents(date.date?.dateString).splice(0, 2).map((event) => <Text key={event.id}>.</Text>)}
+              {date.date?.dateString &&
+                events[date.date.dateString] != null &&
+                getSpecificDayEvents({ date: date.date.dateString })
+                  ?.splice(0, 2)
+                  ?.map((event) => <Text key={event.id}>.</Text>)}
             </Pressable>
           );
         }}
       />
       <BottomSheet ref={sheetRef} index={1} snapPoints={snapPoints}>
         <BottomSheetView style={styles.content}>
-          <Text style={styles.title}>{selectedDay.day} de {selectedDay.month}, {selectedDay.year}</Text>
+          <Text style={styles.title}>
+            {selectedDay.day} de {selectedDay.month}, {selectedDay.year}
+          </Text>
           {selectedDayEvents != null && selectedDayEvents.length > 0 ? (
             selectedDayEvents?.map((event) => (
               <Text key={event.id}>{event.title}</Text>

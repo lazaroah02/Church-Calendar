@@ -1,10 +1,5 @@
 import { EVENTS_URL } from "@/api-endpoints"
-
-type GetEventsProps = {
-    start_date: string,
-    end_date: string,
-    group_by?: "month_days"
-}
+import { GetEventsProps } from "@/types/event"
 
 export async function getEvents({start_date, end_date, group_by="month_days"}: GetEventsProps){
     try{
@@ -17,7 +12,7 @@ export async function getEvents({start_date, end_date, group_by="month_days"}: G
         } else {
             throw new Error('Error getting events')
         }
-    }catch(err){
+    }catch(err: Error | any){
         console.log(err.message)
     }
 }

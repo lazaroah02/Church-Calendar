@@ -6,14 +6,18 @@ import { SessionProvider, useSession } from '@/contexts/authContext';
 import { SplashScreenController } from './splash';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/query-client"; 
 
 export default function Root() {
   // Set up the auth context and render our layout inside of it.
   return (
-    <SessionProvider>
-      <SplashScreenController />
-      <RootLayout />
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider>
+        <SplashScreenController />
+        <RootLayout />
+      </SessionProvider>
+    </QueryClientProvider>
   );
 }
 
