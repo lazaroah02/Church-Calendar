@@ -1,9 +1,9 @@
 import { UserTopBar } from "@/components/UserTopBar";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ScrollView, RefreshControl } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
-import { DateData, CalendarUtils } from "react-native-calendars";
+import { useState, useCallback } from "react";
+import { CalendarUtils } from "react-native-calendars";
 import { CalendarComponent } from "@/components/calendar/calendar";
 import { useEvents } from "@/hooks/events/useEvents";
 import { Day } from "@/components/calendar/day";
@@ -13,29 +13,46 @@ import { EventsBottomSheet } from "@/components/calendar/events-bottom-sheet";
 export default function Calendar() {
   const todaysDate = new Date();
   const today = CalendarUtils.getCalendarDateString(todaysDate);
-  const [selectedDay, setSelectedDay] = useState<DateData>({
-    dateString: today,
-    day: todaysDate.getDate(),
-    month: todaysDate.getMonth() + 1,
-    year: todaysDate.getFullYear(),
-    timestamp: todaysDate.getTime(),
-  });
-  const { setInterval, selectedDayEvents, getSpecificDayEvents } = useEvents();
+
+  const {
+    setInterval,
+    selectedDayEvents,
+    getSpecificDayEvents,
+    refetchEvents,
+    selectedDay,
+    setSelectedDay
+  } = useEvents();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    refetchEvents();
+    setRefreshing(false);
+  }, [refetchEvents]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <UserTopBar />
-      <CalendarComponent
-        setInterval={setInterval}
-        renderDayComponent={(date) => (
-          <Day
-            date={date}
-            selectedDay={selectedDay}
-            setSelectedDay={setSelectedDay}
-            today={today}
-            getSpecificDayEvents={getSpecificDayEvents}
-          />
-        )}
-      />
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <UserTopBar />
+        <CalendarComponent
+          setInterval={setInterval}
+          renderDayComponent={(date) => (
+            <Day
+              date={date}
+              selectedDay={selectedDay}
+              setSelectedDay={setSelectedDay}
+              today={today}
+              getSpecificDayEvents={getSpecificDayEvents}
+            />
+          )}
+        />
+      </ScrollView>
       <EventsBottomSheet
         selectedDay={selectedDay}
         selectedDayEvents={selectedDayEvents}

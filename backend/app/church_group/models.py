@@ -35,6 +35,7 @@ class ChurchGroup(models.Model):
         upload_to=GROUPS_IMAGES_FILDER,
         blank=True, null=True
         )
+    color = models.CharField(max_length=100, blank=True)
 
     objects = ChurchGroupManager()
 

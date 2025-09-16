@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from event.models import Event, Reservation
-from datetime import timedelta
-from django.utils.timezone import now
 from django.db import models
+from church_group.serializers import ChurchGroupsReducedSerializer
 
 
 class EventsSerializer(serializers.ModelSerializer):
+    groups_full_info = ChurchGroupsReducedSerializer(many=True, source="groups", read_only=True)
+
     class Meta:
         model = Event
         fields = [
@@ -23,7 +24,8 @@ class EventsSerializer(serializers.ModelSerializer):
             "visible",
             "open_to_reservations",
             "created_at",
-            "updated_at"
+            "updated_at",
+            "groups_full_info"
         ]
 
 

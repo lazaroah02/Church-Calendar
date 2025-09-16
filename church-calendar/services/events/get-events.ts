@@ -13,6 +13,6 @@ export async function getEvents({start_date, end_date, group_by="month_days"}: G
             throw new Error('Error getting events')
         }
     }catch(err: Error | any){
-        console.log(err.message)
+        throw new Error(err.message || 'Error getting events')
     }
 }

@@ -1,3 +1,5 @@
+import { GroupReducedInfo } from "./group";
+
 export type DateString = `${number}-${number}-${number}` | string; // "YYYY-MM-DD"
 
 export type Interval = {
@@ -27,4 +29,5 @@ export type Event = {
     open_to_reservations: boolean
     created_at: string
     updated_at: string
+    groups_full_info: GroupReducedInfo[]
 }

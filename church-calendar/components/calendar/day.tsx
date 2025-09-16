@@ -1,42 +1,64 @@
-import { Pressable, Text } from "react-native";
-import { useEvents } from "@/hooks/events/useEvents";
+import { Pressable, Text, View } from "react-native";
 import type { DayProps } from "@/types/calendar";
 
-export function Day({ today, date, selectedDay, setSelectedDay, getSpecificDayEvents }: DayProps) {
-  const { events } = useEvents();
+export function Day({
+  today,
+  date,
+  selectedDay,
+  setSelectedDay,
+  getSpecificDayEvents,
+}: DayProps) {
+  const dayEvents = date.date?.dateString
+    ? getSpecificDayEvents(date.date.dateString)
+    : [];
+
   return (
     <Pressable
       onPress={() => {
         if (date.date == null) return;
         setSelectedDay(date.date);
-        getSpecificDayEvents({
-          date: date.date.dateString,
-          dispatchStateUpdate: true,
-        });
       }}
       disabled={date.state === "disabled"}
       style={[
-        date.state === "disabled" && { opacity: 0.5 },
-        date.date?.dateString === today && {
-          backgroundColor: "blue",
-        },
-        date.date?.dateString === selectedDay?.dateString && {
-          backgroundColor: "red",
-        },
         {
-          width: 30,
-          height: 30,
+          width: 40,
+          height: 40,
           justifyContent: "center",
           alignItems: "center",
+          borderRadius: 12,
+          margin: 2,
+        },
+        date.date?.dateString === today && {
+          borderWidth: 2,
+          borderColor: "#ccc",
+        },
+        date.date?.dateString === selectedDay?.dateString && {
+          borderWidth: 2,
+          borderColor: "#007bff",
         },
       ]}
     >
       <Text>{date.date?.day}</Text>
-      {date.date?.dateString &&
-        events[date.date.dateString] != null &&
-        getSpecificDayEvents({ date: date.date.dateString })
-          ?.splice(0, 2)
-          ?.map((event) => <Text key={event.id}>.</Text>)}
+
+      {/* Barras de colores para eventos */}
+      <View style={{ flexDirection: "row", marginTop: 2 }}>
+        {dayEvents?.slice(0, 3).map((event) => (
+          <View
+            key={event.id}
+            style={{
+              width: 6,
+              height: 4,
+              borderRadius: 2,
+              backgroundColor:
+                event.groups_full_info.length > 0 &&
+                event.groups_full_info[0].color !== ""
+                  ? event.groups_full_info[0].color
+                  : "#f39c12",
+              marginHorizontal: 1,
+            }}
+          />
+        ))}
+      </View>
     </Pressable>
   );
 }

@@ -1,13 +1,24 @@
 import { getEvents } from "@/services/events/get-events";
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { DateString, Event, Interval } from "@/types/event";
 import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
+import { CalendarUtils, DateData } from "react-native-calendars";
 
 export function useEvents() {
   const [interval, setInterval] = useState<Interval>(
     getMonthIntervalFromDate(new Date())
   );
+
+  const todaysDate = new Date();
+  const today = CalendarUtils.getCalendarDateString(todaysDate);
+  const [selectedDay, setSelectedDay] = useState<DateData>({
+    dateString: today,
+    day: todaysDate.getDate(),
+    month: todaysDate.getMonth() + 1,
+    year: todaysDate.getFullYear(),
+    timestamp: todaysDate.getTime(),
+  });
 
   const {
     data,
@@ -24,23 +35,21 @@ export function useEvents() {
     staleTime: 1000 * 60 * 30, // 30 minutes
   });
 
-  const events: { [date: string]: Event[] } = data || {};
+  const events: { [date: string]: Event[] } = useMemo(() => data || {}, [data]);
   const [selectedDayEvents, setSelectedDayEvents] = useState<Event[]>([]);
 
-  function getSpecificDayEvents({
-    date,
-    dispatchStateUpdate = false,
-  }: {
-    date: DateString;
-    dispatchStateUpdate?: boolean;
-  }): Event[] | undefined {
-    if (!date) return;
-    const eventsCopy = JSON.parse(JSON.stringify(events));
-    if (dispatchStateUpdate) {
-      setSelectedDayEvents(eventsCopy[date] || []);
-    }
-    return eventsCopy[date];
-  }
+  const getSpecificDayEvents = useCallback(
+    (date: DateString): Event[] => {
+      if (!date) return [];
+      const eventsCopy = JSON.parse(JSON.stringify(events));
+      return eventsCopy[date] || [];
+    },
+    [events]
+  );
+
+  useEffect(() => {
+    setSelectedDayEvents(getSpecificDayEvents(selectedDay.dateString));
+  }, [events, selectedDay, getSpecificDayEvents]);
 
   return {
     events,
@@ -50,5 +59,7 @@ export function useEvents() {
     setInterval,
     selectedDayEvents,
     getSpecificDayEvents,
+    selectedDay,
+    setSelectedDay,
   };
 }

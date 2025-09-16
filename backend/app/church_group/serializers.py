@@ -12,3 +12,9 @@ class ChurchGroupsManagementSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChurchGroup
         fields = "__all__"
+
+
+class ChurchGroupsReducedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChurchGroup
+        fields = ["name", "color"]

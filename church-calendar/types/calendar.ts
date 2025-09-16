@@ -1,19 +1,13 @@
 import { Dispatch, JSX, SetStateAction } from "react";
 import type { DateData } from "react-native-calendars";
-import type { Event, Interval } from "@/types/event";
+import type { DateString, Event, Interval } from "@/types/event";
 
 export type DayProps = {
   today: string;
   date: any;
   selectedDay: DateData;
   setSelectedDay: Dispatch<SetStateAction<DateData>>;
-  getSpecificDayEvents: ({
-    date,
-    dispatchStateUpdate,
-  }: {
-    date: string;
-    dispatchStateUpdate?: boolean;
-  }) => Event[] | undefined;
+  getSpecificDayEvents: (date: DateString) => Event[] | undefined;
 };
 
 export interface CalendarComponentProps {
