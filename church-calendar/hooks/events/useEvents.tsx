@@ -39,16 +39,14 @@ export function useEvents() {
   const [selectedDayEvents, setSelectedDayEvents] = useState<Event[]>([]);
 
   const getSpecificDayEvents = useCallback(
-  (date: DateString): Event[] => {
-    return events[date] || [];
-  },
-  [events]
-);
+    (date: DateString): Event[] => {
+      return events[date] || [];
+    },
+    [events]
+  );
 
   useEffect(() => {
-    if(Object.keys(events).length > 0){
-      setSelectedDayEvents(getSpecificDayEvents(selectedDay.dateString));
-    }
+    setSelectedDayEvents(getSpecificDayEvents(selectedDay.dateString));
   }, [events, selectedDay, getSpecificDayEvents]);
 
   return {
