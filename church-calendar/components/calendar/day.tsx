@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import type { DayProps } from "@/types/calendar";
 
 export function Day({
@@ -20,14 +20,7 @@ export function Day({
       }}
       disabled={date.state === "disabled"}
       style={[
-        {
-          width: 40,
-          height: 40,
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: 12,
-          margin: 2,
-        },
+        styles.dayContainer,
         date.date?.dateString === today && {
           borderWidth: 2,
           borderColor: "#ccc",
@@ -36,6 +29,7 @@ export function Day({
           borderWidth: 2,
           borderColor: "#007bff",
         },
+        date.state === "disabled" && { opacity: 0.3 },
       ]}
     >
       <Text>{date.date?.day}</Text>
@@ -62,3 +56,14 @@ export function Day({
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  dayContainer: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+    margin: 2,
+  },
+});
