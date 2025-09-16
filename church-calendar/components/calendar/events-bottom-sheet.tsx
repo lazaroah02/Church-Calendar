@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 40,
+    minHeight:"35%" // Ensure minimum height is the same as first snap point
   },
   title: {
     fontSize: 16,
