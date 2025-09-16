@@ -1,4 +1,6 @@
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetFlatList,
+} from "@gorhom/bottom-sheet";
 import { useMemo, useRef } from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { DateData } from "react-native-calendars";
@@ -20,46 +22,60 @@ export function EventsBottomSheet({
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["35%", "95%"], []);
 
-  return (
-    <BottomSheet ref={sheetRef} index={1} snapPoints={snapPoints}>
-      <BottomSheetView style={styles.content}>
-        <Text style={styles.title}>
-          {formatSelectedDay(selectedDay.dateString)}
-        </Text>
-
-        {selectedDayEvents?.length ? (
-          selectedDayEvents.map((event) => (
-            <View key={event.id} style={styles.eventCard}>
-              <Text style={styles.eventTime}>
-                {formatTimeRange(event.start_time, event.end_time)}
-              </Text>
-              <View>
-                <Text style={styles.eventTitle}>{event.title}</Text>
-                <View style={styles.groups}>
-                  {event.groups_full_info?.map((group, i) => {
-                    return (
-                      <View
-                        key={i}
-                        style={[
-                          styles.group,
-                          {
-                            backgroundColor:
-                              group.color !== "" ? group.color : "#eee",
-                          },
-                        ]}
-                      >
-                        <Text style={styles.tagText}>{group.name}</Text>
-                      </View>
-                    );
-                  })}
-                </View>
-              </View>
+  const renderEvent = ({ item }: { item: Event }) => (
+    <View style={styles.eventCard}>
+      <Text style={styles.eventTime}>
+        {formatTimeRange(item.start_time, item.end_time)}
+      </Text>
+      <View>
+        <Text style={styles.eventTitle}>{item.title}</Text>
+        <View style={styles.groups}>
+          {item.groups_full_info?.map((group, i) => (
+            <View
+              key={i}
+              style={[
+                styles.group,
+                {
+                  backgroundColor: group.color !== "" ? group.color : "#eee",
+                },
+              ]}
+            >
+              <Text style={styles.tagText}>{group.name}</Text>
             </View>
-          ))
-        ) : (
+          ))}
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <BottomSheet
+      ref={sheetRef}
+      index={0}
+      snapPoints={snapPoints}
+      enableContentPanningGesture={true}
+    >
+      {selectedDayEvents?.length ? (
+        <BottomSheetFlatList
+          data={selectedDayEvents}
+          renderItem={renderEvent}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.listContent}
+          style={styles.content}
+          ListHeaderComponent={
+            <Text style={styles.title}>
+              {formatSelectedDay(selectedDay.dateString)}
+            </Text>
+          }
+        />
+      ) : (
+        <View style={styles.content}>
+          <Text style={styles.title}>
+            {formatSelectedDay(selectedDay.dateString)}
+          </Text>
           <Text style={styles.noEvents}>No hay eventos</Text>
-        )}
-      </BottomSheetView>
+        </View>
+      )}
     </BottomSheet>
   );
 }
@@ -68,6 +84,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
+  },
+  listContent: {
+    paddingBottom: 40,
   },
   title: {
     fontSize: 16,
