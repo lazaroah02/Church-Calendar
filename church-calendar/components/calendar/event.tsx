@@ -6,11 +6,11 @@ export function EventComponent({ item }: { item: Event }) {
   return (
     <Pressable onPress={() => Alert.alert(item.title)}>
       <View style={styles.eventCard}>
-        <Text style={styles.eventTime}>
-          {formatTimeRange(item.start_time, item.end_time)}
-        </Text>
         <View>
           <Text style={styles.eventTitle}>{item.title}</Text>
+          <Text style={styles.eventTime}>
+            {formatTimeRange(item.start_time, item.end_time)}
+          </Text>
           <View style={styles.groups}>
             {item.groups_full_info?.map((group, i) => (
               <View key={i} style={styles.group}>
