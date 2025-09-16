@@ -29,12 +29,11 @@ export function Day({
           borderWidth: 2,
           borderColor: "#007bff",
         },
-        date.state === "disabled" && { opacity: 0.3 },
+        date.state === "disabled" && { opacity: 0.2 },
       ]}
     >
-      <Text>{date.date?.day}</Text>
+      <Text style={styles.dayNumber}>{date.date?.day}</Text>
 
-      {/* Barras de colores para eventos */}
       <View style={{ flexDirection: "row", marginTop: 2 }}>
         {dayEvents?.slice(0, 3).map((event) => (
           <View
@@ -65,5 +64,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 12,
     margin: 2,
+  },
+  dayNumber: {
+    color: "#000",
+    fontFamily: "InterVariable",
+    fontSize: 16,
+    fontWeight: 400,
   },
 });

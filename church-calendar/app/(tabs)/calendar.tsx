@@ -9,6 +9,7 @@ import { useEvents } from "@/hooks/events/useEvents";
 import { Day } from "@/components/calendar/day";
 import "@/lib/calendar/calendar-locale";
 import { EventsBottomSheet } from "@/components/calendar/events-bottom-sheet";
+import { StatusBar } from "expo-status-bar";
 
 export default function Calendar() {
   const todaysDate = new Date();
@@ -20,7 +21,7 @@ export default function Calendar() {
     getSpecificDayEvents,
     refetchEvents,
     selectedDay,
-    setSelectedDay
+    setSelectedDay,
   } = useEvents();
 
   const [refreshing, setRefreshing] = useState(false);
@@ -57,6 +58,7 @@ export default function Calendar() {
         selectedDay={selectedDay}
         selectedDayEvents={selectedDayEvents}
       />
+      <StatusBar style="dark" />
     </SafeAreaView>
   );
 }
