@@ -10,17 +10,21 @@ import {
 import { Image } from "expo-image";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import { useSession } from "@/contexts/authContext";
+import { useSession } from "@/hooks/auth/useSession";
+import { useState } from "react";
 
 export default function SignIn() {
   const { signIn } = useSession();
+  const [formValues, setFormValues] = useState<{ email: string; pass: string }>(
+    { email: "", pass: "" }
+  );
 
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={{ flexGrow: 1 }}
       keyboardShouldPersistTaps="handled"
       enableOnAndroid
-      extraScrollHeight={20} // opcional: espacio extra al enfocar inputs
+      extraScrollHeight={20}
     >
       <View
         style={{
@@ -38,16 +42,27 @@ export default function SignIn() {
 
       <View style={styles.form}>
         <Text style={styles.formTitle}>Iniciar Sesión</Text>
-
         <TextInput
-          placeholder="Número de Teléfono"
-          keyboardType="phone-pad"
+          placeholder="Correo"
+          keyboardType="email-address"
           style={styles.input}
+          onChangeText={(newValue) =>
+            setFormValues((prev) => ({
+              ...prev,
+              email: newValue,
+            }))
+          }
         />
         <TextInput
           placeholder="Contraseña"
           secureTextEntry
           style={styles.input}
+          onChangeText={(newValue) =>
+            setFormValues((prev) => ({
+              ...prev,
+              pass: newValue,
+            }))
+          }
         />
 
         <Link
@@ -69,8 +84,13 @@ export default function SignIn() {
         <Pressable
           style={styles.loginButton}
           onPress={() => {
-            signIn();
-            router.replace("/(tabs)/calendar");
+            signIn({
+              email: formValues.email,
+              pass: formValues.pass,
+              onLoginSuccess: () => {
+                router.replace("/(tabs)/calendar");
+              },
+            });
           }}
         >
           <Text style={styles.logginButtonText}>Iniciar Sesión</Text>

@@ -2,8 +2,9 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
-import { SessionProvider, useSession } from '@/contexts/authContext';
-import { SplashScreenController } from './splash';
+import { SessionProvider } from '@/contexts/authContext';
+import { useSession } from '@/hooks/auth/useSession';
+import SplashScreenController from './splash';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -20,7 +21,6 @@ export default function Root() {
     </QueryClientProvider>
   );
 }
-
 
 function RootLayout() {
   const [loaded] = useFonts({

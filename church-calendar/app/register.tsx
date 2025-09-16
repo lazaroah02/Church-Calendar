@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
-import { useSession } from "@/contexts/authContext";
+import { useSession } from "@/hooks/auth/useSession";
 import { Label } from "@react-navigation/elements";
 import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";

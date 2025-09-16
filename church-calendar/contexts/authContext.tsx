@@ -1,10 +1,21 @@
-import { use, createContext, type PropsWithChildren } from 'react';
-import { useStorageState } from '@/hooks/useStorageState';
+import { createContext, type PropsWithChildren } from "react";
+import { useStorageState } from "@/hooks/useStorageState";
+import { login } from "@/services/auth/login";
+import { Alert } from "react-native";
+import { Session } from "@/types/auth";
 
-const AuthContext = createContext<{
-  signIn: () => void;
+export const AuthContext = createContext<{
+  signIn: ({
+    email,
+    pass,
+    onLoginSuccess,
+  }: {
+    email: string;
+    pass: string;
+    onLoginSuccess: () => void;
+  }) => void;
   signOut: () => void;
-  session?: string | null;
+  session?: Session | null;
   isLoading: boolean;
 }>({
   signIn: () => null,
@@ -13,32 +24,32 @@ const AuthContext = createContext<{
   isLoading: false,
 });
 
-// This hook can be used to access the user info.
-export function useSession() {
-  const value = use(AuthContext);
-  if (!value) {
-    throw new Error('useSession must be wrapped in a <SessionProvider />');
-  }
-
-  return value;
-}
-
 export function SessionProvider({ children }: PropsWithChildren) {
-  const [[isLoading, session], setSession] = useStorageState('session');
+  const [[isLoading, session], setSession] = useStorageState("session");
 
   return (
     <AuthContext
       value={{
-        signIn: () => {
-          // Perform sign-in logic here
-          setSession('xxx');
+        signIn: ({ email, pass, onLoginSuccess }) => {
+          login({ email, pass })
+            .then((data) => {
+              setSession(
+                JSON.stringify({
+                  token: data.token,
+                  userInfo: data.user_info,
+                })
+              );
+              onLoginSuccess();
+            })
+            .catch((err) => Alert.alert(err.message));
         },
         signOut: () => {
           setSession(null);
         },
-        session,
+        session: session ? JSON.parse(session) : null,
         isLoading,
-      }}>
+      }}
+    >
       {children}
     </AuthContext>
   );

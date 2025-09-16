@@ -1,7 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSession } from "@/contexts/authContext";
-import { Link } from "expo-router";
+import { useSession } from "@/hooks/auth/useSession";
 import { navigate } from "expo-router/build/global-state/routing";
 
 export default function Settings() {
