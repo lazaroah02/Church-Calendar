@@ -1,11 +1,11 @@
-import { Text, StyleSheet, View, Alert, Pressable } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
 import { Event } from "@/types/event";
 import { formatTimeRange } from "@/lib/calendar/calendar-utils";
+import { Link } from "expo-router";
 
 export function EventComponent({ item }: { item: Event }) {
   return (
-    <Pressable onPress={() => Alert.alert(item.title)}>
-      <View style={styles.eventCard}>
+    <Link href="/(tabs)/calendar" style={styles.eventCard}>
         <View>
           <Text style={styles.eventTitle}>{item.title}</Text>
           <Text style={styles.eventTime}>
@@ -28,8 +28,7 @@ export function EventComponent({ item }: { item: Event }) {
             ))}
           </View>
         </View>
-      </View>
-    </Pressable>
+    </Link>
   );
 }
 

@@ -42,7 +42,7 @@ function RootLayout() {
           <Stack.Screen name="welcome" options={{ headerShown: false, animation: "fade" }}/>
         </Stack.Protected>
         <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: "fade" }}/>
-          <Stack.Screen name="sign-in" options={{ headerShown: false, animation: "fade" }}/>
+        <Stack.Screen name="sign-in" options={{ headerShown: false, animation: "fade" }}/>
         <Stack.Screen name="register" options={{ headerShown: false, animation: "fade" }}/>
         <Stack.Screen name="+not-found" />
       </Stack>
