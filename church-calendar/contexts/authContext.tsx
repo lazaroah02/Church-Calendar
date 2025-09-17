@@ -1,7 +1,6 @@
 import { createContext, type PropsWithChildren } from "react";
 import { useStorageState } from "@/hooks/useStorageState";
 import { login } from "@/services/auth/login";
-import { Alert } from "react-native";
 import { Session } from "@/types/auth";
 
 export const AuthContext = createContext<{
@@ -9,10 +8,12 @@ export const AuthContext = createContext<{
     email,
     pass,
     onLoginSuccess,
+    onLoginError
   }: {
     email: string;
     pass: string;
     onLoginSuccess: () => void;
+    onLoginError: (err: Error) => void;
   }) => void;
   signOut: () => void;
   session?: Session | null;
@@ -30,7 +31,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
   return (
     <AuthContext
       value={{
-        signIn: ({ email, pass, onLoginSuccess }) => {
+        signIn: ({ email, pass, onLoginSuccess, onLoginError }) => {
           login({ email, pass })
             .then((data) => {
               setSession(
@@ -41,7 +42,9 @@ export function SessionProvider({ children }: PropsWithChildren) {
               );
               onLoginSuccess();
             })
-            .catch((err) => Alert.alert(err.message));
+            .catch((err: Error) => {
+              onLoginError(err)
+            });
         },
         signOut: () => {
           setSession(null);

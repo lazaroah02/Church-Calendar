@@ -18,3 +18,9 @@ export interface LoginResponse{
     token:string
     user_info: UserInfo
 }
+
+export type LoginFormErrors = {
+  email?: string;
+  pass?: string;
+  general?: string;
+};

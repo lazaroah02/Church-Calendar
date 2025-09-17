@@ -22,13 +22,19 @@ export function login({
       if (data.token) {
         return data;
       } else {
-        if (data.password) {
-          throw new Error("Ingresa una contraseña válida");
-        } else if (data.non_field_errors) {
-          throw new Error("Credenciales Incorrectas");
-        } else {
-          throw new Error("Error al iniciar sesión");
+        const errors: Record<string, string> = {};
+
+        if (data.email) {
+          errors.email = "Correo inválido";
         }
+        if (data.password) {
+          errors.pass = "Ingresa una contraseña válida";
+        }
+        if (data.non_field_errors) {
+          errors.general = "Credenciales incorrectas";
+        }
+
+        throw errors;
       }
     });
 }

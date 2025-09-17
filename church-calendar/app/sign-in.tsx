@@ -6,25 +6,28 @@ import {
   StyleSheet,
   Pressable,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import { Image } from "expo-image";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
 import { useSession } from "@/hooks/auth/useSession";
 import { useState } from "react";
+import { LoginFormErrors } from "@/types/auth";
+import FormErrorBanner from "@/components/form-banner-error";
 
 export default function SignIn() {
   const { signIn } = useSession();
+  const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState<{ email: string; pass: string }>(
     { email: "", pass: "" }
   );
-
+  const [errors, setErrors] = useState<LoginFormErrors|null>(null);
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={{ flexGrow: 1 }}
       keyboardShouldPersistTaps="handled"
       enableOnAndroid
-      extraScrollHeight={20}
+      extraScrollHeight={100}
     >
       <View
         style={{
@@ -42,10 +45,21 @@ export default function SignIn() {
 
       <View style={styles.form}>
         <Text style={styles.formTitle}>Iniciar Sesión</Text>
+        {errors && (
+          <FormErrorBanner
+            message={
+              errors.email ||
+              errors.pass ||
+              errors.general ||
+              'Ocurrió un error al iniciar sesión.'
+            }
+          />
+        )}
+        {/* Email */}
         <TextInput
           placeholder="Correo"
           keyboardType="email-address"
-          style={styles.input}
+          style={[styles.input, errors?.email && styles.inputError]}
           onChangeText={(newValue) =>
             setFormValues((prev) => ({
               ...prev,
@@ -53,10 +67,12 @@ export default function SignIn() {
             }))
           }
         />
+
+        {/* Password */}
         <TextInput
           placeholder="Contraseña"
           secureTextEntry
-          style={styles.input}
+          style={[styles.input, errors?.pass && styles.inputError]}
           onChangeText={(newValue) =>
             setFormValues((prev) => ({
               ...prev,
@@ -65,35 +81,33 @@ export default function SignIn() {
           }
         />
 
-        <Link
-          href="/(tabs)/calendar"
-          style={{
-            alignSelf: "flex-end",
-            marginRight: 10,
-            marginTop: -10,
-            marginBottom: 10,
-            fontFamily: "InterVariable",
-            fontSize: 14,
-            fontWeight: "400",
-            opacity: 0.7,
-          }}
-        >
+        <Link href="/(tabs)/calendar" style={styles.forgotPassword}>
           ¿Olvidaste tu contraseña?
         </Link>
 
         <Pressable
           style={styles.loginButton}
           onPress={() => {
+            setLoading(true);
+            setErrors(null);
             signIn({
               email: formValues.email,
               pass: formValues.pass,
               onLoginSuccess: () => {
                 router.replace("/(tabs)/calendar");
+                setLoading(false);
+              },
+              onLoginError: (err) => {
+                setErrors(err as LoginFormErrors);
+                setLoading(false);
               },
             });
           }}
         >
-          <Text style={styles.logginButtonText}>Iniciar Sesión</Text>
+          <Text style={styles.logginButtonText}>
+            {loading ? "Enviando" : "Iniciar Sesión"}
+          </Text>
+          {loading && <ActivityIndicator size="small" color="#000" />}
         </Pressable>
       </View>
 
@@ -151,13 +165,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
   },
+  inputError: {
+    borderWidth: 2,
+    borderColor: "rgb(215, 0, 75)",
+  },
   loginButton: {
     width: 350,
     height: 55,
     backgroundColor: "#fff",
     display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    gap: 10,
     borderRadius: 100,
     marginVertical: 10,
     shadowColor: "#000",
@@ -169,7 +189,25 @@ const styles = StyleSheet.create({
   logginButtonText: {
     color: "#442525",
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: "900",
     fontFamily: "InterVariable",
+  },
+  errorText: {
+    color: "rgb(215, 0, 75)",
+    marginTop: -15,
+    fontSize: 14,
+    alignSelf: "flex-start",
+    fontFamily: "InterVariable",
+    fontWeight: "900",
+  },
+  forgotPassword: {
+    alignSelf: "flex-end",
+    marginRight: 10,
+    marginTop: -10,
+    marginBottom: 10,
+    fontFamily: "InterVariable",
+    fontSize: 14,
+    fontWeight: "400",
+    opacity: 0.7,
   },
 });

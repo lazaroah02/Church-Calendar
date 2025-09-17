@@ -1,0 +1,33 @@
+import { View, Text, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+export default function FormErrorBanner({ message }: { message: string }) {
+  if (!message) return null;
+
+  return (
+    <View style={styles.container}>
+      <Ionicons name="alert-circle" size={18} color="#b91c1c" />
+      <Text style={styles.text}>{message}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fee2e2",
+    borderWidth: 1,
+    borderColor: "#fca5a5",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 15,
+    width: "100%",
+  },
+  text: {
+    color: "#b91c1c",
+    marginLeft: 8,
+    fontFamily: "InterVariable",
+    fontSize: 14,
+  },
+});
