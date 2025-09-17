@@ -20,7 +20,7 @@ export default function Root() {
   }, []);
 
   if (!hydrated) {
-    return null; // o splash screen
+    return <SplashScreenController />
   }
 
   return (
@@ -42,7 +42,7 @@ function RootLayout() {
 
   if (!loaded) {
     // Async font loading only occurs in development.
-    return null;
+    return <SplashScreenController />
   }
 
   return (
