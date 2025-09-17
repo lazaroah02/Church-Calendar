@@ -1,18 +1,29 @@
-import { EVENTS_URL } from "@/api-endpoints"
-import { GetEventsProps } from "@/types/event"
+import { EVENTS_URL } from "@/api-endpoints";
+import { GetEventsProps } from "@/types/event";
 
-export async function getEvents({start_date, end_date, group_by="month_days"}: GetEventsProps){
-    try{
-        const res = await fetch(`${EVENTS_URL}?start_date=${start_date}&end_date=${end_date}&group_by=${group_by}`)
-        if (res.ok) {
-        return res.json()
-            .then(data => {
-                return data
-            })
-        } else {
-            throw new Error('Error getting events')
-        }
-    }catch(err: Error | any){
-        throw new Error(err.message || 'Error getting events')
+export async function getEvents({
+  start_date,
+  end_date,
+  group_by = "month_days",
+  token = "",
+}: GetEventsProps) {
+  try {
+    const res = await fetch(
+      `${EVENTS_URL}?start_date=${start_date}&end_date=${end_date}&group_by=${group_by}`,
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }
+    );
+    if (res.ok) {
+      return res.json().then((data) => {
+        return data;
+      });
+    } else {
+      throw new Error("Error getting events");
     }
+  } catch (err: Error | any) {
+    throw new Error(err.message || "Error getting events");
+  }
 }
