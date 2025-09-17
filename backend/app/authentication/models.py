@@ -8,17 +8,17 @@ USER_PROFILE_IMAGE_MEDIA_FOLDER = 'user-profile-image'
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, username, password=None):
+    def create_user(self, email, password=None):
         if not email:
             raise ValueError('User most have email')
         email = self.normalize_email(email)
-        user = self.model(email=email, username=username)
+        user = self.model(email=email)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, password=None):
-        user = self.create_user(email, username, password)
+    def create_superuser(self, email, password=None):
+        user = self.create_user(email, password)
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
@@ -36,6 +36,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         max_length=255,
         unique=True,
         default=None,
+        blank=True,
         help_text="Unique username"
     )
     is_active = models.BooleanField(
@@ -71,7 +72,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.username

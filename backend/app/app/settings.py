@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-g(5^f)v&#mz*3)ga&=dp0@$3yeu&$=jdr&g!gth(tt*m0u1qh5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.91.210.1', '192.168.1.246']
+ALLOWED_HOSTS = ['10.91.210.1', '192.168.1.246', '192.168.180.1']
 
 
 # Application definition
@@ -51,16 +51,25 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'dj_rest_auth',
     'django_filters',
+
+    # allauth to register users
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -116,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'
 
 TIME_ZONE = 'UTC'
 
@@ -156,9 +165,27 @@ REST_FRAMEWORK = {
 
 }
 
+
+# dj-rest-auth config
 REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'authentication.serializers.CustomUserDetailsSerializer',
 }
+
+
+# allauth config
+SITE_ID = 1
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+
+# cors
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Logging configuration

@@ -98,7 +98,7 @@ class EventParamsSerializer(serializers.Serializer):
         if start_date and end_date:
             delta = (end_date - start_date).days
 
-            if delta < 1:
+            if delta < 0:
                 raise serializers.ValidationError({
                     "start_date": ["start_date must be earlier than end_date."]
                 })
