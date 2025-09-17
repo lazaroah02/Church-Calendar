@@ -1,17 +1,28 @@
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-import { SessionProvider } from '@/contexts/authContext';
-import { useSession } from '@/hooks/auth/useSession';
-import SplashScreenController from './splash';
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import "react-native-reanimated";
+import { SessionProvider } from "@/contexts/authContext";
+import { useSession } from "@/hooks/auth/useSession";
+import SplashScreenController from "./splash";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/lib/query-client"; 
+import { useEffect, useState } from "react";
+
+import { queryClient, persister } from "@/lib/query-client";
 
 export default function Root() {
-  // Set up the auth context and render our layout inside of it.
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    persister.restoreClient(queryClient).finally(() => setHydrated(true));
+  }, []);
+
+  if (!hydrated) {
+    return null; // o splash screen
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
@@ -24,8 +35,8 @@ export default function Root() {
 
 function RootLayout() {
   const [loaded] = useFonts({
-    InterVariable: require('../assets/fonts/Inter-VariableFont.ttf'),
-    LexendBold: require('../assets/fonts/Lexend-Bold.ttf'),
+    InterVariable: require("../assets/fonts/Inter-VariableFont.ttf"),
+    LexendBold: require("../assets/fonts/Lexend-Bold.ttf"),
   });
   const { session } = useSession();
 
@@ -36,18 +47,30 @@ function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-    <SafeAreaProvider>
-      <Stack>
-        <Stack.Protected guard={!session}>
-          <Stack.Screen name="welcome" options={{ headerShown: false, animation: "fade" }}/>
-        </Stack.Protected>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: "fade" }}/>
-        <Stack.Screen name="sign-in" options={{ headerShown: false, animation: "fade" }}/>
-        <Stack.Screen name="register" options={{ headerShown: false, animation: "fade" }}/>
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style={'auto'} />
-    </SafeAreaProvider>
+      <SafeAreaProvider>
+        <Stack>
+          <Stack.Protected guard={!session}>
+            <Stack.Screen
+              name="welcome"
+              options={{ headerShown: false, animation: "fade" }}
+            />
+          </Stack.Protected>
+          <Stack.Screen
+            name="(tabs)"
+            options={{ headerShown: false, animation: "fade" }}
+          />
+          <Stack.Screen
+            name="sign-in"
+            options={{ headerShown: false, animation: "fade" }}
+          />
+          <Stack.Screen
+            name="register"
+            options={{ headerShown: false, animation: "fade" }}
+          />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style={"auto"} />
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }

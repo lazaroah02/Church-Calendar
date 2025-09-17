@@ -19,7 +19,7 @@ export default function Calendar() {
     setInterval,
     selectedDayEvents,
     getSpecificDayEvents,
-    refetchEvents,
+    onRefetch,
     selectedDay,
     setSelectedDay,
   } = useEvents();
@@ -28,9 +28,9 @@ export default function Calendar() {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    refetchEvents();
+    await onRefetch()
     setRefreshing(false);
-  }, [refetchEvents]);
+  }, [onRefetch]);
 
   return (
     <SafeAreaView style={styles.container}>

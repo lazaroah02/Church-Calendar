@@ -1,34 +1,39 @@
 import { getEvents } from "@/services/events/get-events";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { DateString, Event, Interval } from "@/types/event";
 import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
 import { CalendarUtils, DateData } from "react-native-calendars";
 import { useSession } from "../auth/useSession";
 
+/**
+ * Custom hook for handling calendar events with caching and refetching logic.
+ * It integrates TanStack Query for data fetching, manages event data for the
+ * visible month and keeps track of a selected day with its events.
+ */
 export function useEvents() {
   /**
-   * State: Current visible interval (start and end dates) based on the calendar month.
-   * Default: The month of today.
+   * Interval for the currently visible month (start_date - end_date).
+   * Defaults to the current month when initialized.
    */
   const [interval, setInterval] = useState<Interval>(
     getMonthIntervalFromDate(new Date())
   );
 
   /**
-   * Current user session (needed to authenticate API calls).
+   * Get the current user session (used to provide authentication token).
    */
   const { session } = useSession();
 
   /**
-   * Today's date in `DateData` format (react-native-calendars).
-   * Used to initialize the default selected day.
+   * Today's date string (YYYY-MM-DD) in calendar format.
    */
   const todaysDate = new Date();
   const today = CalendarUtils.getCalendarDateString(todaysDate);
 
   /**
-   * State: The currently selected day in the calendar.
+   * Track the selected day on the calendar.
+   * Defaults to today.
    */
   const [selectedDay, setSelectedDay] = useState<DateData>({
     dateString: today,
@@ -39,17 +44,22 @@ export function useEvents() {
   });
 
   /**
-   * State: Cache of the last selected day's events.
-   * Used as a fallback when navigating between months.
+   * Local cache of events for the selected day.
+   * Useful when the selected day belongs to a month that is not currently visible.
    */
   const [selectedDayEventsCache, setSelectedDayEventsCache] = useState<Event[]>(
     []
   );
 
   /**
-   * Query: Fetch events for the current month interval.
-   * - Keyed by interval + session token.
-   * - Cached for 30 minutes.
+   * React Query client instance to manually update or set cache data.
+   */
+  const queryClient = useQueryClient();
+
+  /**
+   * Query to fetch events for the visible month.
+   * - queryKey ensures unique caching per interval and token
+   * - staleTime: cache is fresh for 30 minutes
    */
   const {
     data,
@@ -64,24 +74,17 @@ export function useEvents() {
         end_date: interval.end_date,
         token: session?.token,
       }),
-    staleTime: 1000 * 60 * 30,
   });
 
   /**
-   * Dictionary of events keyed by date string.
-   * Example: { "2025-09-15": [event1, event2], "2025-09-16": [event3] }
+   * Memoized map of events by date (YYYY-MM-DD).
    */
   const events: { [date: string]: Event[] } = useMemo(() => data || {}, [data]);
 
   /**
-   * Utility: Get events for a specific day.
-   *
-   * Rules:
-   * - If the date belongs to the current month:
-   *   - Return [] if no events exist for that day.
-   * - If the date belongs to another month:
-   *   - Return undefined → fallback to cached events.
-   * - Otherwise, return the events for that date.
+   * Retrieve events for a specific day.
+   * - Returns [] if day belongs to the current month but has no events.
+   * - Returns undefined if day belongs to a different month that is not loaded yet.
    */
   const getSpecificDayEvents = useCallback(
     (date: DateString): Event[] | undefined => {
@@ -99,16 +102,14 @@ export function useEvents() {
   );
 
   /**
-   * Derive the events for the currently selected day.
-   * Can be [] (no events in this month) or undefined (different month).
+   * Memoized list of events for the currently selected day.
    */
   const currentDayEvents = useMemo(() => {
     return getSpecificDayEvents(selectedDay.dateString);
   }, [getSpecificDayEvents, selectedDay]);
 
   /**
-   * Effect: Update the cache if the current day has a valid result.
-   * This ensures that when switching months, the last valid selection persists.
+   * If events for the selected day are available, update the cache.
    */
   useEffect(() => {
     if (currentDayEvents !== undefined) {
@@ -117,23 +118,60 @@ export function useEvents() {
   }, [currentDayEvents]);
 
   /**
-   * Final events for the selected day:
-   * - If `currentDayEvents` is [] → show "No events".
-   * - If `currentDayEvents` is undefined → use cached events (month changed).
-   * - Otherwise, return the actual events.
+   * Use events from cache if the selected day belongs to a month
+   * that is not currently visible.
    */
   const selectedDayEvents =
     currentDayEvents !== undefined ? currentDayEvents : selectedDayEventsCache;
 
+  /**
+   * Refetch handler:
+   * - Refreshes events for the visible month.
+   * - If the selected day belongs to a different month,
+   *   it fetches events for that month too and updates cache.
+   */
+  const onRefetch = useCallback(async () => {
+    // Refresh visible month
+    await refetchEvents();
+
+    const selectedDayMonth = selectedDay.dateString.slice(0, 7); // YYYY-MM
+    const currentMonth = interval.start_date.slice(0, 7);
+
+    // If the selected day belongs to a different month
+    if (selectedDayMonth !== currentMonth) {
+      const selectedInterval = getMonthIntervalFromDate(
+        new Date(selectedDay.dateString)
+      );
+
+      // Fetch events for the selected day’s month
+      const freshEvents = await getEvents({
+        start_date: selectedInterval.start_date,
+        end_date: selectedInterval.end_date,
+        token: session?.token,
+      });
+
+      // Store month events in cache
+      queryClient.setQueryData(
+        ["events", JSON.stringify(selectedInterval), session?.token],
+        freshEvents
+      );
+
+      // Update cache for the selected day
+      const freshForSelectedDay = freshEvents[selectedDay.dateString] ?? [];
+      setSelectedDayEventsCache(freshForSelectedDay);
+    }
+  }, [refetchEvents, selectedDay, interval, session?.token, queryClient]);
+
   return {
-    events,                // All events for the current interval
-    refetchEvents,         // Refetch function for manual refresh
-    loadingEvents,         // Loading state for events
-    errorEvents,           // Error state for events
-    setInterval,           // Update the current month interval
-    selectedDay,           // Currently selected day
-    setSelectedDay,        // Update selected day
-    selectedDayEvents,     // Events for the currently selected day
-    getSpecificDayEvents,  // Utility to get events for a given date
+    events,                // all events for the visible month
+    refetchEvents,         // manual refetch for visible month
+    onRefetch,             // extended refetch (visible + selectedDay month)
+    loadingEvents,
+    errorEvents,
+    setInterval,           // update visible month interval
+    selectedDay,           // current selected day
+    setSelectedDay,        // update selected day
+    selectedDayEvents,     // events for the selected day
+    getSpecificDayEvents,  // helper to get events for any given day
   };
 }
