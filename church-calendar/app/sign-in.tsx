@@ -1,19 +1,21 @@
-import { router, Link } from "expo-router";
+import { router } from "expo-router";
 import {
   StatusBar,
   Text,
   View,
   StyleSheet,
   Pressable,
-  TextInput,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Image } from "expo-image";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSession } from "@/hooks/auth/useSession";
 import { useState } from "react";
 import { LoginFormErrors } from "@/types/auth";
-import FormErrorBanner from "@/components/form-banner-error";
+import FormErrorBanner from "@/components/form/form-banner-error";
+import { CustomInput } from "@/components/form/custom-input";
+import { openBrowserAsync } from "expo-web-browser";
 
 export default function SignIn() {
   const { signIn } = useSession();
@@ -21,7 +23,7 @@ export default function SignIn() {
   const [formValues, setFormValues] = useState<{ email: string; pass: string }>(
     { email: "", pass: "" }
   );
-  const [errors, setErrors] = useState<LoginFormErrors|null>(null);
+  const [errors, setErrors] = useState<LoginFormErrors | null>(null);
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -51,15 +53,15 @@ export default function SignIn() {
               errors.email ||
               errors.pass ||
               errors.general ||
-              'Ocurrió un error al iniciar sesión.'
+              "Ocurrió un error al iniciar sesión."
             }
           />
         )}
         {/* Email */}
-        <TextInput
-          placeholder="Correo"
+        <CustomInput
+          error={errors?.email}
           keyboardType="email-address"
-          style={[styles.input, errors?.email && styles.inputError]}
+          placeholder="Correo"
           onChangeText={(newValue) =>
             setFormValues((prev) => ({
               ...prev,
@@ -67,12 +69,10 @@ export default function SignIn() {
             }))
           }
         />
-
         {/* Password */}
-        <TextInput
+        <CustomInput
           placeholder="Contraseña"
-          secureTextEntry
-          style={[styles.input, errors?.pass && styles.inputError]}
+          error={errors?.pass}
           onChangeText={(newValue) =>
             setFormValues((prev) => ({
               ...prev,
@@ -81,9 +81,33 @@ export default function SignIn() {
           }
         />
 
-        <Link href="/(tabs)/calendar" style={styles.forgotPassword}>
+        <Text
+          style={styles.forgotPassword}
+          onPress={() =>
+            Alert.alert(
+              "Olvidaste tu contraseña?",
+              "Contacta un administrador para recuperar tu contraseña",
+              [
+                {
+                  text: "Cancelar",
+                  style: "cancel",
+                },
+                {
+                  text: "Contactar",
+                  onPress: async () => {
+                    await openBrowserAsync(
+                      "https://wa.me/+51706583?text=Hola.%20Olvidé%20mi%20contraseña.%20Me%20puedes%20ayudar?"
+                    );
+                  },
+                  style: "default",
+                },
+              ],
+              { cancelable: true }
+            )
+          }
+        >
           ¿Olvidaste tu contraseña?
-        </Link>
+        </Text>
 
         <Pressable
           style={styles.loginButton}
@@ -153,22 +177,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
   },
-  input: {
-    backgroundColor: "#fff",
-    width: 330,
-    height: 50,
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    marginVertical: 10,
-    color: "#000",
-    fontFamily: "InterVariable",
-    fontSize: 16,
-    fontWeight: "400",
-  },
-  inputError: {
-    borderWidth: 2,
-    borderColor: "rgb(215, 0, 75)",
-  },
   loginButton: {
     width: 350,
     height: 55,
@@ -191,14 +199,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "900",
     fontFamily: "InterVariable",
-  },
-  errorText: {
-    color: "rgb(215, 0, 75)",
-    marginTop: -15,
-    fontSize: 14,
-    alignSelf: "flex-start",
-    fontFamily: "InterVariable",
-    fontWeight: "900",
   },
   forgotPassword: {
     alignSelf: "flex-end",
