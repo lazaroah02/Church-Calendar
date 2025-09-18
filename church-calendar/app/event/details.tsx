@@ -8,6 +8,8 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Modal,
+  Pressable,
 } from "react-native";
 import { useState } from "react";
 import { formatTimeRange } from "@/lib/calendar/calendar-utils";
@@ -15,19 +17,24 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { BASE_URL } from "@/api-endpoints";
+import { MyNavigationBar } from "@/components/navigation-bar/my-navigation-bar";
+import Hyperlink from "react-native-hyperlink";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
   const eventParam = searchParams.get("event") as string | undefined;
   const currentDateReadable = searchParams.get("currentDateReadable");
   const parsedEvent: Event | null = eventParam ? JSON.parse(eventParam) : null;
-  const styles = useThemeStyles(eventDetailsStyles)
+  const styles = useThemeStyles(eventDetailsStyles);
 
   const [isGoing, setIsGoing] = useState(false);
+  const [isImageOpen, setIsImageOpen] = useState(false);
 
   if (!parsedEvent) {
     return (
       <View style={styles.center}>
+        <MyNavigationBar buttonsStyle="dark" />
         <Text style={styles.errorText}>Evento no encontrado</Text>
       </View>
     );
@@ -35,6 +42,7 @@ export default function EventDetails() {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
+      <MyNavigationBar buttonsStyle="dark" />
       <ScrollView contentContainerStyle={styles.container}>
         {/* Title */}
         <View style={styles.titleContainer}>
@@ -60,11 +68,46 @@ export default function EventDetails() {
 
         {/* Image */}
         {parsedEvent.img && (
-          <Image source={{ uri: parsedEvent.img }} style={styles.image} />
+          <>
+            <TouchableOpacity onPress={() => setIsImageOpen(true)}>
+              <Image
+                source={{ uri: `${BASE_URL}${parsedEvent.img}` }}
+                style={styles.image}
+              />
+            </TouchableOpacity>
+
+            {/* Modal fullscreen */}
+            <Modal
+              visible={isImageOpen}
+              transparent={true}
+              animationType="fade"
+              onRequestClose={() => setIsImageOpen(false)} // <-- Android/iOS back/gesture
+            >
+              <Pressable
+                style={styles.modalContainer}
+                onPress={() => setIsImageOpen(false)} // <-- Tocar en zona negra
+              >
+                <Pressable
+                  style={styles.closeArea}
+                  onPress={() => setIsImageOpen(false)}
+                >
+                  <Ionicons name="close" size={40} color="#fff" />
+                </Pressable>
+
+                <Image
+                  source={{ uri: `${BASE_URL}${parsedEvent.img}` }}
+                  style={styles.fullscreenImage}
+                  resizeMode="contain"
+                />
+              </Pressable>
+            </Modal>
+          </>
         )}
 
         {/* Description */}
-        <Text style={styles.description}>{parsedEvent.description}</Text>
+        <Hyperlink linkDefault={true} linkStyle={{ color: "#2980b9" }}>
+          <Text style={styles.description}>{parsedEvent.description}</Text>
+        </Hyperlink>
 
         {/* Groups */}
         <Text style={styles.groupLabel}>Evento para:</Text>
@@ -81,8 +124,9 @@ export default function EventDetails() {
             </View>
           ))}
         </View>
-
-        {/* Join button */}
+      </ScrollView>
+      {/* Join button */}
+      {parsedEvent.open_to_reservations && (
         <TouchableOpacity
           style={[styles.button, isGoing && styles.buttonActive]}
           onPress={() => setIsGoing(!isGoing)}
@@ -96,19 +140,20 @@ export default function EventDetails() {
             <Ionicons name="square-outline" size={20} color="#fff" />
           )}
         </TouchableOpacity>
-      </ScrollView>
+      )}
     </SafeAreaView>
   );
 }
 
-const eventDetailsStyles = (theme: AppTheme) =>({
+const eventDetailsStyles = (theme: AppTheme) => ({
   pageContainer: {
     flex: 1,
-    backgroundColor: "#eee",
+    backgroundColor: "#fff",
   },
   container: {
     padding: 20,
     backgroundColor: "#fff",
+    flexDirection: "column",
   },
   center: {
     flex: 1,
@@ -117,7 +162,8 @@ const eventDetailsStyles = (theme: AppTheme) =>({
   },
   errorText: {
     fontSize: theme.fontSizes.md,
-    color: "red",
+    color: "gray",
+    fontFamily: "LexendBold",
   },
   titleContainer: {
     marginBottom: 10,
@@ -127,31 +173,31 @@ const eventDetailsStyles = (theme: AppTheme) =>({
   },
   title: {
     fontSize: 23,
-    fontWeight: 500,
+    fontWeight: "500",
     color: "#000",
     fontFamily: "LexendBold",
-    paddingRight:10
+    paddingRight: 10,
   },
   date: {
     marginBottom: 2,
     color: "#000",
     fontFamily: "InterVariable",
     fontSize: theme.fontSizes.lg,
-    fontWeight: 700,
+    fontWeight: "700",
   },
   time: {
     fontSize: theme.fontSizes.md,
     marginBottom: 2,
     color: "#000",
     fontFamily: "InterVariable",
-    fontWeight: 400,
+    fontWeight: "400",
   },
   location: {
     fontSize: theme.fontSizes.md,
-    marginBottom: 2,
+    marginBottom: 15,
     color: "#000",
     fontFamily: "InterVariable",
-    fontWeight: 400,
+    fontWeight: "400",
   },
   image: {
     width: "100%",
@@ -159,15 +205,33 @@ const eventDetailsStyles = (theme: AppTheme) =>({
     backgroundColor: "#e0e0e0",
     marginBottom: 15,
     borderRadius: 10,
+    objectFit: "contain",
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.9)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeArea: {
+    position: "absolute",
+    top: 50,
+    right: 20,
+    zIndex: 10,
+  },
+  fullscreenImage: {
+    width: "100%",
+    height: "100%",
   },
   description: {
     fontSize: theme.fontSizes.md,
     lineHeight: 22,
     color: "#333",
     marginBottom: 15,
+    fontFamily: "InterVariable",
   },
   groupLabel: {
-    fontWeight: 900,
+    fontWeight: "900",
     marginBottom: 5,
     color: "#000",
     fontFamily: "InterVariable",
@@ -187,7 +251,7 @@ const eventDetailsStyles = (theme: AppTheme) =>({
     color: "#000",
     fontFamily: "InterVariable",
     fontSize: theme.fontSizes.md,
-    fontWeight: 400,
+    fontWeight: "400",
   },
   groupColor: {
     width: 20,
@@ -197,6 +261,8 @@ const eventDetailsStyles = (theme: AppTheme) =>({
   button: {
     backgroundColor: "#5D3731",
     paddingVertical: 12,
+    marginHorizontal: 20,
+    marginBottom: 10,
     borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",
@@ -208,7 +274,7 @@ const eventDetailsStyles = (theme: AppTheme) =>({
   },
   buttonText: {
     color: "#fff",
-    fontWeight: 600,
+    fontWeight: "600",
     fontFamily: "InterVariable",
     fontSize: theme.fontSizes.md,
   },

@@ -29,7 +29,7 @@ class Event(models.Model):
     groups = models.ManyToManyField(ChurchGroup, blank=True)
     visible = models.BooleanField(default=True)
     is_canceled = models.BooleanField(default=False)
-    open_to_reservations = models.BooleanField(default=True)
+    open_to_reservations = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

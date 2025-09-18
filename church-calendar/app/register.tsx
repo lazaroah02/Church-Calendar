@@ -14,6 +14,7 @@ import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { MyNavigationBar } from "@/components/navigation-bar/my-navigation-bar";
 
 export default function Register() {
   const { signIn } = useSession();
@@ -35,6 +36,7 @@ export default function Register() {
       extraScrollHeight={20}
       style={{ backgroundColor: "rgba(236, 161, 0, 1)" }}
     >
+      <MyNavigationBar buttonsStyle="dark"/>
       <View style={styles.form}>
         <Text style={styles.formTitle}>Crear Cuenta</Text>
 
