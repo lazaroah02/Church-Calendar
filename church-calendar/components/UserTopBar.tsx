@@ -1,8 +1,11 @@
-import { StyleSheet, View, Text } from "react-native";
+import { View, Text } from "react-native";
 import { useSession } from "@/hooks/auth/useSession";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export function UserTopBar() {
   const { session } = useSession();
+  const styles = useThemeStyles(userTopBarStyles)
   return (
     <View style={styles.container}>
       <View style={styles.profilePicture}></View>
@@ -19,7 +22,7 @@ export function UserTopBar() {
   );
 }
 
-const styles = StyleSheet.create({
+const userTopBarStyles = (theme: AppTheme) =>({
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -44,13 +47,13 @@ const styles = StyleSheet.create({
   userName: {
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 15,
+    fontSize: theme.fontSizes.md,
     fontWeight: 500,
   },
   welcomeMessage: {
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 15,
+    fontSize: theme.fontSizes.md,
     fontWeight: 400,
     opacity: 0.5,
   },

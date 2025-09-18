@@ -1,7 +1,10 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export default function FormErrorBanner({ message }: { message: string }) {
+  const styles = useThemeStyles(formBannerErrorStyles)
   if (!message) return null;
 
   return (
@@ -12,7 +15,7 @@ export default function FormErrorBanner({ message }: { message: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+const formBannerErrorStyles = (theme: AppTheme) =>({
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -28,6 +31,6 @@ const styles = StyleSheet.create({
     color: "#b91c1c",
     marginLeft: 8,
     fontFamily: "InterVariable",
-    fontSize: 14,
+    fontSize: theme.fontSizes.md,
   },
 });

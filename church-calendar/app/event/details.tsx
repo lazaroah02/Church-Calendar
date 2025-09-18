@@ -5,7 +5,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   Image,
   TouchableOpacity,
@@ -14,12 +13,15 @@ import { useState } from "react";
 import { formatTimeRange } from "@/lib/calendar/calendar-utils";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
   const eventParam = searchParams.get("event") as string | undefined;
   const currentDateReadable = searchParams.get("currentDateReadable");
   const parsedEvent: Event | null = eventParam ? JSON.parse(eventParam) : null;
+  const styles = useThemeStyles(eventDetailsStyles)
 
   const [isGoing, setIsGoing] = useState(false);
 
@@ -99,7 +101,7 @@ export default function EventDetails() {
   );
 }
 
-const styles = StyleSheet.create({
+const eventDetailsStyles = (theme: AppTheme) =>({
   pageContainer: {
     flex: 1,
     backgroundColor: "#eee",
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   errorText: {
-    fontSize: 16,
+    fontSize: theme.fontSizes.md,
     color: "red",
   },
   titleContainer: {
@@ -134,18 +136,18 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 18,
+    fontSize: theme.fontSizes.lg,
     fontWeight: 700,
   },
   time: {
-    fontSize: 16,
+    fontSize: theme.fontSizes.md,
     marginBottom: 2,
     color: "#000",
     fontFamily: "InterVariable",
     fontWeight: 400,
   },
   location: {
-    fontSize: 16,
+    fontSize: theme.fontSizes.md,
     marginBottom: 2,
     color: "#000",
     fontFamily: "InterVariable",
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   description: {
-    fontSize: 16,
+    fontSize: theme.fontSizes.md,
     lineHeight: 22,
     color: "#333",
     marginBottom: 15,
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 18,
+    fontSize: theme.fontSizes.lg,
   },
   groupsContainer: {
     flexDirection: "row",
@@ -184,7 +186,7 @@ const styles = StyleSheet.create({
   groupName: {
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 16,
+    fontSize: theme.fontSizes.md,
     fontWeight: 400,
   },
   groupColor: {
@@ -208,6 +210,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: 600,
     fontFamily: "InterVariable",
-    fontSize: 16,
+    fontSize: theme.fontSizes.md,
   },
 });

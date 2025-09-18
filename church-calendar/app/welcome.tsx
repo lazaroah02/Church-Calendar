@@ -1,27 +1,29 @@
 import { Link } from "expo-router";
-import {
-  StatusBar,
-  Text,
-  View,
-  StyleSheet,
-  Pressable,
-} from "react-native";
+import { StatusBar, Text, View, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { navigate } from "expo-router/build/global-state/routing";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { AppTheme } from "@/theme";
 
 export default function Welcome() {
+  const styles = useThemeStyles(welcomeStyles);
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ height: 350, justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{ height: 350, justifyContent: "center", alignItems: "center" }}
+      >
         <Image
           source={require("@/assets/images/Logo.png")}
           style={styles.logo}
         />
-        <Text style = {styles.title}>La Resurrección Calendar</Text>
+        <Text style={styles.title}>La Resurrección Calendar</Text>
       </View>
       <View style={styles.container}>
         <Text style={styles.containerTitle}>Bienvenido</Text>
-        <Text style={styles.containerwelcomeMessage}>Aquí encontrarás todos los eventos disponibles de forma fácil y rápida.</Text>
+        <Text style={styles.containerwelcomeMessage}>
+          Aquí encontrarás todos los eventos disponibles de forma fácil y
+          rápida.
+        </Text>
         <Pressable
           style={styles.loginButton}
           onPress={() => {
@@ -38,21 +40,7 @@ export default function Welcome() {
         >
           <Text style={styles.registerButtonText}>Crear Cuenta</Text>
         </Pressable>
-        <Link
-          href="/(tabs)/calendar"
-          style={{
-            fontSize: 14,
-            fontWeight: 500,
-            opacity: 0.7,
-            color:"#fff",
-            textShadowColor: "rgba(0, 0, 0, 0.25)",
-            textShadowOffset: { width: 0, height: 2 },
-            textShadowRadius: 4,
-            fontFamily: "LexendBold",
-            lineHeight: 15,
-            marginTop: 10,
-          }}
-        >
+        <Link href="/(tabs)/calendar" style={styles.continueLikeGuest}>
           Continuar como invitado
         </Link>
       </View>
@@ -61,12 +49,12 @@ export default function Welcome() {
   );
 }
 
-const styles = StyleSheet.create({
+const welcomeStyles = (theme: AppTheme) => ({
   logo: {
     width: 80,
-    height: 130
+    height: 130,
   },
-  title:{
+  title: {
     width: 200,
     textAlign: "center",
     color: "#442525",
@@ -100,10 +88,10 @@ const styles = StyleSheet.create({
   },
   containerwelcomeMessage: {
     alignSelf: "center",
-    textAlign:"center",
+    textAlign: "center",
     color: "#FFF",
     fontFamily: "LexendBold",
-    fontSize: 20,
+    fontSize: theme.fontSizes.lg,
     fontWeight: 600,
     marginBottom: 10,
   },
@@ -124,7 +112,7 @@ const styles = StyleSheet.create({
   },
   logginButtonText: {
     color: "#442525",
-    fontSize: 20,
+    fontSize: theme.fontSizes.xl,
     fontWeight: "bold",
     fontFamily: "InterVariable",
   },
@@ -144,8 +132,20 @@ const styles = StyleSheet.create({
   },
   registerButtonText: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: theme.fontSizes.xl,
     fontWeight: "bold",
     fontFamily: "InterVariable",
+  },
+  continueLikeGuest: {
+    fontSize: theme.fontSizes.sm,
+    fontWeight: 500,
+    opacity: 0.7,
+    color: "#fff",
+    textShadowColor: "rgba(0, 0, 0, 0.25)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+    fontFamily: "LexendBold",
+    lineHeight: 15,
+    marginTop: 10,
   },
 });

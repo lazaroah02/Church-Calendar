@@ -3,7 +3,6 @@ import {
   StatusBar,
   Text,
   View,
-  StyleSheet,
   Pressable,
   TextInput,
 } from "react-native";
@@ -13,11 +12,14 @@ import { useSession } from "@/hooks/auth/useSession";
 import { Label } from "@react-navigation/elements";
 import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export default function Register() {
   const { signIn } = useSession();
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const styles = useThemeStyles(registerStyles)
 
   const onChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
     const currentDate = selectedDate;
@@ -90,7 +92,7 @@ export default function Register() {
   );
 }
 
-const styles = StyleSheet.create({
+const registerStyles = (theme: AppTheme) =>({
   logo: {
     width: 80,
     height: 130,
@@ -137,14 +139,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 18,
+    fontSize: theme.fontSizes.lg,
     fontWeight: "400",
   },
   label: {
     alignSelf: "flex-start",
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 18,
+    fontSize: theme.fontSizes.lg,
     fontWeight: "600",
     opacity:0.8
   },
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
   },
   registerButtonText: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: theme.fontSizes.xl,
     fontWeight: "600",
     fontFamily: "InterVariable",
   },

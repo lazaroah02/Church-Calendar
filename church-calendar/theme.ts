@@ -1,9 +1,9 @@
 export const normalTheme = {
   fontSizes: {
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl:20
+    sm: 12,
+    md: 14,
+    lg: 16,
+    xl:18
   },
 };
 

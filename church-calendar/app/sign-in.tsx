@@ -16,10 +16,13 @@ import { LoginFormErrors } from "@/types/auth";
 import FormErrorBanner from "@/components/form/form-banner-error";
 import { CustomInput } from "@/components/form/custom-input";
 import { openBrowserAsync } from "expo-web-browser";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export default function SignIn() {
   const { signIn } = useSession();
   const [loading, setLoading] = useState(false);
+  const styles = useThemeStyles(signInStyles)
   const [formValues, setFormValues] = useState<{ email: string; pass: string }>(
     { email: "", pass: "" }
   );
@@ -33,7 +36,7 @@ export default function SignIn() {
     >
       <View
         style={{
-          height: 350,
+          height: 300,
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -140,7 +143,7 @@ export default function SignIn() {
   );
 }
 
-const styles = StyleSheet.create({
+const signInStyles = (theme: AppTheme) =>({
   logo: {
     width: 80,
     height: 130,
@@ -196,7 +199,7 @@ const styles = StyleSheet.create({
   },
   logginButtonText: {
     color: "#442525",
-    fontSize: 20,
+    fontSize: theme.fontSizes.xl,
     fontWeight: "900",
     fontFamily: "InterVariable",
   },
@@ -206,7 +209,7 @@ const styles = StyleSheet.create({
     marginTop: -10,
     marginBottom: 10,
     fontFamily: "InterVariable",
-    fontSize: 15,
+    fontSize: theme.fontSizes.sm,
     fontWeight: "400",
     opacity: 0.7,
   },

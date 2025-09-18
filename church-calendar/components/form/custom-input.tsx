@@ -1,5 +1,7 @@
+import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { KeyboardTypeOptions, StyleSheet, TextInput, View } from "react-native";
+import { KeyboardTypeOptions, TextInput, View } from "react-native";
 
 export function CustomInput({
   error,
@@ -8,6 +10,7 @@ export function CustomInput({
   secureTextEntry = false,
   onChangeText = () => null,
 }: CustomInputProps) {
+  const styles = useThemeStyles(customInputStyles)
   return (
     <View style={styles.inputContainer}>
       <TextInput
@@ -29,7 +32,7 @@ export function CustomInput({
   );
 }
 
-const styles = StyleSheet.create({
+const customInputStyles = (theme: AppTheme) =>({
   inputContainer: {
     position: "relative",
     marginVertical: 10,
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 18,
+    fontSize: theme.fontSizes.lg,
     fontWeight: "400",
   },
   inputError: {
