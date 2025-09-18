@@ -2,7 +2,6 @@ from dj_rest_auth.views import LoginView
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from rest_framework.authentication import TokenAuthentication
 from authentication.serializers import CustomUserDetailsSerializer
 
 
@@ -32,7 +31,6 @@ class CustomLoginView(LoginView):
 
         Required permissions: None (standard login endpoint)
     """
-    authentication_classes = [TokenAuthentication]
 
     def get_response(self):
         serializer = self.get_serializer(data=self.request.data)

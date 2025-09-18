@@ -20,6 +20,7 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { BASE_URL } from "@/api-endpoints";
 import { MyNavigationBar } from "@/components/navigation-bar/my-navigation-bar";
 import Hyperlink from "react-native-hyperlink";
+import { useSession } from "@/hooks/auth/useSession";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
@@ -27,6 +28,7 @@ export default function EventDetails() {
   const currentDateReadable = searchParams.get("currentDateReadable");
   const parsedEvent: Event | null = eventParam ? JSON.parse(eventParam) : null;
   const styles = useThemeStyles(eventDetailsStyles);
+  const {session} = useSession()
 
   const [isGoing, setIsGoing] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState(false);
@@ -126,7 +128,7 @@ export default function EventDetails() {
         </View>
       </ScrollView>
       {/* Join button */}
-      {parsedEvent.open_to_reservations && (
+      {parsedEvent.open_to_reservations && session && (
         <TouchableOpacity
           style={[styles.button, isGoing && styles.buttonActive]}
           onPress={() => setIsGoing(!isGoing)}
