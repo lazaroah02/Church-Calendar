@@ -1,7 +1,9 @@
-import { Text, StyleSheet, View, Pressable } from "react-native";
+import { Text, View, Pressable } from "react-native";
 import { Event } from "@/types/event";
 import { formatTimeRange } from "@/lib/calendar/calendar-utils";
 import { router } from "expo-router";
+import type { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export function EventComponent({
   item,
@@ -10,12 +12,16 @@ export function EventComponent({
   item: Event;
   currentDateReadable: string;
 }) {
+  const styles = useThemeStyles(eventComponentStyles);
   return (
     <Pressable
       onPress={() =>
         router.push({
           pathname: "/event/details",
-          params: { event: JSON.stringify(item), currentDateReadable: currentDateReadable },
+          params: {
+            event: JSON.stringify(item),
+            currentDateReadable: currentDateReadable,
+          },
         })
       }
       style={styles.eventCard}
@@ -45,12 +51,12 @@ export function EventComponent({
   );
 }
 
-const styles = StyleSheet.create({
+const eventComponentStyles = (theme: AppTheme) => ({
   eventCard: {
     marginBottom: 25,
   },
   eventTime: {
-    fontSize: 16,
+    fontSize: theme.fontSizes.md,
     color: "#000",
     fontFamily: "InterVariable",
     fontWeight: 900,
@@ -59,7 +65,7 @@ const styles = StyleSheet.create({
   eventTitle: {
     color: "#000",
     fontFamily: "LexendBold",
-    fontSize: 18,
+    fontSize: theme.fontSizes.lg,
     fontWeight: 500,
   },
   groups: {
@@ -85,7 +91,7 @@ const styles = StyleSheet.create({
   groupName: {
     color: "#000",
     fontFamily: "LexendBold",
-    fontSize: 14,
+    fontSize: theme.fontSizes.sm,
     fontWeight: 400,
     opacity: 0.5,
   },

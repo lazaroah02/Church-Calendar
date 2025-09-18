@@ -3,11 +3,14 @@ import BottomSheet, {
   BottomSheetBackgroundProps,
 } from "@gorhom/bottom-sheet";
 import { useMemo, useRef } from "react";
-import { Text, StyleSheet, Animated } from "react-native";
+import { Text, Animated } from "react-native";
 import { DateData } from "react-native-calendars";
 import { Event } from "@/types/event";
 import { formatSelectedDay } from "@/lib/calendar/calendar-utils";
 import { EventComponent } from "./event";
+import { useAppTheme } from "@/contexts/theme-context";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export function EventsBottomSheet({
   selectedDay,
@@ -16,6 +19,7 @@ export function EventsBottomSheet({
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["30%", "95%"], []);
   const currentDateReadable = formatSelectedDay(selectedDay.dateString);
+  const styles = useThemeStyles(bottomSheetStyles);
 
   return (
     <BottomSheet
@@ -54,6 +58,7 @@ const CustomBottomSheetBackground: React.FC<BottomSheetBackgroundProps> = ({
   style,
 }) => {
   // combina el style que el BottomSheet pasa internamente con el tuyo
+  const styles = useThemeStyles(bottomSheetStyles);
   const containerStyle = useMemo(
     () => [style, styles.sheetBackground],
     [style]
@@ -61,7 +66,7 @@ const CustomBottomSheetBackground: React.FC<BottomSheetBackgroundProps> = ({
   return <Animated.View style={containerStyle} />;
 };
 
-const styles = StyleSheet.create({
+const bottomSheetStyles = (theme: AppTheme) => ({
   sheetBackground: {
     backgroundColor: "white",
     borderTopLeftRadius: 50,
@@ -86,12 +91,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: "#444",
     fontFamily: "InterVariable",
-    fontSize: 20,
+    fontSize: theme.fontSizes.lg,
     fontWeight: 700,
   },
   noEvents: {
     color: "#aaa",
     textAlign: "center",
     marginTop: 20,
+    fontSize: theme.fontSizes.sm,
   },
 });

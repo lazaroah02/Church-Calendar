@@ -9,7 +9,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-
+import { AppThemeProvider } from "@/contexts/theme-context";
 import { queryClient, persister } from "@/lib/query-client";
 
 export default function Root() {
@@ -20,14 +20,16 @@ export default function Root() {
   }, []);
 
   if (!hydrated) {
-    return <SplashScreenController />
+    return <SplashScreenController />;
   }
 
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
-        <SplashScreenController />
-        <RootLayout />
+        <AppThemeProvider>
+          <SplashScreenController />
+          <RootLayout />
+        </AppThemeProvider>
       </SessionProvider>
     </QueryClientProvider>
   );
@@ -42,7 +44,7 @@ function RootLayout() {
 
   if (!loaded) {
     // Async font loading only occurs in development.
-    return <SplashScreenController />
+    return <SplashScreenController />;
   }
 
   return (
