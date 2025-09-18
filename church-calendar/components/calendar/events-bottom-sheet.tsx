@@ -17,7 +17,7 @@ export function EventsBottomSheet({
   selectedDayEvents,
 }: EventsBottomSheetProps) {
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["30%", "95%"], []);
+  const snapPoints = useMemo(() => ["25%", "95%"], []);
   const currentDateReadable = formatSelectedDay(selectedDay.dateString);
   const styles = useThemeStyles(bottomSheetStyles);
 
@@ -85,7 +85,7 @@ const bottomSheetStyles = (theme: AppTheme) => ({
   },
   listContent: {
     paddingBottom: 40,
-    minHeight: "30%", // Ensure minimum height is the same as first snap point
+    minHeight: "25%", // Ensure minimum height is the same as first snap point
   },
   title: {
     marginBottom: 15,
