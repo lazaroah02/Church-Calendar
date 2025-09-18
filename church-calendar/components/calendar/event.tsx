@@ -1,34 +1,47 @@
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, Pressable } from "react-native";
 import { Event } from "@/types/event";
 import { formatTimeRange } from "@/lib/calendar/calendar-utils";
-import { Link } from "expo-router";
+import { router } from "expo-router";
 
-export function EventComponent({ item }: { item: Event }) {
+export function EventComponent({
+  item,
+  currentDateReadable,
+}: {
+  item: Event;
+  currentDateReadable: string;
+}) {
   return (
-    <Link href="/(tabs)/calendar" style={styles.eventCard}>
-        <View>
-          <Text style={styles.eventTitle}>{item.title}</Text>
-          <Text style={styles.eventTime}>
-            {formatTimeRange(item.start_time, item.end_time)}
-          </Text>
-          <View style={styles.groups}>
-            {item.groups_full_info?.map((group, i) => (
-              <View key={i} style={styles.group}>
-                <View
-                  style={[
-                    styles.groupColor,
-                    {
-                      backgroundColor:
-                        group.color !== "" ? group.color : "#eee",
-                    },
-                  ]}
-                ></View>
-                <Text style={styles.groupName}>{group.name}</Text>
-              </View>
-            ))}
-          </View>
+    <Pressable
+      onPress={() =>
+        router.push({
+          pathname: "/event/details",
+          params: { event: JSON.stringify(item), currentDateReadable: currentDateReadable },
+        })
+      }
+      style={styles.eventCard}
+    >
+      <View>
+        <Text style={styles.eventTitle}>{item.title}</Text>
+        <Text style={styles.eventTime}>
+          {formatTimeRange(item.start_time, item.end_time)}
+        </Text>
+        <View style={styles.groups}>
+          {item.groups_full_info?.map((group, i) => (
+            <View key={i} style={styles.group}>
+              <View
+                style={[
+                  styles.groupColor,
+                  {
+                    backgroundColor: group.color !== "" ? group.color : "#eee",
+                  },
+                ]}
+              ></View>
+              <Text style={styles.groupName}>{group.name}</Text>
+            </View>
+          ))}
         </View>
-    </Link>
+      </View>
+    </Pressable>
   );
 }
 
@@ -37,7 +50,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   eventTime: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#000",
     fontFamily: "InterVariable",
     fontWeight: 900,
@@ -46,7 +59,7 @@ const styles = StyleSheet.create({
   eventTitle: {
     color: "#000",
     fontFamily: "LexendBold",
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: 500,
   },
   groups: {
@@ -72,7 +85,7 @@ const styles = StyleSheet.create({
   groupName: {
     color: "#000",
     fontFamily: "LexendBold",
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: 400,
     opacity: 0.5,
   },

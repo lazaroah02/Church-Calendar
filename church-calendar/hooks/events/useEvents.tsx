@@ -67,7 +67,7 @@ export function useEvents() {
     isLoading: loadingEvents,
     refetch: refetchEvents,
   } = useQuery({
-    queryKey: ["events", JSON.stringify(interval), session?.token],
+    queryKey: ["events", JSON.stringify(interval), session?.token ?? "guest"],
     queryFn: () =>
       getEvents({
         start_date: interval.start_date,

@@ -2,6 +2,8 @@ import { createContext, type PropsWithChildren } from "react";
 import { useStorageState } from "@/hooks/useStorageState";
 import { login } from "@/services/auth/login";
 import { Session } from "@/types/auth";
+import { queryClient } from "@/lib/query-client";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface SignInProps {
   email: string;
@@ -50,8 +52,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
     <AuthContext
       value={{
         signIn: handleSignIn,
-        signOut: () => {
+        signOut: async () => {
           setSession(null);
+          queryClient.clear()
+          await AsyncStorage.removeItem("REACT_QUERY_OFFLINE_CACHE");
         },
         session: session ? JSON.parse(session) : null,
         isLoading,

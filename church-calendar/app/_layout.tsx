@@ -67,6 +67,10 @@ function RootLayout() {
             name="register"
             options={{ headerShown: false, animation: "fade" }}
           />
+          <Stack.Screen
+            name="event/details"
+            options={{ headerShown: false, animation: "slide_from_right" }}
+          />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style={"auto"} />

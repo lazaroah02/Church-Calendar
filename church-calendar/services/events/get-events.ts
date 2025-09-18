@@ -7,14 +7,18 @@ export async function getEvents({
   group_by = "month_days",
   token = "",
 }: GetEventsProps) {
+  const options: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Token ${token}` } : {}),
+      credentials: "omit"
+    },
+  };
   try {
     const res = await fetch(
       `${EVENTS_URL}?start_date=${start_date}&end_date=${end_date}&group_by=${group_by}`,
-      {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      }
+      options
     );
     if (res.ok) {
       return res.json().then((data) => {

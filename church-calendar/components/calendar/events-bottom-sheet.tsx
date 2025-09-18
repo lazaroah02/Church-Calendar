@@ -1,4 +1,7 @@
-import BottomSheet, { BottomSheetFlatList, BottomSheetBackgroundProps } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetFlatList,
+  BottomSheetBackgroundProps,
+} from "@gorhom/bottom-sheet";
 import { useMemo, useRef } from "react";
 import { Text, StyleSheet, Animated } from "react-native";
 import { DateData } from "react-native-calendars";
@@ -12,6 +15,7 @@ export function EventsBottomSheet({
 }: EventsBottomSheetProps) {
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["30%", "95%"], []);
+  const currentDateReadable = formatSelectedDay(selectedDay.dateString);
 
   return (
     <BottomSheet
@@ -19,19 +23,22 @@ export function EventsBottomSheet({
       index={0}
       snapPoints={snapPoints}
       enableContentPanningGesture={true}
-      backgroundComponent={CustomBottomSheetBackground} 
+      backgroundComponent={CustomBottomSheetBackground}
     >
       <BottomSheetFlatList
         data={selectedDayEvents}
-        renderItem={(item) => <EventComponent item={item.item} />}
+        renderItem={(item) => (
+          <EventComponent
+            item={item.item}
+            currentDateReadable={currentDateReadable}
+          />
+        )}
         ListEmptyComponent={<Text style={styles.noEvents}>No hay eventos</Text>}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContent}
         style={styles.content}
         ListHeaderComponent={
-          <Text style={styles.title}>
-            {formatSelectedDay(selectedDay.dateString)}
-          </Text>
+          <Text style={styles.title}>{currentDateReadable}</Text>
         }
       />
     </BottomSheet>
@@ -43,12 +50,16 @@ interface EventsBottomSheetProps {
   selectedDayEvents: Event[] | undefined;
 }
 
-const CustomBottomSheetBackground: React.FC<BottomSheetBackgroundProps> = ({ style }) => {
+const CustomBottomSheetBackground: React.FC<BottomSheetBackgroundProps> = ({
+  style,
+}) => {
   // combina el style que el BottomSheet pasa internamente con el tuyo
-  const containerStyle = useMemo(() => [style, styles.sheetBackground], [style]);
+  const containerStyle = useMemo(
+    () => [style, styles.sheetBackground],
+    [style]
+  );
   return <Animated.View style={containerStyle} />;
 };
-
 
 const styles = StyleSheet.create({
   sheetBackground: {
@@ -75,7 +86,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: "#444",
     fontFamily: "InterVariable",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 700,
   },
   noEvents: {

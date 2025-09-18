@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "400",
   },
   inputError: {

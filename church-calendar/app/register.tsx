@@ -77,7 +77,7 @@ export default function Register() {
         <Pressable
           style={styles.registerButton}
           onPress={() => {
-            signIn();
+            //signIn();
             router.replace("/(tabs)/calendar");
           }}
         >
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#442525",
     fontFamily: "LexendBold",
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "700",
   },
   form: {
@@ -137,14 +137,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "400",
   },
   label: {
     alignSelf: "flex-start",
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600",
     opacity:0.8
   },
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   registerButtonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "600",
     fontFamily: "InterVariable",
   },

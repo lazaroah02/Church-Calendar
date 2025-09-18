@@ -17,7 +17,7 @@ export function CalendarComponent({
       }}
       dayComponent={(date) => renderDayComponent(date)}
       theme={{
-        textDayHeaderFontSize: 16,
+        textDayHeaderFontSize: 18,
         textDayHeaderFontWeight: "900",
         textDayHeaderFontFamily:"InterVariable",
         textSectionTitleColor:"#000",
@@ -56,11 +56,11 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     color: "#343434",
     fontFamily: "InterVariable",
-    fontSize: 23,
+    fontSize: 25,
     fontWeight: 900,
   },
   year: {
-    fontSize: 14,
+    fontSize: 15,
     color: "#343434",
     marginTop: -2,
     fontFamily: "InterVariable",
