@@ -73,7 +73,14 @@ function RootLayout() {
             name="event/details"
             options={{ headerShown: false, animation: "slide_from_right" }}
           />
-          <Stack.Screen name="+not-found" />
+          <Stack.Screen
+            name="user/profile"
+            options={{ headerShown: false, animation: "slide_from_right" }}
+          />
+          <Stack.Screen
+            name="+not-found"
+            options={{ headerShown: false, animation: "slide_from_right" }}
+          />
         </Stack>
         <StatusBar style={"auto"} />
       </SafeAreaProvider>

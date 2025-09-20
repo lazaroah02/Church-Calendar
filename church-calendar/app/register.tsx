@@ -14,7 +14,7 @@ import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
-import { MyNavigationBar } from "@/components/navigation-bar/my-navigation-bar";
+import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 
 export default function Register() {
   const { signIn } = useSession();

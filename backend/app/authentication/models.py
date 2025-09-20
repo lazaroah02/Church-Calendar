@@ -54,7 +54,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     full_name = models.CharField(
         max_length=255,
-        blank=True,
         default="",
         help_text="Full name"
     )

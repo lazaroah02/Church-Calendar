@@ -18,7 +18,7 @@ import { router } from "expo-router";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { BASE_URL } from "@/api-endpoints";
-import { MyNavigationBar } from "@/components/navigation-bar/my-navigation-bar";
+import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import Hyperlink from "react-native-hyperlink";
 import { useSession } from "@/hooks/auth/useSession";
 
@@ -28,18 +28,13 @@ export default function EventDetails() {
   const currentDateReadable = searchParams.get("currentDateReadable");
   const parsedEvent: Event | null = eventParam ? JSON.parse(eventParam) : null;
   const styles = useThemeStyles(eventDetailsStyles);
-  const {session} = useSession()
+  const { session } = useSession()
 
   const [isGoing, setIsGoing] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState(false);
 
   if (!parsedEvent) {
-    return (
-      <View style={styles.center}>
-        <MyNavigationBar buttonsStyle="dark" />
-        <Text style={styles.errorText}>Evento no encontrado</Text>
-      </View>
-    );
+    return router.replace("/+not-found")
   }
 
   return (
@@ -156,16 +151,6 @@ const eventDetailsStyles = (theme: AppTheme) => ({
     padding: 20,
     backgroundColor: "#fff",
     flexDirection: "column",
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  errorText: {
-    fontSize: theme.fontSizes.md,
-    color: "gray",
-    fontFamily: "LexendBold",
   },
   titleContainer: {
     marginBottom: 10,

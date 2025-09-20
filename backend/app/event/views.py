@@ -113,7 +113,6 @@ class Events(EventListMixin, viewsets.ReadOnlyModelViewSet):
     pagination_class = EventsPagination
 
     def get_queryset(self):
-        print(self.request.user)
         if not self.request.user.is_authenticated:
             general_group = ChurchGroup.objects.get(name=GENERAL_GROUP_NAME)
             return Event.objects.filter(visible=True, groups__in=[general_group])

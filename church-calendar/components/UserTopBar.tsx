@@ -1,28 +1,45 @@
-import { View, Text } from "react-native";
+import { View, Text, Image, Pressable } from "react-native";
 import { useSession } from "@/hooks/auth/useSession";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { BASE_URL } from "@/api-endpoints";
+import { Ionicons } from "@expo/vector-icons";
+import { navigate } from "expo-router/build/global-state/routing";
 
 export function UserTopBar() {
   const { session } = useSession();
-  const styles = useThemeStyles(userTopBarStyles)
+  const styles = useThemeStyles(userTopBarStyles);
   return (
-    <View style={styles.container}>
-      <View style={styles.profilePicture}></View>
-      <View>
-        <Text style={styles.userName}>
-          Hola,{" "}
-          {session == null
-            ? "Invitado"
-            : session.userInfo?.full_name || session.userInfo?.email}
-        </Text>
-        <Text style={styles.welcomeMessage}>Dios te Bendiga!</Text>
-      </View>
+    <View>
+      <Pressable
+        style={styles.container}
+        onPress={() => session && navigate("/user/profile")}
+      >
+        <View style={styles.profilePictureContainer}>
+          {session?.userInfo.profile_img ? (
+            <Image
+              style={styles.profilePicture}
+              source={{ uri: `${BASE_URL}${session?.userInfo.profile_img}` }}
+            />
+          ) : (
+            <Ionicons name="person-outline" size={30} color="#fff" />
+          )}
+        </View>
+        <View>
+          <Text style={styles.userName}>
+            Hola,{" "}
+            {session == null
+              ? "Invitado"
+              : session.userInfo?.full_name || session.userInfo?.email}
+          </Text>
+          <Text style={styles.welcomeMessage}>Dios te Bendiga!</Text>
+        </View>
+      </Pressable>
     </View>
   );
 }
 
-const userTopBarStyles = (theme: AppTheme) =>({
+const userTopBarStyles = (theme: AppTheme) => ({
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -38,10 +55,17 @@ const userTopBarStyles = (theme: AppTheme) =>({
     shadowRadius: 4,
     elevation: 4,
   },
-  profilePicture: {
+  profilePictureContainer: {
     backgroundColor: "#37C6FF",
     width: 45,
     height: 45,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  profilePicture: {
+    width: "100%",
+    height: "100%",
     borderRadius: 100,
   },
   userName: {
