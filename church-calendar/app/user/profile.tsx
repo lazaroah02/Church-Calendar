@@ -15,8 +15,10 @@ export default function UserProfile() {
   const { session } = useSession();
 
   const searchParams = useSearchParams();
-    const userInfoParam = searchParams.get("userInfo") as string | undefined;
-    const parsedUserInfo: UserInfo | null = userInfoParam ? JSON.parse(userInfoParam) : null;
+  const userInfoParam = searchParams.get("userInfo") as string | undefined;
+  const parsedUserInfo: UserInfo | null = userInfoParam
+    ? JSON.parse(userInfoParam)
+    : null;
 
   if (!parsedUserInfo) {
     return router.replace("/+not-found");
@@ -46,7 +48,7 @@ export default function UserProfile() {
 
         {/*Description*/}
         <Text style={styles.description}>{parsedUserInfo.description}</Text>
-        
+
         {/* Groups */}
         <Text style={styles.groupLabel}>Grupos:</Text>
         <View style={styles.groupsContainer}>
@@ -100,20 +102,25 @@ const userProfileStyles = (theme: AppTheme) => {
       gap: 5,
     },
     name: {
-      fontWeight: 700,
-      fontSize: theme.fontSizes.lg,
+      fontWeight: 500,
+      fontSize: theme.fontSizes.xl,
+      color: "#000",
+      fontFamily: "LexendBold",
     },
     description: {
-      fontSize: theme.fontSizes.md,
+      fontSize: theme.fontSizes.lg,
       marginTop: 20,
-    },
-    groupLabel: {
-      fontWeight: "900",
-      marginBottom: 5,
-      marginTop:20,
       color: "#000",
       fontFamily: "InterVariable",
-      fontSize: theme.fontSizes.lg,
+      fontWeight: 400,
+    },
+    groupLabel: {
+      fontWeight: 500,
+      marginBottom: 5,
+      marginTop: 20,
+      color: "#000",
+      fontFamily: "LexendBold",
+      fontSize: theme.fontSizes.xl,
     },
     groupsContainer: {
       flexDirection: "row",
@@ -129,7 +136,8 @@ const userProfileStyles = (theme: AppTheme) => {
       color: "#000",
       fontFamily: "InterVariable",
       fontSize: theme.fontSizes.md,
-      fontWeight: "400",
+      fontWeight: 400,
+      
     },
     groupColor: {
       width: 20,
