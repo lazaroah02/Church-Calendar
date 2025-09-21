@@ -1,3 +1,4 @@
+import { UserInfo } from "./auth";
 import { GroupReducedInfo } from "./group";
 
 export type DateString = `${number}-${number}-${number}` | string; // "YYYY-MM-DD"
@@ -31,4 +32,5 @@ export type Event = {
     created_at: string
     updated_at: string
     groups_full_info: GroupReducedInfo[]
+    created_by_full_info: UserInfo
 }

@@ -14,13 +14,14 @@ import {
 import { useState } from "react";
 import { formatTimeRange } from "@/lib/calendar/calendar-utils";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { BASE_URL } from "@/api-endpoints";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import Hyperlink from "react-native-hyperlink";
 import { useSession } from "@/hooks/auth/useSession";
+import { navigate } from "expo-router/build/global-state/routing";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
@@ -28,13 +29,13 @@ export default function EventDetails() {
   const currentDateReadable = searchParams.get("currentDateReadable");
   const parsedEvent: Event | null = eventParam ? JSON.parse(eventParam) : null;
   const styles = useThemeStyles(eventDetailsStyles);
-  const { session } = useSession()
+  const { session } = useSession();
 
   const [isGoing, setIsGoing] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState(false);
 
   if (!parsedEvent) {
-    return router.replace("/+not-found")
+    return router.replace("/+not-found");
   }
 
   return (
@@ -106,6 +107,36 @@ export default function EventDetails() {
           <Text style={styles.description}>{parsedEvent.description}</Text>
         </Hyperlink>
 
+        {/*Created by*/}
+        <Text style={styles.groupLabel}>Creado por:</Text>
+        <Pressable
+          onPress={() =>
+            router.push({
+              pathname: "/user/profile",
+              params: {
+                userInfo: JSON.stringify(parsedEvent.created_by_full_info),
+              },
+            })
+          }
+          style={styles.createdByContainer}
+        >
+          <View style={styles.profilePictureContainer}>
+            {parsedEvent.created_by_full_info?.profile_img ? (
+              <Image
+                style={styles.profilePicture}
+                source={{
+                  uri: `${BASE_URL}${parsedEvent.created_by_full_info?.profile_img}`,
+                }}
+              />
+            ) : (
+              <Ionicons name="person-outline" size={20} color="#fff" />
+            )}
+          </View>
+          <Text style={styles.userName}>
+            {parsedEvent.created_by_full_info?.full_name}
+          </Text>
+        </Pressable>
+
         {/* Groups */}
         <Text style={styles.groupLabel}>Evento para:</Text>
         <View style={styles.groupsContainer}>
@@ -122,6 +153,7 @@ export default function EventDetails() {
           ))}
         </View>
       </ScrollView>
+
       {/* Join button */}
       {parsedEvent.open_to_reservations && session && (
         <TouchableOpacity
@@ -216,6 +248,31 @@ const eventDetailsStyles = (theme: AppTheme) => ({
     color: "#333",
     marginBottom: 15,
     fontFamily: "InterVariable",
+  },
+  createdByContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 15,
+  },
+  profilePictureContainer: {
+    backgroundColor: "#37C6FF",
+    width: 30,
+    height: 30,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  profilePicture: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 100,
+  },
+  userName: {
+    color: "#000",
+    fontFamily: "InterVariable",
+    fontSize: theme.fontSizes.md,
+    fontWeight: 500,
   },
   groupLabel: {
     fontWeight: "900",

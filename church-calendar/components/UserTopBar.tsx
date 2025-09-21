@@ -4,7 +4,7 @@ import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { BASE_URL } from "@/api-endpoints";
 import { Ionicons } from "@expo/vector-icons";
-import { navigate } from "expo-router/build/global-state/routing";
+import { router } from "expo-router";
 
 export function UserTopBar() {
   const { session } = useSession();
@@ -13,7 +13,15 @@ export function UserTopBar() {
     <View>
       <Pressable
         style={styles.container}
-        onPress={() => session && navigate("/user/profile")}
+        onPress={() =>
+          session &&
+          router.push({
+            pathname: "/user/profile",
+            params: {
+              userInfo: JSON.stringify(session.userInfo),
+            },
+          })
+        }
       >
         <View style={styles.profilePictureContainer}>
           {session?.userInfo.profile_img ? (
@@ -27,10 +35,10 @@ export function UserTopBar() {
         </View>
         <View>
           <Text style={styles.userName}>
-            Hola,{" "}
+            Hola
             {session == null
-              ? "Invitado"
-              : session.userInfo?.full_name || session.userInfo?.email}
+              ? ", Invitado"
+              : `, ${session.userInfo?.full_name}`}
           </Text>
           <Text style={styles.welcomeMessage}>Dios te Bendiga!</Text>
         </View>

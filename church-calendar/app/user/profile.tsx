@@ -3,8 +3,10 @@ import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
+import { UserInfo } from "@/types/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useSearchParams } from "expo-router/build/hooks";
 import { ScrollView, Text, Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -12,7 +14,11 @@ export default function UserProfile() {
   const styles = useThemeStyles(userProfileStyles);
   const { session } = useSession();
 
-  if (!session) {
+  const searchParams = useSearchParams();
+    const userInfoParam = searchParams.get("userInfo") as string | undefined;
+    const parsedUserInfo: UserInfo | null = userInfoParam ? JSON.parse(userInfoParam) : null;
+
+  if (!parsedUserInfo) {
     return router.replace("/+not-found");
   }
 
@@ -22,10 +28,10 @@ export default function UserProfile() {
       <ScrollView contentContainerStyle={styles.scrollView}>
         {/*Profile Picture*/}
         <View style={styles.profilePictureContainer}>
-          {session?.userInfo.profile_img ? (
+          {parsedUserInfo.profile_img ? (
             <Image
               style={styles.profilePicture}
-              source={{ uri: `${BASE_URL}${session?.userInfo.profile_img}` }}
+              source={{ uri: `${BASE_URL}${parsedUserInfo.profile_img}` }}
             />
           ) : (
             <Ionicons name="person-outline" size={100} color="#fff" />
@@ -34,17 +40,17 @@ export default function UserProfile() {
 
         {/*Full Name*/}
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>{session.userInfo.full_name}</Text>
+          <Text style={styles.name}>{parsedUserInfo.full_name}</Text>
           <Ionicons name="checkmark-circle" size={20} color="fff" />
         </View>
 
         {/*Description*/}
-        <Text style={styles.description}>{session.userInfo.description}</Text>
+        <Text style={styles.description}>{parsedUserInfo.description}</Text>
         
         {/* Groups */}
         <Text style={styles.groupLabel}>Grupos:</Text>
         <View style={styles.groupsContainer}>
-          {session.userInfo.member_groups_full_info?.map((group) => (
+          {parsedUserInfo.member_groups_full_info?.map((group) => (
             <View key={group.name} style={styles.group}>
               <View
                 style={[
