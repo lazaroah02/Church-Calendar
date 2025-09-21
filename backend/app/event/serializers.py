@@ -2,10 +2,12 @@ from rest_framework import serializers
 from event.models import Event, Reservation
 from django.db import models
 from church_group.serializers import ChurchGroupsReducedSerializer
+from authentication.serializers import CustomUserDetailsSerializer
 
 
 class EventsSerializer(serializers.ModelSerializer):
     groups_full_info = ChurchGroupsReducedSerializer(many=True, source="groups", read_only=True)
+    created_by_full_info = CustomUserDetailsSerializer(source="created_by", read_only=True)
 
     class Meta:
         model = Event
@@ -25,7 +27,8 @@ class EventsSerializer(serializers.ModelSerializer):
             "open_to_reservations",
             "created_at",
             "updated_at",
-            "groups_full_info"
+            "groups_full_info",
+            "created_by_full_info"
         ]
 
 
