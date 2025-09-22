@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/api-endpoints";
+import { Button } from "@/components/Button";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
@@ -7,7 +8,8 @@ import { UserInfo } from "@/types/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
-import { ScrollView, Text, Image, View } from "react-native";
+import { ScrollView, Text, Image, View, Pressable } from "react-native";
+import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UserProfile() {
@@ -46,7 +48,22 @@ export default function UserProfile() {
           <Ionicons name="checkmark-circle" size={20} color="fff" />
         </View>
 
+        {session?.userInfo.id === parsedUserInfo.id && (
+          <>
+            {/*Phone*/}
+            <Text style={styles.groupLabel}>Teléfono:</Text>
+            <Text style={styles.description}>
+              {parsedUserInfo.phone_number}
+            </Text>
+
+            {/*Email*/}
+            <Text style={styles.groupLabel}>Correo:</Text>
+            <Text style={styles.description}>{parsedUserInfo.email}</Text>
+          </>
+        )}
+
         {/*Description*/}
+        <Text style={styles.groupLabel}>Descripción:</Text>
         <Text style={styles.description}>{parsedUserInfo.description}</Text>
 
         {/* Groups */}
@@ -65,6 +82,7 @@ export default function UserProfile() {
           ))}
         </View>
       </ScrollView>
+      <Button text="Editar Perfil" onPress={() => null}/>
     </SafeAreaView>
   );
 }
@@ -109,7 +127,6 @@ const userProfileStyles = (theme: AppTheme) => {
     },
     description: {
       fontSize: theme.fontSizes.lg,
-      marginTop: 20,
       color: "#000",
       fontFamily: "InterVariable",
       fontWeight: 400,
@@ -120,7 +137,8 @@ const userProfileStyles = (theme: AppTheme) => {
       marginTop: 20,
       color: "#000",
       fontFamily: "LexendBold",
-      fontSize: theme.fontSizes.xl,
+      fontSize: theme.fontSizes.lg,
+      opacity: 0.8
     },
     groupsContainer: {
       flexDirection: "row",
@@ -137,7 +155,6 @@ const userProfileStyles = (theme: AppTheme) => {
       fontFamily: "InterVariable",
       fontSize: theme.fontSizes.md,
       fontWeight: 400,
-      
     },
     groupColor: {
       width: 20,

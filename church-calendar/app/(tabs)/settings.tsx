@@ -7,6 +7,7 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { Collapsible } from "@/components/Collapsible";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppTheme } from "@/contexts/theme-context";
+import { Button } from "@/components/Button";
 
 export default function Settings() {
   const { signOut } = useSession();
@@ -41,8 +42,9 @@ export default function Settings() {
           </Pressable>
         </Collapsible>
       </ScrollView>
-      <Pressable
-        style={styles.signOutButton}
+      <Button
+        text="Cerrar Sesión"
+        variant="cancel"
         onPress={() => {
           Alert.alert(
             "Cuidado!",
@@ -64,9 +66,7 @@ export default function Settings() {
             { cancelable: true }
           );
         }}
-      >
-        <Text style={styles.signOutButtonText}>Cerrar Sesión</Text>
-      </Pressable>
+      />
     </SafeAreaView>
   );
 }
@@ -85,23 +85,6 @@ const settingsStyles = (theme: AppTheme) => ({
     fontFamily: "InterVariable",
     fontSize: 25,
     fontWeight: "700",
-  },
-  signOutButton: {
-    alignSelf: "center",
-    width: 330,
-    height: 55,
-    backgroundColor: "#B5B5B5",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 100,
-    marginVertical: 10,
-  },
-  signOutButtonText: {
-    color: "#000",
-    fontSize: theme.fontSizes.md,
-    fontWeight: "500",
-    fontFamily: "InterVariable",
   },
   optionCollapsible: {
     marginTop: 20,
