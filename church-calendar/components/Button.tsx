@@ -9,7 +9,6 @@ import {
   Text,
   ViewStyle,
 } from "react-native";
-import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
 export function Button({
   children,
@@ -29,7 +28,7 @@ export function Button({
 interface ButtonProps {
   children?: ReactNode;
   text: string;
-  variant?: "cancel";
+  variant?: "cancel" | "submit";
   onPress: () => void;
   style?:
     | Falsy
@@ -58,4 +57,24 @@ const ButtonStyles = (theme: AppTheme) => ({
       fontFamily: "InterVariable",
     },
   },
+  submit: {
+    button: {
+      alignSelf: "center",
+      width: 330,
+      height: 55,
+      backgroundColor: "rgba(236, 161, 0, 1)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 100,
+      marginVertical: 10,
+    },
+    text: {
+      color: "#000",
+      fontSize: theme.fontSizes.md,
+      fontWeight: "500",
+      fontFamily: "InterVariable",
+    },
+  },
+
 });

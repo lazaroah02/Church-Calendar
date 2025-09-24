@@ -3,7 +3,6 @@ import {
   StatusBar,
   Text,
   View,
-  StyleSheet,
   Pressable,
   ActivityIndicator,
   Alert,
@@ -64,6 +63,7 @@ export default function SignIn() {
         <CustomInput
           error={errors?.email}
           keyboardType="email-address"
+          textContentType="emailAddress"
           placeholder="Correo"
           onChangeText={(newValue) =>
             setFormValues((prev) => ({
@@ -75,7 +75,9 @@ export default function SignIn() {
         {/* Password */}
         <CustomInput
           placeholder="Contraseña"
+          textContentType="password"
           error={errors?.pass}
+          isPassword={true}
           onChangeText={(newValue) =>
             setFormValues((prev) => ({
               ...prev,

@@ -1,43 +1,70 @@
+import { useState } from "react";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { KeyboardTypeOptions, TextInput, View } from "react-native";
+import {
+  Falsy,
+  RecursiveArray,
+  RegisteredStyle,
+  ViewStyle,
+  TextInput,
+  View,
+  TextInputProps,
+  Pressable,
+} from "react-native";
 
 export function CustomInput({
   error,
-  keyboardType = "default",
-  placeholder = "",
-  secureTextEntry = false,
-  onChangeText = () => null,
+  inputStyle = {},
+  containerStyle = {},
+  isPassword = false,
+  ...props
 }: CustomInputProps) {
-  const styles = useThemeStyles(customInputStyles)
+  const styles = useThemeStyles(customInputStyles);
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer, containerStyle]}>
       <TextInput
-        placeholder={placeholder}
-        keyboardType={keyboardType}
-        secureTextEntry={secureTextEntry}
-        style={[styles.input, error && styles.inputError]}
-        onChangeText={onChangeText}
+        style={[styles.input, inputStyle, error && styles.inputError]}
+        secureTextEntry={isPassword && !showPassword}
+        {...props}
       />
+
+      {/* Icono de toggle contraseña */}
+      {isPassword && (
+        <Pressable
+          onPress={() => setShowPassword((prev) => !prev)}
+          style={styles.iconContainer}
+        >
+          <Ionicons
+            name={showPassword ? "eye-off" : "eye"}
+            size={20}
+            color="#333"
+          />
+        </Pressable>
+      )}
+
+      {/* Icono de error */}
       {error && (
         <Ionicons
           name="alert-circle"
           size={18}
           color="#b91c1c"
-          style={styles.errorIcon}
+          style={[styles.errorIcon, isPassword && { right: 35 }]}
         />
       )}
     </View>
   );
 }
 
-const customInputStyles = (theme: AppTheme) =>({
+const customInputStyles = (theme: AppTheme) => ({
   inputContainer: {
     position: "relative",
     marginVertical: 10,
     width: 330,
     height: 50,
+    justifyContent: "center",
   },
   input: {
     backgroundColor: "#fff",
@@ -47,23 +74,38 @@ const customInputStyles = (theme: AppTheme) =>({
     fontFamily: "InterVariable",
     fontSize: theme.fontSizes.lg,
     fontWeight: "400",
+    height: "100%",
   },
   inputError: {
     borderWidth: 2,
     borderColor: "rgb(215, 0, 75)",
   },
-  errorIcon: {
+  iconContainer: {
     position: "absolute",
     right: 5,
     top: "50%",
     transform: [{ translateY: "-50%" }],
+    padding: 5,
+  },
+  errorIcon: {
+    position: "absolute",
+    right: 5,
+    top: "50%",
+    transform: [{ translateY: -9 }],
   },
 });
 
-interface CustomInputProps {
-  error: string | null | undefined;
-  keyboardType?: KeyboardTypeOptions;
-  placeholder?: string;
-  secureTextEntry?: boolean;
-  onChangeText?: (newValue: string) => void;
+interface CustomInputProps extends TextInputProps {
+  error?: string | null;
+  isPassword?: boolean;
+  containerStyle?:
+    | Falsy
+    | ViewStyle
+    | RegisteredStyle<ViewStyle>
+    | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
+  inputStyle?:
+    | Falsy
+    | ViewStyle
+    | RegisteredStyle<ViewStyle>
+    | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
 }

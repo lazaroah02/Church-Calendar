@@ -30,11 +30,14 @@ export default function UserProfile() {
     <SafeAreaView style={styles.pageContainer}>
       <MyNavigationBar buttonsStyle="dark" />
       <StatusBar barStyle={"dark-content"} />
-      {isEditting?<UserForm user={parsedUserInfo}/>:
-      <UserInfoComponent user={parsedUserInfo} />
-      }
-      {session?.userInfo.id === parsedUserInfo.id && (
-        <Button text="Editar Perfil" onPress={() => setIsEdditing(!isEditting)} />
+      {isEditting ? (
+        <UserForm user={parsedUserInfo} onCancel={() => setIsEdditing(false)}/>
+      ) : (
+        <UserInfoComponent user={parsedUserInfo} />
+      )}
+
+      {session?.userInfo.id === parsedUserInfo.id && !isEditting && (
+        <Button text="Editar Perfil" onPress={() => setIsEdditing(true)} />
       )}
     </SafeAreaView>
   );
