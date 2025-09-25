@@ -112,7 +112,7 @@ export default function EventDetails() {
         <Pressable
           onPress={() =>
             router.push({
-              pathname: "/user/profile",
+              pathname: "/user/detail",
               params: {
                 userInfo: JSON.stringify(parsedEvent.created_by_full_info),
               },

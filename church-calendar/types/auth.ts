@@ -16,7 +16,7 @@ export type UserInfo = {
 };
 
 export type Session = {
-  token: string;
+  token: string | null | undefined;
   userInfo: UserInfo;
 };
 
@@ -30,3 +30,18 @@ export type LoginFormErrors = {
   pass?: string;
   general?: string;
 };
+
+export interface SignInProps {
+  email: string;
+  pass: string;
+  onLoginSuccess: () => void;
+  onLoginError: (err: Error) => void;
+}
+
+export interface AuthContenxtProps {
+  signIn: ({ email, pass, onLoginSuccess, onLoginError }: SignInProps) => void;
+  signOut: () => void;
+  session?: Session | null;
+  isLoading: boolean;
+  updateSession: (newSession: Session) => void;
+}

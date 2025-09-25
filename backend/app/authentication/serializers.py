@@ -12,6 +12,11 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     updated_at = serializers.DateTimeField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     member_groups_full_info = ChurchGroupsReducedSerializer(many=True, source="member_groups", read_only=True)
+    member_groups = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='id'
+    )
 
     class Meta:
         model = get_user_model()

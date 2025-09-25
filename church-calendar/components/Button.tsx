@@ -2,17 +2,21 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { ReactNode } from "react";
 import {
+  ActivityIndicator,
   Falsy,
   Pressable,
   RecursiveArray,
   RegisteredStyle,
   Text,
+  View,
   ViewStyle,
 } from "react-native";
 
 export function Button({
   children,
   text,
+  loadingText = null,
+  loading = false,
   variant = "cancel",
   style = {},
   onPress,
@@ -20,7 +24,16 @@ export function Button({
   const styles = useThemeStyles(ButtonStyles);
   return (
     <Pressable onPress={onPress} style={[styles[variant].button, style]}>
-      {children ? children : <Text style={styles[variant].text}>{text}</Text>}
+      {children ? (
+        children
+      ) : (
+        <View style={{ flexDirection: "row", gap: 10 }}>
+          <Text style={styles[variant].text}>
+            {loadingText && loading ? loadingText : text}
+          </Text>
+          {loading && <ActivityIndicator size="small" color="#000" />}
+        </View>
+      )}
     </Pressable>
   );
 }
@@ -30,6 +43,8 @@ interface ButtonProps {
   text: string;
   variant?: "cancel" | "submit";
   onPress: () => void;
+  loading?: boolean;
+  loadingText?: string | null;
   style?:
     | Falsy
     | ViewStyle
@@ -76,5 +91,4 @@ const ButtonStyles = (theme: AppTheme) => ({
       fontFamily: "InterVariable",
     },
   },
-
 });

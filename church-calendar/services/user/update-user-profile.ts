@@ -43,5 +43,15 @@ export function updateUserProfile({
     body: formData,
   };
 
-  return fetch(USER_PROFILE_URL, options).then((res) => console.log(res));
+  return fetch(USER_PROFILE_URL, options).then((res) => {
+    return res.json()
+    .then(data => {
+      if(res.ok){
+        return data
+      }else{
+        console.log(data)
+        throw new Error("Error")
+      }
+    })
+  });
 }

@@ -2,9 +2,9 @@ import { View, Text, Image, Pressable } from "react-native";
 import { useSession } from "@/hooks/auth/useSession";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
-import { BASE_URL } from "@/api-endpoints";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { getImageUri } from "@/lib/get-image-uri";
 
 export function UserTopBar() {
   const { session } = useSession();
@@ -17,9 +17,6 @@ export function UserTopBar() {
           session &&
           router.push({
             pathname: "/user/profile",
-            params: {
-              userInfo: JSON.stringify(session.userInfo),
-            },
           })
         }
       >
@@ -27,7 +24,7 @@ export function UserTopBar() {
           {session?.userInfo.profile_img ? (
             <Image
               style={styles.profilePicture}
-              source={{ uri: `${BASE_URL}${session?.userInfo.profile_img}` }}
+              source={{ uri: getImageUri(session.userInfo.profile_img) }}
             />
           ) : (
             <Ionicons name="person-outline" size={30} color="#fff" />

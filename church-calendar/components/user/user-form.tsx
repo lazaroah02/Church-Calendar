@@ -1,6 +1,5 @@
 import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import { BASE_URL } from "@/api-endpoints";
 import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
@@ -11,20 +10,23 @@ import { Button } from "../Button";
 import { CustomInput } from "../form/custom-input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { updateUserProfile } from "@/services/user/update-user-profile";
+import { getImageUri } from "@/lib/get-image-uri";
 
 export function UserForm({
   user,
   onCancel = () => null,
+  onSuccess = () => null,
 }: {
   user: UserInfo;
   onCancel?: () => void;
+  onSuccess?: () => void;
 }) {
   const styles = useThemeStyles(userForm);
   const inputColor = "#EBEBEB";
-  const { session } = useSession();
+  const { session, updateSession } = useSession();
 
   const [profileImage, setProfileImage] = useState(
-    user.profile_img ? `${BASE_URL}${user.profile_img}` : null
+    user.profile_img ? getImageUri(user.profile_img) : null
   );
 
   const [formValues, setFormValues] = useState({
@@ -33,16 +35,24 @@ export function UserForm({
     email: user.email || "",
     description: user.description || "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleTextChange = (key: keyof typeof formValues, value: string) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = () => {
+    setLoading(true);
     updateUserProfile({
       token: session?.token,
       values: { profile_img: profileImage, ...formValues },
-    });
+    })
+      .then((data) => {
+        updateSession({ token: session?.token, userInfo: data });
+        onSuccess()
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   };
 
   const pickImage = async () => {
@@ -135,13 +145,11 @@ export function UserForm({
         />
       </KeyboardAwareScrollView>
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center" }}>
-        <Button
-          text="Cancelar"
-          onPress={onCancel}
-          style={{ width: "40%" }}
-        />
+        <Button text="Cancelar" onPress={onCancel} style={{ width: "40%" }} />
         <Button
           text="Enviar"
+          loadingText="Enviando"
+          loading={loading}
           onPress={() => handleSubmit()}
           variant="submit"
           style={{ width: "50%" }}

@@ -78,6 +78,10 @@ function RootLayout() {
             options={{ headerShown: false, animation: "slide_from_right" }}
           />
           <Stack.Screen
+            name="user/detail"
+            options={{ headerShown: false, animation: "slide_from_right" }}
+          />
+          <Stack.Screen
             name="+not-found"
             options={{ headerShown: false, animation: "slide_from_right" }}
           />
