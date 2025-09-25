@@ -1,5 +1,3 @@
-import { BASE_URL } from "@/api-endpoints";
-import SplashScreenController from "@/app/splash";
 import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { getImageUri } from "@/lib/get-image-uri";
@@ -8,7 +6,7 @@ import { UserInfo } from "@/types/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, View, Image, Text } from "react-native";
 
-export function UserInfoComponent({ user }: { user: UserInfo }) {
+export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
   const styles = useThemeStyles(userInfoStyles);
   const { session } = useSession();
   
@@ -16,7 +14,7 @@ export function UserInfoComponent({ user }: { user: UserInfo }) {
     <ScrollView contentContainerStyle={styles.scrollView}>
       {/*Profile Picture*/}
       <View style={styles.profilePictureContainer}>
-        {user.profile_img ? (
+        {user?.profile_img ? (
           <Image
             style={styles.profilePicture}
             source={{ uri: getImageUri(user.profile_img) }}
@@ -28,27 +26,27 @@ export function UserInfoComponent({ user }: { user: UserInfo }) {
 
       {/*Full Name*/}
       <View style={styles.nameContainer}>
-        <Text style={styles.name}>{user.full_name}</Text>
-        {user.is_staff && (
+        <Text style={styles.name}>{user?.full_name}</Text>
+        {user?.is_staff && (
           <Ionicons name="checkmark-circle" size={20} color="fff" />
         )}
       </View>
 
-      {session?.userInfo.id === user.id && (
+      {session?.userInfo.id === user?.id && (
         <>
           {/*Phone*/}
           <Text style={styles.groupLabel}>Teléfono:</Text>
-          <Text style={styles.description}>{user.phone_number}</Text>
+          <Text style={styles.description}>{user?.phone_number}</Text>
 
           {/*Email*/}
           <Text style={styles.groupLabel}>Correo:</Text>
-          <Text style={styles.description}>{user.email}</Text>
+          <Text style={styles.description}>{user?.email}</Text>
         </>
       )}
 
       {/*Description*/}
       <Text style={styles.groupLabel}>Descripción:</Text>
-      <Text style={styles.description}>{user.description}</Text>
+      <Text style={styles.description}>{user?.description}</Text>
 
       {/* Groups */}
       <Text style={styles.groupLabel}>Grupos:</Text>

@@ -1,6 +1,6 @@
 import { Button } from "@/components/Button";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
-import { UserForm } from "@/components/user/user-form";
+import { UserProfileForm } from "@/components/user/user-profile-form";
 import { UserInfoComponent } from "@/components/user/user-info";
 import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
@@ -21,7 +21,7 @@ export default function UserProfile() {
       <MyNavigationBar buttonsStyle="dark" />
       <StatusBar barStyle={"dark-content"} />
       {isEditting ? (
-        <UserForm
+        <UserProfileForm
           user={session?.userInfo}
           onCancel={() => setIsEdditing(false)}
           onSuccess={() => {

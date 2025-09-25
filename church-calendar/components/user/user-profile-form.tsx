@@ -4,6 +4,7 @@ import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { UserInfo } from "@/types/auth";
+import { UserProfileFormErrors } from "@/types/user";
 import { Ionicons } from "@expo/vector-icons";
 import { View, Image, Text, Pressable, Alert } from "react-native";
 import { Button } from "../Button";
@@ -11,13 +12,14 @@ import { CustomInput } from "../form/custom-input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { updateUserProfile } from "@/services/user/update-user-profile";
 import { getImageUri } from "@/lib/get-image-uri";
+import FormErrorBanner from "../form/form-banner-error";
 
-export function UserForm({
+export function UserProfileForm({
   user,
   onCancel = () => null,
   onSuccess = () => null,
 }: {
-  user: UserInfo;
+  user: UserInfo | undefined;
   onCancel?: () => void;
   onSuccess?: () => void;
 }) {
@@ -26,14 +28,15 @@ export function UserForm({
   const { session, updateSession } = useSession();
 
   const [profileImage, setProfileImage] = useState(
-    user.profile_img ? getImageUri(user.profile_img) : null
+    user?.profile_img ? getImageUri(user?.profile_img) : null
   );
+  const [errors, setErrors] = useState<UserProfileFormErrors | null>(null);
 
   const [formValues, setFormValues] = useState({
-    full_name: user.full_name || "",
-    phone_number: user.phone_number || "",
-    email: user.email || "",
-    description: user.description || "",
+    full_name: user?.full_name || "",
+    phone_number: user?.phone_number || "",
+    email: user?.email || "",
+    description: user?.description || "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -49,9 +52,9 @@ export function UserForm({
     })
       .then((data) => {
         updateSession({ token: session?.token, userInfo: data });
-        onSuccess()
+        onSuccess();
       })
-      .catch((err) => console.log(err))
+      .catch((err) => setErrors(err as UserProfileFormErrors))
       .finally(() => setLoading(false));
   };
 
@@ -97,10 +100,23 @@ export function UserForm({
           </View>
         </Pressable>
 
+        {errors && (
+          <FormErrorBanner
+            style={{ marginTop: 10, marginBottom: 0 }}
+            message={
+              errors.full_name ||
+              errors.phone_number ||
+              errors.email ||
+              errors.description ||
+              "Ocurrió un error inesperado."
+            }
+          />
+        )}
+
         {/* Full Name */}
         <Text style={styles.groupLabel}>Nombre Completo</Text>
         <CustomInput
-          error={null}
+          error={errors?.full_name}
           textContentType="name"
           value={formValues.full_name}
           onChangeText={(value) => handleTextChange("full_name", value)}
@@ -111,7 +127,7 @@ export function UserForm({
         {/* Phone */}
         <Text style={styles.groupLabel}>Teléfono:</Text>
         <CustomInput
-          error={null}
+          error={errors?.phone_number}
           keyboardType="phone-pad"
           textContentType="telephoneNumber"
           value={formValues.phone_number}
@@ -123,7 +139,7 @@ export function UserForm({
         {/* Email */}
         <Text style={styles.groupLabel}>Correo:</Text>
         <CustomInput
-          error={null}
+          error={errors?.email}
           keyboardType="email-address"
           textContentType="emailAddress"
           value={formValues.email}

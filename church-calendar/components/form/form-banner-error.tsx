@@ -1,21 +1,24 @@
-import { View, Text } from "react-native";
+import { View, Text, Falsy, ViewStyle, RegisteredStyle, RecursiveArray } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 
-export default function FormErrorBanner({ message }: { message: string }) {
-  const styles = useThemeStyles(formBannerErrorStyles)
+export default function FormErrorBanner({
+  message,
+  style,
+}: FormErrorBannerProps) {
+  const styles = useThemeStyles(formBannerErrorStyles);
   if (!message) return null;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Ionicons name="alert-circle" size={18} color="#b91c1c" />
       <Text style={styles.text}>{message}</Text>
     </View>
   );
 }
 
-const formBannerErrorStyles = (theme: AppTheme) =>({
+const formBannerErrorStyles = (theme: AppTheme) => ({
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -34,3 +37,12 @@ const formBannerErrorStyles = (theme: AppTheme) =>({
     fontSize: theme.fontSizes.md,
   },
 });
+
+interface FormErrorBannerProps{
+  message: string;
+  style?:
+    | Falsy
+    | ViewStyle
+    | RegisteredStyle<ViewStyle>
+    | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
+}

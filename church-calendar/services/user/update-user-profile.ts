@@ -49,8 +49,19 @@ export function updateUserProfile({
       if(res.ok){
         return data
       }else{
-        console.log(data)
-        throw new Error("Error")
+        const errors: Record<string, string> = {};
+
+        if (data.full_name) {
+          errors.full_name = "Nombre Incorrecto";
+        }
+        if (data.phone_number) {
+          errors.phone_number = "Teléfono inválido";
+        }
+        if (data.email) {
+          errors.email = "Correo inválido";
+        }
+
+        throw errors;
       }
     })
   });
