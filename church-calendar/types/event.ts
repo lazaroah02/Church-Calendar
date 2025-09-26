@@ -10,7 +10,7 @@ export type Interval = {
 
 export interface GetEventsProps extends Interval {
     group_by?: "month_days" | "",
-    token?: string
+    token?: string | undefined | null
 }
 
 export type EventId = string

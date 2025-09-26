@@ -40,9 +40,9 @@ function RootLayout() {
     InterVariable: require("../assets/fonts/Inter-VariableFont.ttf"),
     LexendBold: require("../assets/fonts/Lexend-Bold.ttf"),
   });
-  const { session } = useSession();
+  const { session, isLoading } = useSession();
 
-  if (!loaded) {
+  if (!loaded || isLoading) {
     // Async font loading only occurs in development.
     return <SplashScreenController />;
   }

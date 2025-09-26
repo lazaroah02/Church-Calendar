@@ -8,7 +8,6 @@ import { DateData } from "react-native-calendars";
 import { Event } from "@/types/event";
 import { formatSelectedDay } from "@/lib/calendar/calendar-utils";
 import { EventComponent } from "./event";
-import { useAppTheme } from "@/contexts/theme-context";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 

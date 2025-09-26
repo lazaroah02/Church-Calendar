@@ -7,3 +7,5 @@ export const EVENTS_URL = `${BASE_URL}/api/events`
 export const LOGIN_URL = `${BASE_URL}/api/auth/login/`
 export const LOGOUT_URL = `${BASE_URL}/api/auth/logout/`
 export const USER_PROFILE_URL = `${BASE_URL}/api/auth/user/`
+
+export const MANAGE_EVENTS_URL = `${BASE_URL}/api/events/manage`

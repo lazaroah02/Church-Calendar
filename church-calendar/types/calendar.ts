@@ -7,7 +7,7 @@ export type DayProps = {
   date: any;
   selectedDay: DateData;
   setSelectedDay: Dispatch<SetStateAction<DateData>>;
-  getSpecificDayEvents: (date: DateString) => Event[] | undefined;
+  getSpecificDayEvents: (date: DateString) => Event[];
 };
 
 export interface CalendarComponentProps {

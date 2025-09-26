@@ -5,8 +5,10 @@ import { Platform } from "react-native";
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Ionicons } from "@expo/vector-icons";
+import { useSession } from "@/hooks/auth/useSession";
 
 export default function TabLayout() {
+  const { session } = useSession();
   return (
     <Tabs
       screenOptions={{
@@ -25,6 +27,7 @@ export default function TabLayout() {
           },
         }),
       }}
+      initialRouteName="calendar"
     >
       <Tabs.Screen
         name="calendar"
@@ -35,6 +38,17 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="administration"
+        options={{
+          href: session?.userInfo.is_staff ? "/administration" : null,
+          title: "Administración",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="key-outline" size={28} color={color} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="notifications"
         options={{

@@ -5,6 +5,7 @@ import type { DateString, Event, Interval } from "@/types/event";
 import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
 import { CalendarUtils, DateData } from "react-native-calendars";
 import { useSession } from "../auth/useSession";
+import { getEventsToManage } from "@/services/events/management/get-events-to-manage";
 
 /**
  * Custom hook for handling calendar events with caching and refetching logic.
@@ -24,6 +25,7 @@ export function useEvents() {
    * Get the current user session (used to provide authentication token).
    */
   const { session } = useSession();
+  const isAdmin = session?.userInfo?.is_staff || false;
 
   /**
    * Today's date string (YYYY-MM-DD) in calendar format.
@@ -67,13 +69,23 @@ export function useEvents() {
     isLoading: loadingEvents,
     refetch: refetchEvents,
   } = useQuery({
-    queryKey: ["events", JSON.stringify(interval), session?.userInfo?.id ?? "guest"],
+    queryKey: [
+      isAdmin ? "eventsToManage" : "events",
+      JSON.stringify(interval),
+      session?.userInfo?.id ?? "guest",
+    ],
     queryFn: () =>
-      getEvents({
-        start_date: interval.start_date,
-        end_date: interval.end_date,
-        token: session?.token,
-      }),
+      isAdmin
+        ? getEventsToManage({
+            start_date: interval.start_date,
+            end_date: interval.end_date,
+            token: session?.token,
+          })
+        : getEvents({
+            start_date: interval.start_date,
+            end_date: interval.end_date,
+            token: session?.token,
+          }),  
   });
 
   /**
@@ -83,11 +95,19 @@ export function useEvents() {
 
   /**
    * Retrieve events for a specific day.
+   */
+  const getSpecificDayEvents = useCallback(
+    (date: DateString): Event[] => events[date] || [],
+    [events]
+  );
+
+  /**
+   * Memoized list of events for the currently selected day.
    * - Returns [] if day belongs to the current month but has no events.
    * - Returns undefined if day belongs to a different month that is not loaded yet.
    */
-  const getSpecificDayEvents = useCallback(
-    (date: DateString): Event[] | undefined => {
+  const currentDayEvents = useMemo(() => {
+    const date = selectedDay.dateString;
       const sameMonth =
         selectedDay.month === parseInt(interval.start_date.split("-")[1]);
 
@@ -97,16 +117,7 @@ export function useEvents() {
         return undefined;
       }
       return events[date];
-    },
-    [events, interval, selectedDay]
-  );
-
-  /**
-   * Memoized list of events for the currently selected day.
-   */
-  const currentDayEvents = useMemo(() => {
-    return getSpecificDayEvents(selectedDay.dateString);
-  }, [getSpecificDayEvents, selectedDay]);
+  }, [selectedDay, events, interval.start_date]);
 
   /**
    * If events for the selected day are available, update the cache.
@@ -144,11 +155,17 @@ export function useEvents() {
       );
 
       // Fetch events for the selected day’s month
-      const freshEvents = await getEvents({
-        start_date: selectedInterval.start_date,
-        end_date: selectedInterval.end_date,
-        token: session?.token,
-      });
+      const freshEvents = isAdmin
+        ? await getEventsToManage({
+            start_date: selectedInterval.start_date,
+            end_date: selectedInterval.end_date,
+            token: session?.token,
+          })
+        : await getEvents({
+            start_date: selectedInterval.start_date,
+            end_date: selectedInterval.end_date,
+            token: session?.token,
+          });
 
       // Store month events in cache
       queryClient.setQueryData(
@@ -160,18 +177,25 @@ export function useEvents() {
       const freshForSelectedDay = freshEvents[selectedDay.dateString] ?? [];
       setSelectedDayEventsCache(freshForSelectedDay);
     }
-  }, [refetchEvents, selectedDay, interval, session?.token, queryClient]);
+  }, [
+    refetchEvents,
+    selectedDay,
+    interval,
+    session?.token,
+    queryClient,
+    isAdmin,
+  ]);
 
   return {
-    events,                // all events for the visible month
-    refetchEvents,         // manual refetch for visible month
-    onRefetch,             // extended refetch (visible + selectedDay month)
+    events, // all events for the visible month
+    refetchEvents, // manual refetch for visible month
+    onRefetch, // extended refetch (visible + selectedDay month)
     loadingEvents,
     errorEvents,
-    setInterval,           // update visible month interval
-    selectedDay,           // current selected day
-    setSelectedDay,        // update selected day
-    selectedDayEvents,     // events for the selected day
-    getSpecificDayEvents,  // helper to get events for any given day
+    setInterval, // update visible month interval
+    selectedDay, // current selected day
+    setSelectedDay, // update selected day
+    selectedDayEvents, // events for the selected day
+    getSpecificDayEvents, // helper to get events for any given day
   };
 }

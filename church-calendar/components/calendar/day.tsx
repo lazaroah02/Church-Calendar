@@ -8,9 +8,7 @@ export function Day({
   setSelectedDay,
   getSpecificDayEvents,
 }: DayProps) {
-  const dayEvents = date.date?.dateString
-    ? getSpecificDayEvents(date.date.dateString)
-    : [];
+  const dayEvents = getSpecificDayEvents(date.date?.dateString);
 
   return (
     <Pressable
@@ -28,7 +26,7 @@ export function Day({
         date.date?.dateString === selectedDay?.dateString && {
           borderWidth: 2,
           borderColor: "#007bff",
-          backgroundColor:"#fff"
+          backgroundColor: "#fff",
         },
         date.state === "disabled" && { opacity: 0.2 },
       ]}
@@ -44,9 +42,9 @@ export function Day({
                 height: 4,
                 borderRadius: 2,
                 backgroundColor:
-                  event.groups_full_info.length > 0 &&
-                  event.groups_full_info[0].color !== ""
-                    ? event.groups_full_info[0].color
+                  event.groups_full_info?.length > 0 &&
+                  event.groups_full_info[0]?.color !== ""
+                    ? event.groups_full_info[0]?.color
                     : "#f39c12",
                 marginHorizontal: 1,
               }}
