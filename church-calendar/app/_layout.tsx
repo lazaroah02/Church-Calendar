@@ -71,19 +71,23 @@ function RootLayout() {
           />
           <Stack.Screen
             name="event/details"
-            options={{ headerShown: false, animation: "slide_from_right" }}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="event/create"
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="user/profile"
-            options={{ headerShown: false, animation: "slide_from_right" }}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="user/detail"
-            options={{ headerShown: false, animation: "slide_from_right" }}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="+not-found"
-            options={{ headerShown: false, animation: "slide_from_right" }}
+            options={{ headerShown: false }}
           />
         </Stack>
         <StatusBar style={"auto"} />
