@@ -12,16 +12,17 @@ import {
   Pressable,
 } from "react-native";
 import { useState } from "react";
-import { formatTimeRange } from "@/lib/calendar/calendar-utils";
+import { formatTimeStamp, formatTimeRange } from "@/lib/calendar/calendar-utils";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, router } from "expo-router";
+import {  router } from "expo-router";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { BASE_URL } from "@/api-endpoints";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import Hyperlink from "react-native-hyperlink";
 import { useSession } from "@/hooks/auth/useSession";
-import { navigate } from "expo-router/build/global-state/routing";
+import { UserInfo } from "@/types/auth";
+import { getImageUri } from "@/lib/get-image-uri";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
@@ -30,7 +31,7 @@ export default function EventDetails() {
   const parsedEvent: Event | null = eventParam ? JSON.parse(eventParam) : null;
   const styles = useThemeStyles(eventDetailsStyles);
   const { session } = useSession();
-
+  const isAdmin = session?.userInfo.is_staff || false;
   const [isGoing, setIsGoing] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState(false);
 
@@ -55,6 +56,8 @@ export default function EventDetails() {
             {parsedEvent.title}
           </Text>
         </View>
+
+        {parsedEvent?.is_canceled && <Text style={[styles.groupName, {color:"red", marginTop:10, marginBottom:10}]}>Este Evento ha sido cancelado</Text>}
 
         {/* Date, time, and location */}
         <Text style={styles.date}>{currentDateReadable}</Text>
@@ -108,34 +111,26 @@ export default function EventDetails() {
         </Hyperlink>
 
         {/*Created by*/}
-        <Text style={styles.groupLabel}>Creado por:</Text>
-        <Pressable
-          onPress={() =>
-            router.push({
-              pathname: "/user/detail",
-              params: {
-                userInfo: JSON.stringify(parsedEvent.created_by_full_info),
-              },
-            })
+        <UserAvatar
+          title={
+            isAdmin
+              ? `Creado el ${formatTimeStamp(parsedEvent.created_at)} por:`
+              : "Creado por:"
           }
-          style={styles.createdByContainer}
-        >
-          <View style={styles.profilePictureContainer}>
-            {parsedEvent.created_by_full_info?.profile_img ? (
-              <Image
-                style={styles.profilePicture}
-                source={{
-                  uri: `${BASE_URL}${parsedEvent.created_by_full_info?.profile_img}`,
-                }}
-              />
-            ) : (
-              <Ionicons name="person-outline" size={20} color="#fff" />
-            )}
-          </View>
-          <Text style={styles.userName}>
-            {parsedEvent.created_by_full_info?.full_name}
-          </Text>
-        </Pressable>
+          user={parsedEvent?.created_by_full_info}
+          styles={styles}
+        />
+
+        {/*Last Edit by*/}
+        {isAdmin && (
+          <UserAvatar
+            title={`Última edición el ${formatTimeStamp(
+              parsedEvent.updated_at
+            )} por:`}
+            user={parsedEvent.last_edit_by_full_info}
+            styles={styles}
+          />
+        )}
 
         {/* Groups */}
         <Text style={styles.groupLabel}>Evento para:</Text>
@@ -152,10 +147,20 @@ export default function EventDetails() {
             </View>
           ))}
         </View>
+
+        {isAdmin && (
+          <>
+            {/* Estado */}
+            <Text style={styles.groupLabel}>Estado del Evento:</Text>
+            <Text style={styles.groupName}>• {parsedEvent.is_canceled? 'Cancelado': 'No Cancelado'}</Text>
+            <Text style={styles.groupName}>• {parsedEvent.visible? 'Visible': 'Oculto'}</Text>
+            <Text style={styles.groupName}>• {parsedEvent.open_to_reservations? 'Abierto a reservaciones': 'Cerrado a reservaciones'}</Text>
+          </>
+        )}
       </ScrollView>
 
       {/* Join button */}
-      {parsedEvent.open_to_reservations && session && (
+      {parsedEvent.open_to_reservations && session && !parsedEvent.is_canceled &&(
         <TouchableOpacity
           style={[styles.button, isGoing && styles.buttonActive]}
           onPress={() => setIsGoing(!isGoing)}
@@ -173,6 +178,47 @@ export default function EventDetails() {
     </SafeAreaView>
   );
 }
+
+const UserAvatar = ({
+  title,
+  user,
+  styles,
+}: {
+  title: string;
+  user: UserInfo;
+  styles: any;
+}) => {
+  return (
+    <>
+      <Text style={styles.groupLabel}>{title}</Text>
+      <Pressable
+        onPress={() =>
+          router.push({
+            pathname: "/user/detail",
+            params: {
+              userInfo: JSON.stringify(user),
+            },
+          })
+        }
+        style={styles.createdByContainer}
+      >
+        <View style={styles.profilePictureContainer}>
+          {user?.profile_img ? (
+            <Image
+              style={styles.profilePicture}
+              source={{
+                uri: getImageUri(user?.profile_img),
+              }}
+            />
+          ) : (
+            <Ionicons name="person-outline" size={20} color="#fff" />
+          )}
+        </View>
+        <Text style={styles.userName}>{user?.full_name}</Text>
+      </Pressable>
+    </>
+  );
+};
 
 const eventDetailsStyles = (theme: AppTheme) => ({
   pageContainer: {

@@ -27,7 +27,31 @@ export function EventComponent({
       style={styles.eventCard}
     >
       <View>
-        <Text style={styles.eventTitle}>{item.title}</Text>
+        <Text
+          style={[
+            styles.eventTitle,
+            item.is_canceled ? { textDecorationLine: "line-through" } : {},
+          ]}
+        >
+          {item.title}
+        </Text>
+        {item.is_canceled && (
+          <View style={{ flexDirection: "row" }}>
+            <Text
+              style={[
+                styles.eventTime,
+                {
+                  alignSelf: "flex-start",
+                  backgroundColor: "orange",
+                  padding: 4,
+                  borderRadius: 10,
+                },
+              ]}
+            >
+              Cancelado
+            </Text>
+          </View>
+        )}
         <Text style={styles.eventTime}>
           {formatTimeRange(item.start_time, item.end_time)}
         </Text>

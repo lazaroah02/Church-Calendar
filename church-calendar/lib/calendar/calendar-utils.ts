@@ -32,7 +32,7 @@ export function formatSelectedDay(dateString: string): string {
     day: "numeric",
     month: "long",
     year: "numeric",
-    timeZone: "UTC"
+    timeZone: "UTC",
   });
 
   const parts = formatter.formatToParts(new Date(dateString));
@@ -63,3 +63,19 @@ export function formatTimeRange(start: string, end: string): string {
   return `${startFormatted} - ${endFormatted}`;
 }
 
+export function formatTimeStamp(timestamp: string): string {
+  const formatter = new Intl.DateTimeFormat("es-ES", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "UTC",
+  });
+
+  // Ex: "9 de septiembre de 2025, 10:05"
+  const formatted = formatter.format(new Date(timestamp));
+
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+}

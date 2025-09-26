@@ -33,4 +33,5 @@ export type Event = {
     updated_at: string
     groups_full_info: GroupReducedInfo[]
     created_by_full_info: UserInfo
+    last_edit_by_full_info: UserInfo
 }
