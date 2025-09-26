@@ -36,11 +36,12 @@ class ManageEventsSerializer(serializers.ModelSerializer):
     last_edit_by = serializers.PrimaryKeyRelatedField(read_only=True)
     groups_full_info = ChurchGroupsReducedSerializer(many=True, source="groups", read_only=True)
     created_by_full_info = CustomUserDetailsSerializer(source="created_by", read_only=True)
+    last_edit_by_full_info = CustomUserDetailsSerializer(source="last_edit_by", read_only=True)
 
     class Meta:
         model = Event
         fields = "__all__"
-        extra_fields = ["groups_full_info", "created_by_full_info"]
+        extra_fields = ["groups_full_info", "created_by_full_info", "last_edit_by_full_info"]
 
     def validate(self, attrs):
 
