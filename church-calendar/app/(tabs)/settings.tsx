@@ -1,13 +1,13 @@
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { Alert, ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSession } from "@/hooks/auth/useSession";
 import { navigate } from "expo-router/build/global-state/routing";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { Collapsible } from "@/components/Collapsible";
-import { Ionicons } from "@expo/vector-icons";
 import { useAppTheme } from "@/contexts/theme-context";
 import { Button } from "@/components/Button";
+import { CheckBox } from "@/components/form/checkbox";
 
 export default function Settings() {
   const { signOut } = useSession();
@@ -18,28 +18,16 @@ export default function Settings() {
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Opciones</Text>
         <Collapsible title="Tamaño de Letra" style={styles.optionCollapsible}>
-          <Pressable
-            style={styles.optionContainer}
-            onPress={() => setThemeName("normal")}
-          >
-            <Text style={styles.optionText}>Normal</Text>
-            {themeName === "normal" ? (
-              <Ionicons name="checkbox-outline" size={20} color="#000" />
-            ) : (
-              <Ionicons name="square-outline" size={20} color="#000" />
-            )}
-          </Pressable>
-          <Pressable
-            style={styles.optionContainer}
-            onPress={() => setThemeName("large")}
-          >
-            <Text style={styles.optionText}>Grande</Text>
-            {themeName === "large" ? (
-              <Ionicons name="checkbox-outline" size={20} color="#000" />
-            ) : (
-              <Ionicons name="square-outline" size={20} color="#000" />
-            )}
-          </Pressable>
+          <CheckBox
+            label="Normal"
+            checked={themeName === "normal"}
+            onCheck={() => setThemeName("normal")}
+          />
+          <CheckBox
+            label="Grande"
+            checked={themeName === "large"}
+            onCheck={() => setThemeName("large")}
+          />
         </Collapsible>
       </ScrollView>
       <Button
@@ -89,16 +77,5 @@ const settingsStyles = (theme: AppTheme) => ({
   optionCollapsible: {
     marginTop: 20,
     marginLeft: -3,
-  },
-  optionContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginTop: 10,
-  },
-  optionText: {
-    fontSize: theme.fontSizes.md,
-    fontFamily: "InterVariable",
-    fontWeight: 600,
   },
 });
