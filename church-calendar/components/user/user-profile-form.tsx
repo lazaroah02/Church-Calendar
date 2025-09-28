@@ -13,6 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { updateUserProfile } from "@/services/user/update-user-profile";
 import { getImageUri } from "@/lib/get-image-uri";
 import FormErrorBanner from "../form/form-banner-error";
+import { pickImage } from "@/lib/pick-image";
 
 export function UserProfileForm({
   user,
@@ -58,25 +59,6 @@ export function UserProfileForm({
       .finally(() => setLoading(false));
   };
 
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Permiso denegado", "Necesitas dar acceso a tu galería.");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8,
-    });
-
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
-    }
-  };
-
   return (
     <>
       <KeyboardAwareScrollView
@@ -86,7 +68,15 @@ export function UserProfileForm({
         extraScrollHeight={100}
       >
         {/* Profile Picture */}
-        <Pressable style={styles.profilePictureContainer} onPress={pickImage}>
+        <Pressable
+          style={styles.profilePictureContainer}
+          onPress={() =>
+            pickImage({
+              aspect: [1, 1],
+              setImage: (img) => setProfileImage(img),
+            })
+          }
+        >
           {profileImage ? (
             <Image
               style={styles.profilePicture}

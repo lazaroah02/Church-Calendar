@@ -6,14 +6,15 @@ import { getImageUri } from "@/lib/get-image-uri";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { Pressable, Text, Image, View, Alert } from "react-native";
+import { Pressable, Text, Image, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
-import * as ImagePicker from "expo-image-picker";
 import { useSearchParams } from "expo-router/build/hooks";
 import { CheckBox } from "@/components/form/checkbox";
 import { Button } from "@/components/Button";
 import { router } from "expo-router";
+import { pickImage } from "@/lib/pick-image";
+import type { Event } from "@/types/event";
 
 export default function CreateEvent() {
   const { session } = useSession();
@@ -25,6 +26,12 @@ export default function CreateEvent() {
   const parsedEvent: Event | null = event ? JSON.parse(event) : null;
 
   const [formValues, setFormValues] = useState({
+    title: "",
+    location: "",
+    description: "",
+    start_time: "",
+    end_time: "",
+    groups: [],
     is_canceled: false,
     visible: true,
     open_to_reservations: false,
@@ -33,24 +40,6 @@ export default function CreateEvent() {
   const [profileImage, setProfileImage] = useState(
     parsedEvent?.img ? getImageUri(parsedEvent?.img) : null
   );
-
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Permiso denegado", "Necesitas dar acceso a tu galería.");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      quality: 0.8,
-    });
-
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
-    }
-  };
 
   const handleFieldChange = (
     key: keyof typeof formValues,
@@ -69,7 +58,10 @@ export default function CreateEvent() {
         extraScrollHeight={100}
       >
         {/* Picture */}
-        <Pressable style={styles.pictureContainer} onPress={pickImage}>
+        <Pressable
+          style={styles.pictureContainer}
+          onPress={() => pickImage({ setImage: (img) => setProfileImage(img) })}
+        >
           {profileImage ? (
             <Image style={styles.picture} source={{ uri: profileImage }} />
           ) : (
@@ -88,7 +80,8 @@ export default function CreateEvent() {
         <Text style={styles.label}>Título:</Text>
         <CustomInput
           error={null}
-          onChangeText={(value) => null}
+          value={formValues.title}
+          onChangeText={(value) => handleFieldChange("title", value)}
           inputStyle={{ backgroundColor: inputColor }}
           containerStyle={{ width: "100%" }}
         />
@@ -97,7 +90,8 @@ export default function CreateEvent() {
         <Text style={styles.label}>Lugar:</Text>
         <CustomInput
           error={null}
-          onChangeText={(value) => null}
+          value={formValues.location}
+          onChangeText={(value) => handleFieldChange("location", value)}
           inputStyle={{ backgroundColor: inputColor }}
           containerStyle={{ width: "100%" }}
         />
@@ -106,7 +100,8 @@ export default function CreateEvent() {
         <Text style={styles.label}>Descripción:</Text>
         <CustomInput
           error={null}
-          onChangeText={(value) => null}
+          value={formValues.description}
+          onChangeText={(value) => handleFieldChange("description", value)}
           inputStyle={{ backgroundColor: inputColor, height: "auto" }}
           containerStyle={{ height: "auto", width: "100%" }}
           scrollEnabled
