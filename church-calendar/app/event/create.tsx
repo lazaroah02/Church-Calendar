@@ -15,22 +15,30 @@ import { Button } from "@/components/Button";
 import { router } from "expo-router";
 import { pickImage } from "@/lib/pick-image";
 import type { Event } from "@/types/event";
+import { StatusBar } from "expo-status-bar";
+import { DateTimePickerGroup } from "@/components/form/date-time-picker-group";
+
+const inputColor = "#EBEBEB";
 
 export default function CreateEvent() {
   const { session } = useSession();
   const styles = useThemeStyles(createEventFormStyles);
-  const inputColor = "#EBEBEB";
 
   const searchParams = useSearchParams();
   const event = searchParams.get("event") as string | undefined;
   const parsedEvent: Event | null = event ? JSON.parse(event) : null;
 
+  const [showDateTimePickers, setShowDateTimePickers] = useState<{
+    start_time: false | "date" | "time";
+    end_time: false | "date" | "time";
+  }>({ start_time: false, end_time: false });
+
   const [formValues, setFormValues] = useState({
     title: "",
     location: "",
     description: "",
-    start_time: "",
-    end_time: "",
+    start_time: new Date(),
+    end_time: new Date(),
     groups: [],
     is_canceled: false,
     visible: true,
@@ -43,7 +51,7 @@ export default function CreateEvent() {
 
   const handleFieldChange = (
     key: keyof typeof formValues,
-    value: string | boolean
+    value: string | boolean | Date | undefined
   ) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
   };
@@ -51,6 +59,7 @@ export default function CreateEvent() {
   return (
     <SafeAreaView style={styles.pageContainer}>
       <MyNavigationBar buttonsStyle="dark" />
+      <StatusBar style="dark" />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.scrollView}
         keyboardShouldPersistTaps="handled"
@@ -106,6 +115,60 @@ export default function CreateEvent() {
           containerStyle={{ height: "auto", width: "100%" }}
           scrollEnabled
           multiline
+        />
+
+        {/* START DATE */}
+        <Text style={styles.label}>Inicio:</Text>
+        <DateTimePickerGroup
+          value={formValues.start_time}
+          handleChange={(date) => handleFieldChange("start_time", date)}
+          showTimePicker={showDateTimePickers.start_time === "time"}
+          showDatePicker={showDateTimePickers.start_time === "date"}
+          handleShowDatePicker={() =>
+            setShowDateTimePickers({ start_time: "date", end_time: false })
+          }
+          handleShowTimePicker={() =>
+            setShowDateTimePickers({ start_time: "time", end_time: false })
+          }
+          handleHideDatePicker={() =>
+            setShowDateTimePickers({
+              start_time: false,
+              end_time: false,
+            })
+          }
+          handleHideTimePicker={() =>
+            setShowDateTimePickers({
+              start_time: false,
+              end_time: false,
+            })
+          }
+        />
+
+        {/* END DATE */}
+        <Text style={styles.label}>Fin:</Text>
+        <DateTimePickerGroup
+          value={formValues.end_time}
+          handleChange={(date) => handleFieldChange("end_time", date)}
+          showTimePicker={showDateTimePickers.end_time === "time"}
+          showDatePicker={showDateTimePickers.end_time === "date"}
+          handleShowDatePicker={() =>
+            setShowDateTimePickers({ end_time: "date", start_time: false })
+          }
+          handleShowTimePicker={() =>
+            setShowDateTimePickers({ end_time: "time", start_time: false })
+          }
+          handleHideDatePicker={() =>
+            setShowDateTimePickers({
+              start_time: false,
+              end_time: false,
+            })
+          }
+          handleHideTimePicker={() =>
+            setShowDateTimePickers({
+              start_time: false,
+              end_time: false,
+            })
+          }
         />
 
         {/*State*/}
