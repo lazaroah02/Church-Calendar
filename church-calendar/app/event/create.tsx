@@ -52,7 +52,7 @@ export default function CreateEvent() {
 
   const handleFieldChange = (
     key: keyof typeof formValues,
-    value: string | boolean | Date | undefined
+    value: string | boolean | Date | number[] | undefined
   ) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
   };
@@ -173,7 +173,12 @@ export default function CreateEvent() {
         />
 
         {/*Groups*/}
-        <ChurchGroupsPicker containerStyle={{marginTop:25}}/>
+        <ChurchGroupsPicker
+          containerStyle={{ marginTop: 25 }}
+          onChange={(selectedGroups) =>
+            handleFieldChange("groups", selectedGroups)
+          }
+        />
 
         {/*State*/}
         <Text style={styles.label}>Estado:</Text>

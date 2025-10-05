@@ -1,6 +1,8 @@
+import { useGroups } from "@/hooks/groups/useGroups";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
-import React, { useState } from "react";
+import { Group } from "@/types/group";
+import React, { useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -19,22 +21,31 @@ interface ChurchGroupsPickerProps {
     | ViewStyle
     | RegisteredStyle<ViewStyle>
     | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
+  onChange: (selectedGroups: number[]) => void;
 }
 
 const ChurchGroupsPicker = ({
   containerStyle,
   placeholder = "Dirigido a",
+  onChange = () => null,
 }: ChurchGroupsPickerProps) => {
-  const [selectedGroups, setSelectedGroups] = useState([]);
+  const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
   const styles = useThemeStyles(ChurchGroupsPickerStyles);
+  const { groups, isLoading, isError, refetch } = useGroups();
 
-  const data = [
-    { label: "Danza", value: "1" },
-    { label: "Jóvenes", value: "2" },
-    { label: "Música", value: "3" },
-    { label: "Teatro", value: "4" },
-    { label: "Voluntariado", value: "5" },
-  ];
+  const data = useMemo(
+    () =>
+      groups.map((group: Group) => ({
+        label: group.name,
+        value: group.id,
+      })),
+    [groups]
+  );
+
+  function handleSetSelectedGroups(groups: number[]){
+    setSelectedGroups(groups)
+    onChange(groups)
+  }
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -42,14 +53,14 @@ const ChurchGroupsPicker = ({
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
         inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
+        search={true}
         data={data}
         labelField="label"
         valueField="value"
         placeholder={placeholder}
         searchPlaceholder="Buscar..."
         value={selectedGroups}
-        onChange={(item) => setSelectedGroups(item)}
+        onChange={(item) => handleSetSelectedGroups(item)}
         mode="modal"
         containerStyle={styles.modalStyle}
         renderItem={(item) => {
@@ -59,11 +70,11 @@ const ChurchGroupsPicker = ({
               activeOpacity={0.7}
               onPress={() => {
                 if (isSelected) {
-                  setSelectedGroups(
+                  handleSetSelectedGroups(
                     selectedGroups.filter((v) => v !== item.value)
                   );
                 } else {
-                  setSelectedGroups([...selectedGroups, item.value]);
+                  handleSetSelectedGroups([...selectedGroups, item.value]);
                 }
               }}
               style={[styles.item, isSelected && styles.itemSelected]}
@@ -119,6 +130,7 @@ const ChurchGroupsPickerStyles = (theme: AppTheme) => ({
     marginHorizontal: 20,
     padding: 10,
     fontFamily: "InterVariable",
+    marginBottom: 200,
   },
   item: {
     marginVertical: 6,
