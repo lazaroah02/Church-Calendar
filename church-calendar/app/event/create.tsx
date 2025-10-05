@@ -17,6 +17,7 @@ import { pickImage } from "@/lib/pick-image";
 import type { Event } from "@/types/event";
 import { StatusBar } from "expo-status-bar";
 import { DateTimePickerGroup } from "@/components/form/date-time-picker-group";
+import { ChurchGroupsPicker } from "@/components/form/church-groups-picker";
 
 const inputColor = "#EBEBEB";
 
@@ -170,6 +171,9 @@ export default function CreateEvent() {
             })
           }
         />
+
+        {/*Groups*/}
+        <ChurchGroupsPicker containerStyle={{marginTop:25}}/>
 
         {/*State*/}
         <Text style={styles.label}>Estado:</Text>
