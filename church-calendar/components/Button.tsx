@@ -18,12 +18,13 @@ export function Button({
   loadingText = null,
   loading = false,
   variant = "cancel",
+  disabled = false,
   style = {},
   onPress,
 }: ButtonProps) {
   const styles = useThemeStyles(ButtonStyles);
   return (
-    <Pressable onPress={onPress} style={[styles[variant].button, style]}>
+    <Pressable onPress={onPress} style={[styles[variant].button, style]} disabled={disabled}>
       {children ? (
         children
       ) : (
@@ -45,6 +46,7 @@ interface ButtonProps {
   onPress: () => void;
   loading?: boolean;
   loadingText?: string | null;
+  disabled: boolean
   style?:
     | Falsy
     | ViewStyle

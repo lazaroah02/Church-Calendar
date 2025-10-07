@@ -35,3 +35,16 @@ export type Event = {
     created_by_full_info: UserInfo
     last_edit_by_full_info: UserInfo
 }
+
+export type CreateEvent = {
+    title: string
+    start_time: Date
+    end_time: Date
+    img?: string | null
+    description: string
+    location: string
+    groups: number[]
+    is_canceled: boolean
+    visible: boolean
+    open_to_reservations: boolean
+}

@@ -238,3 +238,4 @@ class ManageEvents(EventListMixin, viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         return self.filter_and_respond(request, self.get_queryset())
+

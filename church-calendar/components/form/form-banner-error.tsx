@@ -2,16 +2,18 @@ import { View, Text, Falsy, ViewStyle, RegisteredStyle, RecursiveArray } from "r
 import { Ionicons } from "@expo/vector-icons";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { Ref } from "react";
 
 export default function FormErrorBanner({
   message,
   style,
+  ref
 }: FormErrorBannerProps) {
   const styles = useThemeStyles(formBannerErrorStyles);
   if (!message) return null;
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style]} ref = {ref}>
       <Ionicons name="alert-circle" size={18} color="#b91c1c" />
       <Text style={styles.text}>{message}</Text>
     </View>
@@ -35,11 +37,13 @@ const formBannerErrorStyles = (theme: AppTheme) => ({
     marginLeft: 8,
     fontFamily: "InterVariable",
     fontSize: theme.fontSizes.md,
+    paddingRight: 10
   },
 });
 
 interface FormErrorBannerProps{
   message: string;
+  ref?: Ref<View> | undefined,
   style?:
     | Falsy
     | ViewStyle

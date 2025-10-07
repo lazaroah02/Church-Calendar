@@ -5,7 +5,7 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { getImageUri } from "@/lib/get-image-uri";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pressable, Text, Image, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +18,8 @@ import type { Event } from "@/types/event";
 import { StatusBar } from "expo-status-bar";
 import { DateTimePickerGroup } from "@/components/form/date-time-picker-group";
 import { ChurchGroupsPicker } from "@/components/form/church-groups-picker";
+import { useManageEvents } from "@/hooks/events/useManageEvents";
+import FormErrorBanner from "@/components/form/form-banner-error";
 
 const inputColor = "#EBEBEB";
 
@@ -26,8 +28,12 @@ export default function CreateEvent() {
   const styles = useThemeStyles(createEventFormStyles);
 
   const searchParams = useSearchParams();
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const event = searchParams.get("event") as string | undefined;
   const parsedEvent: Event | null = event ? JSON.parse(event) : null;
+
+  const { handleCreateEvent, isCreatingEvent, createEventErrors, reset } =
+    useManageEvents();
 
   const [showDateTimePickers, setShowDateTimePickers] = useState<{
     start_time: false | "date" | "time";
@@ -46,7 +52,7 @@ export default function CreateEvent() {
     open_to_reservations: false,
   });
 
-  const [profileImage, setProfileImage] = useState(
+  const [eventImage, setEventImage] = useState(
     parsedEvent?.img ? getImageUri(parsedEvent?.img) : null
   );
 
@@ -55,7 +61,14 @@ export default function CreateEvent() {
     value: string | boolean | Date | number[] | undefined
   ) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
+    reset()
   };
+
+  useEffect(() => {
+    if (createEventErrors) {
+      scrollViewRef.current?.scrollToPosition(0, 0, true);
+    }
+  }, [createEventErrors]);
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -66,14 +79,15 @@ export default function CreateEvent() {
         keyboardShouldPersistTaps="handled"
         enableOnAndroid
         extraScrollHeight={100}
+        ref={scrollViewRef}
       >
         {/* Picture */}
         <Pressable
           style={styles.pictureContainer}
-          onPress={() => pickImage({ setImage: (img) => setProfileImage(img) })}
+          onPress={() => pickImage({ setImage: (img) => setEventImage(img) })}
         >
-          {profileImage ? (
-            <Image style={styles.picture} source={{ uri: profileImage }} />
+          {eventImage ? (
+            <Image style={styles.picture} source={{ uri: eventImage }} />
           ) : (
             <Ionicons
               name="camera-outline"
@@ -85,11 +99,20 @@ export default function CreateEvent() {
             <Ionicons name="camera" size={24} color="#fff" />
           </View>
         </Pressable>
+        {createEventErrors && (
+          <FormErrorBanner
+            message={
+              Object.values(createEventErrors).find((err) => Boolean(err)) ||
+              "Ocurrió un error inesperado."
+            }
+            style={{ marginTop: 10, marginBottom: 0 }}
+          />
+        )}
 
         {/*Title*/}
         <Text style={styles.label}>Título:</Text>
         <CustomInput
-          error={null}
+          error={createEventErrors?.title}
           value={formValues.title}
           onChangeText={(value) => handleFieldChange("title", value)}
           inputStyle={{ backgroundColor: inputColor }}
@@ -99,7 +122,7 @@ export default function CreateEvent() {
         {/*Location*/}
         <Text style={styles.label}>Lugar:</Text>
         <CustomInput
-          error={null}
+          error={createEventErrors?.location}
           value={formValues.location}
           onChangeText={(value) => handleFieldChange("location", value)}
           inputStyle={{ backgroundColor: inputColor }}
@@ -148,6 +171,7 @@ export default function CreateEvent() {
         {/* END DATE */}
         <Text style={styles.label}>Fin:</Text>
         <DateTimePickerGroup
+          error={createEventErrors?.end_time}
           value={formValues.end_time}
           handleChange={(date) => handleFieldChange("end_time", date)}
           showTimePicker={showDateTimePickers.end_time === "time"}
@@ -203,14 +227,16 @@ export default function CreateEvent() {
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center" }}>
         <Button
           text="Cancelar"
+          disabled={isCreatingEvent}
           onPress={() => router.back()}
           style={{ width: "40%" }}
         />
         <Button
           text="Enviar"
           loadingText="Enviando"
-          loading={false}
-          onPress={() => null}
+          loading={isCreatingEvent}
+          disabled={isCreatingEvent}
+          onPress={() => handleCreateEvent({ img: eventImage, ...formValues })}
           variant="submit"
           style={{ width: "50%" }}
         />

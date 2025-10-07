@@ -1,5 +1,6 @@
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
+import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -15,6 +16,7 @@ interface DateTimePickerGroupProps {
   handleHideTimePicker: () => void;
   value: Date;
   handleChange: (date: Date | undefined) => void;
+  error?: null | boolean;
 }
 
 const inputColor = "#EBEBEB";
@@ -23,6 +25,7 @@ export function DateTimePickerGroup({
   showDatePicker,
   showTimePicker,
   value,
+  error,
   handleShowDatePicker,
   handleShowTimePicker,
   handleHideDatePicker,
@@ -36,9 +39,19 @@ export function DateTimePickerGroup({
         <View style={{ flexGrow: 1 }}>
           <Text style={styles.label}>Fecha</Text>
           <Pressable onPress={handleShowDatePicker}>
-            <Text style={styles.dateTimeInputPicker}>
+            <Text
+              style={[styles.dateTimeInputPicker, error && styles.inputError]}
+            >
               {value?.toLocaleDateString("es-ES")}
             </Text>
+            {error && (
+              <Ionicons
+                name="alert-circle"
+                size={18}
+                color="#b91c1c"
+                style={[styles.errorIcon]}
+              />
+            )}
           </Pressable>
           {showDatePicker && (
             <DateTimePicker
@@ -66,12 +79,22 @@ export function DateTimePickerGroup({
         <View style={{ width: "50%" }}>
           <Text style={styles.label}>Hora</Text>
           <Pressable onPress={handleShowTimePicker}>
-            <Text style={styles.dateTimeInputPicker}>
+            <Text
+              style={[styles.dateTimeInputPicker, error && styles.inputError]}
+            >
               {value.toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
             </Text>
+            {error && (
+              <Ionicons
+                name="alert-circle"
+                size={18}
+                color="#b91c1c"
+                style={[styles.errorIcon]}
+              />
+            )}
           </Pressable>
           {showTimePicker && (
             <DateTimePicker
@@ -109,6 +132,7 @@ const DateTimePickerGroupStyles = (theme: AppTheme) => {
       opacity: 0.8,
     },
     dateTimeInputPicker: {
+      position: "relative",
       backgroundColor: inputColor,
       width: "100%",
       height: 45,
@@ -120,6 +144,17 @@ const DateTimePickerGroupStyles = (theme: AppTheme) => {
       fontSize: theme.fontSizes.lg,
       fontWeight: "400",
       verticalAlign: "middle",
+    },
+    errorIcon: {
+      position: "absolute",
+      right: 5,
+      top: "50%",
+      transform: [{ translateY: -9 }],
+    },
+
+    inputError: {
+      borderWidth: 2,
+      borderColor: "rgb(215, 0, 75)",
     },
   };
 };

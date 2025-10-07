@@ -11,6 +11,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { AppThemeProvider } from "@/contexts/theme-context";
 import { queryClient, persister } from "@/lib/query-client";
+import { CalendarContextProvider } from "@/contexts/calendar-context/calendarContext";
 
 export default function Root() {
   const [hydrated, setHydrated] = useState(false);
@@ -26,10 +27,12 @@ export default function Root() {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
-        <AppThemeProvider>
-          <SplashScreenController />
-          <RootLayout />
-        </AppThemeProvider>
+        <CalendarContextProvider>
+          <AppThemeProvider>
+            <SplashScreenController />
+            <RootLayout />
+          </AppThemeProvider>
+        </CalendarContextProvider>
       </SessionProvider>
     </QueryClientProvider>
   );

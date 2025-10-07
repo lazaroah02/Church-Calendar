@@ -5,11 +5,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useCallback } from "react";
 import { CalendarUtils } from "react-native-calendars";
 import { CalendarComponent } from "@/components/calendar/calendar";
-import { useEvents } from "@/hooks/events/useEvents";
 import { Day } from "@/components/calendar/day";
 import "@/lib/calendar/calendar-locale";
 import { EventsBottomSheet } from "@/components/calendar/events-bottom-sheet";
 import { StatusBar } from "expo-status-bar";
+import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
 
 export default function Calendar() {
   const todaysDate = new Date();
@@ -22,7 +22,7 @@ export default function Calendar() {
     onRefetch,
     selectedDay,
     setSelectedDay,
-  } = useEvents();
+  } = useCalendarEventsContext();
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -31,6 +31,7 @@ export default function Calendar() {
     await onRefetch()
     setRefreshing(false);
   }, [onRefetch]);
+  
 
   return (
     <SafeAreaView style={styles.container}>
