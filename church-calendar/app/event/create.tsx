@@ -24,7 +24,6 @@ import FormErrorBanner from "@/components/form/form-banner-error";
 const inputColor = "#EBEBEB";
 
 export default function CreateEvent() {
-  const { session } = useSession();
   const styles = useThemeStyles(createEventFormStyles);
 
   const searchParams = useSearchParams();

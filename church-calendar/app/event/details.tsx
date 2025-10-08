@@ -10,11 +10,15 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  Alert,
 } from "react-native";
-import { useState } from "react";
-import { formatTimeStamp, formatTimeRange } from "@/lib/calendar/calendar-utils";
+import { ReactNode, useState } from "react";
+import {
+  formatTimeStamp,
+  formatTimeRange,
+} from "@/lib/calendar/calendar-utils";
 import { Ionicons } from "@expo/vector-icons";
-import {  router } from "expo-router";
+import { router } from "expo-router";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { BASE_URL } from "@/api-endpoints";
@@ -23,6 +27,8 @@ import Hyperlink from "react-native-hyperlink";
 import { useSession } from "@/hooks/auth/useSession";
 import { UserInfo } from "@/types/auth";
 import { getImageUri } from "@/lib/get-image-uri";
+import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
+import { EventTrheeDotsmenuOptions } from "@/components/event/event-three-dots-menu-options";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
@@ -45,19 +51,35 @@ export default function EventDetails() {
       <ScrollView contentContainerStyle={styles.container}>
         {/* Title */}
         <View style={styles.titleContainer}>
-          <Ionicons
-            name="chevron-back"
-            size={30}
-            color="#000"
-            style={{ marginLeft: -8 }}
-            onPress={() => router.back()}
-          />
-          <Text style={styles.title} numberOfLines={3}>
-            {parsedEvent.title}
-          </Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <Ionicons
+              name="chevron-back"
+              size={30}
+              color="#000"
+              style={{ marginLeft: -8, marginTop: 3 }}
+              onPress={() => router.back()}
+            />
+            <Text style={styles.title} numberOfLines={3}>
+              {parsedEvent.title}
+            </Text>
+          </View>
+          {isAdmin && (
+            <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }}>
+              <EventTrheeDotsmenuOptions event={parsedEvent} />
+            </SimpleThreeDotsMenu>
+          )}
         </View>
 
-        {parsedEvent?.is_canceled && <Text style={[styles.groupName, {color:"red", marginTop:10, marginBottom:10}]}>Este Evento ha sido cancelado</Text>}
+        {parsedEvent?.is_canceled && (
+          <Text
+            style={[
+              styles.groupName,
+              { color: "red", marginTop: 10, marginBottom: 10 },
+            ]}
+          >
+            Este Evento ha sido cancelado
+          </Text>
+        )}
 
         {/* Date, time, and location */}
         <Text style={styles.date}>{currentDateReadable}</Text>
@@ -152,29 +174,40 @@ export default function EventDetails() {
           <>
             {/* Estado */}
             <Text style={styles.groupLabel}>Estado del Evento:</Text>
-            <Text style={styles.groupName}>• {parsedEvent.is_canceled? 'Cancelado': 'No Cancelado'}</Text>
-            <Text style={styles.groupName}>• {parsedEvent.visible? 'Visible': 'Oculto'}</Text>
-            <Text style={styles.groupName}>• {parsedEvent.open_to_reservations? 'Abierto a reservaciones': 'Cerrado a reservaciones'}</Text>
+            <Text style={styles.groupName}>
+              • {parsedEvent.is_canceled ? "Cancelado" : "No Cancelado"}
+            </Text>
+            <Text style={styles.groupName}>
+              • {parsedEvent.visible ? "Visible" : "Oculto"}
+            </Text>
+            <Text style={styles.groupName}>
+              •{" "}
+              {parsedEvent.open_to_reservations
+                ? "Abierto a reservaciones"
+                : "Cerrado a reservaciones"}
+            </Text>
           </>
         )}
       </ScrollView>
 
       {/* Join button */}
-      {parsedEvent.open_to_reservations && session && !parsedEvent.is_canceled &&(
-        <TouchableOpacity
-          style={[styles.button, isGoing && styles.buttonActive]}
-          onPress={() => setIsGoing(!isGoing)}
-        >
-          <Text style={styles.buttonText}>
-            {isGoing ? "Anotado" : "Anotarse"}
-          </Text>
-          {isGoing ? (
-            <Ionicons name="checkbox-outline" size={20} color="#fff" />
-          ) : (
-            <Ionicons name="square-outline" size={20} color="#fff" />
-          )}
-        </TouchableOpacity>
-      )}
+      {parsedEvent.open_to_reservations &&
+        session &&
+        !parsedEvent.is_canceled && (
+          <TouchableOpacity
+            style={[styles.button, isGoing && styles.buttonActive]}
+            onPress={() => setIsGoing(!isGoing)}
+          >
+            <Text style={styles.buttonText}>
+              {isGoing ? "Anotado" : "Anotarse"}
+            </Text>
+            {isGoing ? (
+              <Ionicons name="checkbox-outline" size={20} color="#fff" />
+            ) : (
+              <Ionicons name="square-outline" size={20} color="#fff" />
+            )}
+          </TouchableOpacity>
+        )}
     </SafeAreaView>
   );
 }
@@ -234,7 +267,7 @@ const eventDetailsStyles = (theme: AppTheme) => ({
     marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 23,
