@@ -79,3 +79,10 @@ export function formatTimeStamp(timestamp: string): string {
 
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
+
+export const getNaiveDate = (dateString: string | null | undefined) => {
+    if (!dateString) return new Date();
+    // Replace 'Z' and the offset (+00:00) to force local interpretation.
+    const naiveString = dateString.replace('Z', '').replace(/\+\d{2}:\d{2}$/, '');
+    return new Date(naiveString);
+  };

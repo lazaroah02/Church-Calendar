@@ -36,7 +36,7 @@ export type Event = {
     last_edit_by_full_info: UserInfo
 }
 
-export type CreateEvent = {
+export type EventFormType = {
     title: string
     start_time: Date
     end_time: Date

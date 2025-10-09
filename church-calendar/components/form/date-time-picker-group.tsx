@@ -16,7 +16,7 @@ interface DateTimePickerGroupProps {
   handleHideTimePicker: () => void;
   value: Date;
   handleChange: (date: Date | undefined) => void;
-  error?: null | boolean;
+  error?: null | boolean | string;
 }
 
 const inputColor = "#EBEBEB";
@@ -85,6 +85,7 @@ export function DateTimePickerGroup({
               {value.toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
+                hour12: true,
               })}
             </Text>
             {error && (

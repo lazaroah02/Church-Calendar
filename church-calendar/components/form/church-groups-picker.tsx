@@ -22,14 +22,16 @@ interface ChurchGroupsPickerProps {
     | RegisteredStyle<ViewStyle>
     | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
   onChange: (selectedGroups: number[]) => void;
+  defaultSelectedGroups?: number[];
 }
 
 const ChurchGroupsPicker = ({
   containerStyle,
   placeholder = "Dirigido a",
   onChange = () => null,
+  defaultSelectedGroups = [],
 }: ChurchGroupsPickerProps) => {
-  const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<number[]>(defaultSelectedGroups || []);
   const styles = useThemeStyles(ChurchGroupsPickerStyles);
   const { groups, isLoading, isError, refetch } = useGroups();
 
