@@ -108,6 +108,9 @@ export function DateTimePickerGroup({
                 date: Date | undefined
               ) => {
                 handleHideTimePicker();
+                if (event.type === "dismissed") {
+                  return;
+                }
                 if (date) {
                   const updated = new Date(value);
                   updated.setHours(date.getHours());

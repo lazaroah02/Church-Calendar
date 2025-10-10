@@ -1,6 +1,8 @@
 import { Interval } from "@/types/event";
 import { CalendarUtils } from "react-native-calendars";
 
+const TIMEZONE = undefined
+
 export function getMonthIntervalFromDate(date: Date): Interval {
   const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
   const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -32,7 +34,7 @@ export function formatSelectedDay(dateString: string): string {
     day: "numeric",
     month: "long",
     year: "numeric",
-    timeZone: "UTC",
+    timeZone: TIMEZONE,
   });
 
   const parts = formatter.formatToParts(new Date(dateString));
@@ -54,7 +56,7 @@ export function formatTimeRange(start: string, end: string): string {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-    timeZone: "UTC",
+    timeZone: TIMEZONE,
   };
 
   const startFormatted = new Date(start).toLocaleTimeString("es-ES", options);
@@ -71,7 +73,7 @@ export function formatTimeStamp(timestamp: string): string {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-    timeZone: "UTC",
+    timeZone: TIMEZONE
   });
 
   // Ex: "9 de septiembre de 2025, 10:05"
@@ -80,9 +82,3 @@ export function formatTimeStamp(timestamp: string): string {
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
 
-export const getNaiveDate = (dateString: string | null | undefined) => {
-    if (!dateString) return new Date();
-    // Replace 'Z' and the offset (+00:00) to force local interpretation.
-    const naiveString = dateString.replace('Z', '').replace(/\+\d{2}:\d{2}$/, '');
-    return new Date(naiveString);
-  };

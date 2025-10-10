@@ -1,12 +1,12 @@
 import { BASE_URL, MANAGE_EVENTS_URL } from "@/api-endpoints";
-import { CreateEvent } from "@/types/event";
+import { EventFormType } from "@/types/event";
 
 export function createEvent({
   token = "",
   data,
 }: {
   token: string;
-  data: CreateEvent;
+  data: EventFormType;
 }) {
   const formData = new FormData();
 

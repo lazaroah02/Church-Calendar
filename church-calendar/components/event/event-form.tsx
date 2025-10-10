@@ -14,7 +14,6 @@ import { ChurchGroupsPicker } from "@/components/form/church-groups-picker";
 import FormErrorBanner from "@/components/form/form-banner-error";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
-import { getNaiveDate } from "@/lib/calendar/calendar-utils";
 
 const inputColor = "#EBEBEB";
 
@@ -42,8 +41,8 @@ export function EventForm({
     title: event?.title || "",
     location: event?.location || "",
     description: event?.description || "",
-    start_time: getNaiveDate(event?.start_time),
-    end_time: getNaiveDate(event?.end_time),
+    start_time: new Date(event?.start_time || Date.now()),
+    end_time: new Date(event?.end_time || Date.now()),
     groups: event?.groups || [],
     is_canceled: event?.is_canceled || false,
     visible: event?.visible || true,
