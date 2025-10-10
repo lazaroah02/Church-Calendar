@@ -1,0 +1,80 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-10 10:58-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#: .\event\views.py:134 .\event\views.py:162 .\event\views.py:204
+msgid "Authentication required to make reservations."
+msgstr "Se requiere autenticación para hacer reservas."
+
+#: .\event\views.py:142
+msgid "You have reserved for this event."
+msgstr "Ya tienes una reserva para este evento."
+
+#: .\event\views.py:147
+msgid "You don't have reservations for this event."
+msgstr "No tienes reservas para este evento."
+
+#: .\event\views.py:153 .\event\views.py:195 .\event\views.py:218
+msgid "Event requested doesn't exist."
+msgstr "El evento solicitado no existe."
+
+#: .\event\views.py:170
+msgid "This event is not open to reservations."
+msgstr "Este evento no está abierto a reservas."
+
+#: .\event\views.py:176
+msgid "This event has reached its reservation limit."
+msgstr "Este evento ha alcanzado su límite de reservas."
+
+#: .\event\views.py:182
+msgid "You have already made a reservation for this event."
+msgstr "Ya has hecho una reserva para este evento."
+
+#: .\event\views.py:189
+msgid "Reservation created successfully."
+msgstr "Reserva creada exitosamente."
+
+#: .\event\views.py:212
+msgid "Reservation deleted successfully."
+msgstr "Reserva eliminada correctamente."
+
+#: .\user\serializers.py:21
+msgid "Designates whether the user can log in"
+msgstr "Indica si el usuario puede iniciar sesión"
+
+#: .\user\serializers.py:25
+msgid "Designates whether the user can access the admin panel"
+msgstr "Indica si el usuario puede acceder al panel de administración"
+
+#: .\user\serializers.py:71
+msgid "An admin/superuser user must be staff too"
+msgstr "Un usuario administrador o superusuario también debe ser parte del personal"
+
+#: .\user\serializers.py:79
+msgid "A user with this email already exists."
+msgstr "Ya existe un usuario con este correo electrónico."
+
+#: .\user\serializers.py:85
+msgid "A user with this username already exists."
+msgstr "Ya existe un usuario con este nombre de usuario."
+
+#: .\user\views.py:93
+msgid "Password was not provided"
+msgstr "No se proporcionó una contraseña."

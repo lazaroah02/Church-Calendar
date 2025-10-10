@@ -30,6 +30,10 @@ class Event(models.Model):
     visible = models.BooleanField(default=True)
     is_canceled = models.BooleanField(default=False)
     open_to_reservations = models.BooleanField(default=False)
+    reservations_limit = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        help_text="Maximum number of reservations allowed. Leave blank for no limit.")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -40,13 +44,3 @@ class Event(models.Model):
     class Meta:
         ordering = ['start_time']
 
-
-class Reservation(models.Model):
-    event = models.ForeignKey(
-        Event, on_delete=models.CASCADE, related_name='reservations'
-    )
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Reservation by {self.user} for {self.event}"

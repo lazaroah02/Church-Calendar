@@ -1,11 +1,13 @@
 from event.paginators import EventsPagination
-from rest_framework import viewsets
+from rest_framework import viewsets, response, status
 from event.models import Event
 from event.serializers import (
     EventsSerializer, ManageEventsSerializer,
     )
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from event.mixins import EventListMixin
+from rest_framework.decorators import action
+from django.utils.translation import gettext as _
 
 from church_group.models import ChurchGroup, GENERAL_GROUP_NAME
 
@@ -124,6 +126,98 @@ class Events(EventListMixin, viewsets.ReadOnlyModelViewSet):
     def list(self, request, *args, **kwargs):
         return self.filter_and_respond(request, self.get_queryset())
 
+    @action(methods=["GET"], detail=True)
+    def is_reserved(self, request, pk):
+        try:
+            if request.user.is_anonymous:
+                return response.Response(
+                    {"message": _("Authentication required to make reservations.")},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            event = Event.objects.get(id=pk)
+
+            if event.reservations.filter(user=request.user).exists():
+                return response.Response(
+                    {"message": _("You have reserved for this event.")},
+                    status=status.HTTP_200_BAD_REQUEST
+                )
+
+            return response.Response(
+                {"message": _("You don't have reservations for this event.")},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        except Event.DoesNotExist:
+            return response.Response(
+                {"message": _("Event requested doesn't exist.")},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @action(methods=["POST"], detail=True)
+    def make_reservation(self, request, pk):
+        try:
+            if request.user.is_anonymous:
+                return response.Response(
+                    {"message": _("Authentication required to make reservations.")},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            event = Event.objects.get(id=pk)
+
+            if not event.open_to_reservations:
+                return response.Response(
+                    {"message": _("This event is not open to reservations.")},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            if event.reservations_limit is not None and event.reservations.count() >= event.reservations_limit:
+                return response.Response(
+                    {"message": _("This event has reached its reservation limit.")},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            if event.reservations.filter(user=request.user).exists():
+                return response.Response(
+                    {"message": _("You have already made a reservation for this event.")},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            event.reservations.create(user=request.user)
+
+            return response.Response(
+                {"message": _("Reservation created successfully.")},
+                status=status.HTTP_201_CREATED
+            )
+
+        except Event.DoesNotExist:
+            return response.Response(
+                {"message": _("Event requested doesn't exist.")},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @action(methods=["DELETE"], detail=True)
+    def remove_reservation(self, request, pk):
+        try:
+            if request.user.is_anonymous:
+                return response.Response(
+                    {"message": _("Authentication required to make reservations.")},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            event = Event.objects.get(id=pk)
+            event.reservations.filter(user=request.user).delete()
+
+            return response.Response(
+                {"message": _("Reservation deleted successfully.")},
+                status=status.HTTP_200_OK
+            )
+
+        except Event.DoesNotExist:
+            return response.Response(
+                {"message": _("Event requested doesn't exist.")},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 class ManageEvents(EventListMixin, viewsets.ModelViewSet):
     """
@@ -238,4 +332,3 @@ class ManageEvents(EventListMixin, viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         return self.filter_and_respond(request, self.get_queryset())
-

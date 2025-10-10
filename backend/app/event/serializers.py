@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from event.models import Event, Reservation
+from event.models import Event
 from django.db import models
 from church_group.serializers import ChurchGroupsReducedSerializer
 from authentication.serializers import CustomUserDetailsSerializer
@@ -25,6 +25,7 @@ class EventsSerializer(serializers.ModelSerializer):
             "is_canceled",
             "visible",
             "open_to_reservations",
+            "reservations_limit",
             "created_at",
             "updated_at",
             "groups_full_info",
@@ -53,12 +54,6 @@ class ManageEventsSerializer(serializers.ModelSerializer):
         if attrs.get('start_time') and attrs.get('end_time') and attrs.get('start_time') >= attrs.get('end_time'):
             raise serializers.ValidationError("End time must be after start time.")
         return attrs
-
-
-class ReservationsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Reservation
-        fields = "__all__"
 
 
 class GroupByChoices(models.TextChoices):

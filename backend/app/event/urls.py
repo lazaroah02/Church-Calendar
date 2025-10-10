@@ -6,6 +6,7 @@ router = routers.SimpleRouter()
 router.register("manage", ManageEvents, basename="manage-events")
 router.register("", Events, basename="events")
 
-urlpatterns = []
+urlpatterns = [
+]
 
 urlpatterns += router.urls

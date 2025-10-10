@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'authentication',
     'church_group',
     'user',
+    'reservation',
 
     # Third-party Apps
     'rest_framework',
@@ -125,13 +126,22 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'es-es'
-
 TIME_ZONE = 'America/Havana'
+
+USE_TZ = True
+
+LANGUAGE_CODE = 'en'
 
 USE_I18N = True
 
-USE_TZ = True
+LANGUAGES = [
+    ('en', 'English'),
+    ('es', 'Español'),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 
 # Static files (CSS, JavaScript, Images)
@@ -160,7 +170,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        #'rest_framework.authentication.SessionAuthentication'
+        'rest_framework.authentication.SessionAuthentication'
     ],
 
 }
