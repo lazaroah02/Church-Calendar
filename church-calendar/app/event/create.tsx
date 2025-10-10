@@ -4,9 +4,10 @@ import { StatusBar } from "expo-status-bar";
 
 import { useManageEvents } from "@/hooks/events/useManageEvents";
 import { EventForm } from "@/components/event/event-form";
+import { router } from "expo-router";
 
 export default function CreateEvent() {
-  const { handleCreateEvent, isCreatingEvent, createEventErrors, reset } =
+  const { handleCreateEvent, isCreatingEvent, createEventErrors, resetCreateEventMutation } =
     useManageEvents();
 
   return (
@@ -16,8 +17,9 @@ export default function CreateEvent() {
       <EventForm
         isPending={isCreatingEvent}
         errors={createEventErrors}
-        reset={reset}
+        reset={resetCreateEventMutation}
         handleSubmit={(values) => handleCreateEvent(values)}
+        onCancel={() => router.back()}
       />
     </SafeAreaView>
   );

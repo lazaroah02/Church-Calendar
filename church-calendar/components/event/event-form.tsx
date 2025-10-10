@@ -6,7 +6,6 @@ import { Pressable, Text, Image, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { CheckBox } from "@/components/form/checkbox";
 import { Button } from "@/components/Button";
-import { router } from "expo-router";
 import { pickImage } from "@/lib/pick-image";
 import type { EventFormType, Event } from "@/types/event";
 import { DateTimePickerGroup } from "@/components/form/date-time-picker-group";
@@ -23,12 +22,14 @@ export function EventForm({
   errors = null,
   isPending = false,
   handleSubmit = (values) => null,
+  onCancel = () => null
 }: {
   event?: Event | null;
   reset?: () => void;
   errors?: Record<string, string | null> | null;
   isPending: boolean;
   handleSubmit: (values: EventFormType) => void;
+  onCancel?: () => void;
 }) {
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const styles = useThemeStyles(EventFormStyles);
@@ -223,7 +224,7 @@ export function EventForm({
         <Button
           text="Cancelar"
           disabled={isPending}
-          onPress={() => router.back()}
+          onPress={onCancel}
           style={{ width: "40%" }}
         />
         <Button

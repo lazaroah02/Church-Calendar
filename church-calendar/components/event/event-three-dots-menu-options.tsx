@@ -47,7 +47,7 @@ export function EventTrheeDotsmenuOptions({ event }: { event: Event }) {
           padding: 10,
         }}
         onPress={() =>
-          router.push({
+          router.replace({
             pathname: "/event/edit",
             params: {
               eventInfo: JSON.stringify(event),
