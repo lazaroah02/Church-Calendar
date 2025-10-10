@@ -29,6 +29,7 @@ export type Event = {
     is_canceled: boolean
     visible: boolean
     open_to_reservations: boolean
+    reservations_limit: number | null
     created_at: string
     updated_at: string
     groups_full_info: GroupReducedInfo[]
@@ -47,4 +48,5 @@ export type EventFormType = {
     is_canceled: boolean
     visible: boolean
     open_to_reservations: boolean
+    reservations_limit?: number | null
 }

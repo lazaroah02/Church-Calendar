@@ -1,45 +1,90 @@
 import { POSTION, useToast } from "expo-toast";
+import { useCallback, useMemo } from "react"; // Added useCallback and useMemo
 
 type ToastType = "success" | "error" | "warning";
 
+interface ToastOptions {
+  message: string;
+  position?: POSTION;
+  duration?: number;
+}
+
+/**
+ * Custom hook to manage toast notifications, ensuring returned functions are stable
+ * using useCallback to prevent unnecessary re-renders in dependent hooks/components.
+ */
 export function useCustomToast() {
   const toast = useToast();
 
-  const colors: Record<ToastType, string> = {
-    success: "#4BB543", 
-    error: "#E74C3C",  
-    warning: "#F1C40F",
-  };
+  // Memoize color and style objects to ensure they are stable across renders
+  const colors: Record<ToastType, string> = useMemo(
+    () => ({
+      success: "#4BB543", // verde
+      error: "#E74C3C", // rojo
+      warning: "#F1C40F", // amarillo
+    }),
+    []
+  );
 
-  const baseStyle = {
-    borderRadius: 8,
-    padding: 12,
-  };
+  const baseStyle = useMemo(
+    () => ({
+      borderRadius: 8,
+      padding: 12,
+    }),
+    []
+  );
 
-  const textBaseStyle = {
-    color: "white",
-    fontWeight: "600" as const,
-  };
+  const textBaseStyle = useMemo(
+    () => ({
+      color: "white",
+      fontWeight: "600" as const,
+    }),
+    []
+  );
 
-  const showToast = (message: string, type: ToastType, position: POSTION) => {
-    toast.show(message, {
-      position,
-      containerStyle: {
-        ...baseStyle,
-        backgroundColor: colors[type],
-      },
-      textStyle: textBaseStyle,
-    });
-  };
+  // Memoize the base toast function to ensure it is stable
+  const showToast = useCallback(
+    ({
+      message,
+      type,
+      position = POSTION.BOTTOM,
+      duration = 5000,
+    }: ToastOptions & { type: ToastType }) => {
+      toast.show(message, {
+        position,
+        duration,
+        containerStyle: {
+          ...baseStyle,
+          backgroundColor: colors[type],
+        },
+        textStyle: textBaseStyle,
+      });
+    },
+    // Include all necessary stable dependencies
+    [toast, colors, baseStyle, textBaseStyle]
+  );
 
-  const showSuccessToast = (message: string, position?: POSTION) =>
-    showToast(message, "success", position || POSTION.BOTTOM);
+  // Memoize public facing functions, depending only on the stable showToast
+  const showSuccessToast = useCallback(
+    ({ message, position, duration }: ToastOptions) => {
+      showToast({ message, type: "success", position, duration });
+    },
+    [showToast]
+  );
 
-  const showErrorToast = (message: string, position?: POSTION) =>
-    showToast(message, "error", position || POSTION.BOTTOM);
+  const showErrorToast = useCallback(
+    ({ message, position, duration }: ToastOptions) => {
+      showToast({ message, type: "error", position, duration });
+    },
+    [showToast]
+  );
 
-  const showWarningToast = (message: string, position?: POSTION) =>
-    showToast(message, "warning", position || POSTION.BOTTOM);
+  const showWarningToast = useCallback(
+    ({ message, position, duration }: ToastOptions) => {
+      showToast({ message, type: "warning", position, duration });
+    },
+    [showToast]
+  );
 
   return {
     showSuccessToast,

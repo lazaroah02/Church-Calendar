@@ -1,3 +1,4 @@
+from event.throttles import EventReservationThrottle
 from event.paginators import EventsPagination
 from rest_framework import viewsets, response, status
 from event.models import Event
@@ -139,13 +140,19 @@ class Events(EventListMixin, viewsets.ReadOnlyModelViewSet):
 
             if event.reservations.filter(user=request.user).exists():
                 return response.Response(
-                    {"message": _("You have reserved for this event.")},
-                    status=status.HTTP_200_BAD_REQUEST
+                    {
+                        "message": _("You have reserved for this event."),
+                        "reservation": True
+                        },
+                    status=status.HTTP_200_OK
                 )
 
             return response.Response(
-                {"message": _("You don't have reservations for this event.")},
-                status=status.HTTP_404_NOT_FOUND
+                {
+                    "message": _("You don't have reservations for this event."),
+                    "reservation": False
+                    },
+                status=status.HTTP_200_OK
             )
 
         except Event.DoesNotExist:
@@ -154,7 +161,7 @@ class Events(EventListMixin, viewsets.ReadOnlyModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    @action(methods=["POST"], detail=True)
+    @action(methods=["POST"], detail=True, throttle_classes=[EventReservationThrottle])
     def make_reservation(self, request, pk):
         try:
             if request.user.is_anonymous:
@@ -196,7 +203,7 @@ class Events(EventListMixin, viewsets.ReadOnlyModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    @action(methods=["DELETE"], detail=True)
+    @action(methods=["DELETE"], detail=True, throttle_classes=[EventReservationThrottle])
     def remove_reservation(self, request, pk):
         try:
             if request.user.is_anonymous:
@@ -218,6 +225,7 @@ class Events(EventListMixin, viewsets.ReadOnlyModelViewSet):
                 {"message": _("Event requested doesn't exist.")},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
 
 class ManageEvents(EventListMixin, viewsets.ModelViewSet):
     """

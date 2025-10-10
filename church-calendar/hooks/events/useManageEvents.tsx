@@ -38,12 +38,12 @@ export function useManageEvents() {
     onSuccess: () => {
       onRefetch();
       router.back();
-      showSuccessToast("Evento eliminado con éxito!");
+      showSuccessToast({ message: "Evento eliminado con éxito!" });
     },
     onError: () => {
-      showErrorToast(
-        "Error al eliminar el evento. Revisa tu conexión a internet."
-      );
+      showErrorToast({
+        message: "Error al eliminar el evento. Revisa tu conexión a internet.",
+      });
     },
   });
 
@@ -52,7 +52,6 @@ export function useManageEvents() {
     isPending: isUpdatingEvent,
     error: errorUpdatingEvent,
     reset: resetUpdateEventMutation,
-
   } = useMutation({
     mutationFn: ({
       data,
@@ -69,11 +68,11 @@ export function useManageEvents() {
     onSuccess: (data) => {
       onRefetch();
       router.replace({
-            pathname: "/event/details",
-            params: {
-              event: JSON.stringify(data),
-            },
-          })
+        pathname: "/event/details",
+        params: {
+          event: JSON.stringify(data),
+        },
+      });
     },
   });
 
@@ -99,6 +98,6 @@ export function useManageEvents() {
     handleUpdateEvent,
     isUpdatingEvent,
     updateEventErrors,
-    resetUpdateEventMutation
+    resetUpdateEventMutation,
   };
 }

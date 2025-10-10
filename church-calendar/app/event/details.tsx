@@ -32,17 +32,17 @@ import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { EventTrheeDotsmenuOptions } from "@/components/event/event-three-dots-menu-options";
 import { PageHeader } from "@/components/PageHeader";
 import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
+import { ReserveEvent } from "@/components/event/reserv-event";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
   const eventParam = searchParams.get("event") as string | undefined;
-  const {selectedDay} = useCalendarEventsContext()
-  const currentDateReadable = formatSelectedDay(selectedDay.dateString)
+  const { selectedDay } = useCalendarEventsContext();
+  const currentDateReadable = formatSelectedDay(selectedDay.dateString);
   const parsedEvent: Event | null = eventParam ? JSON.parse(eventParam) : null;
   const styles = useThemeStyles(eventDetailsStyles);
   const { session } = useSession();
   const isAdmin = session?.userInfo.is_staff || false;
-  const [isGoing, setIsGoing] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState(false);
 
   useEffect(() => {
@@ -185,24 +185,7 @@ export default function EventDetails() {
         )}
       </ScrollView>
 
-      {/* Join button */}
-      {parsedEvent.open_to_reservations &&
-        session &&
-        !parsedEvent.is_canceled && (
-          <TouchableOpacity
-            style={[styles.button, isGoing && styles.buttonActive]}
-            onPress={() => setIsGoing(!isGoing)}
-          >
-            <Text style={styles.buttonText}>
-              {isGoing ? "Anotado" : "Anotarse"}
-            </Text>
-            {isGoing ? (
-              <Ionicons name="checkbox-outline" size={20} color="#fff" />
-            ) : (
-              <Ionicons name="square-outline" size={20} color="#fff" />
-            )}
-          </TouchableOpacity>
-        )}
+      <ReserveEvent event={parsedEvent} />
     </SafeAreaView>
   );
 }
@@ -255,7 +238,7 @@ const eventDetailsStyles = (theme: AppTheme) => ({
   },
   container: {
     padding: 20,
-    paddingTop:0,
+    paddingTop: 0,
     backgroundColor: "#fff",
     flexDirection: "column",
   },
@@ -376,26 +359,5 @@ const eventDetailsStyles = (theme: AppTheme) => ({
     width: 20,
     height: 20,
     borderRadius: 10,
-  },
-  button: {
-    backgroundColor: "#5D3731",
-    paddingVertical: 12,
-    marginHorizontal: 20,
-    marginBottom: 10,
-    marginTop:5,
-    borderRadius: 25,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 20,
-  },
-  buttonActive: {
-    backgroundColor: "#3D2520",
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-    fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.md,
   },
 });

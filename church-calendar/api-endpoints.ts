@@ -2,6 +2,7 @@
 //export const BASE_URL = 'http://10.91.210.1:8000'
 export const BASE_URL = 'http://192.168.1.229:8000'
 //export const BASE_URL = 'http://192.168.180.1:8000'
+//export const BASE_URL = 'http://10.222.135.1:8000'
 
 export const EVENTS_URL = `${BASE_URL}/api/events`
 export const CHURCH_GROUPS_URL = `${BASE_URL}/api/church-groups/`

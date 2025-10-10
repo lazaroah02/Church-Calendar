@@ -6,7 +6,6 @@ import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
 import { CalendarUtils, DateData } from "react-native-calendars";
 import { useSession } from "@/hooks/auth/useSession";
 import { getEventsToManage } from "@/services/events/management/get-events-to-manage";
-import { DEFAUL_STALE_TIME } from "@/lib/query-client";
 
 /**
  * Custom hook for handling calendar events with caching and refetching logic.
