@@ -16,6 +16,7 @@ import { ReactNode, useEffect, useState } from "react";
 import {
   formatTimeStamp,
   formatTimeRange,
+  formatSelectedDay,
 } from "@/lib/calendar/calendar-utils";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -30,11 +31,13 @@ import { getImageUri } from "@/lib/get-image-uri";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { EventTrheeDotsmenuOptions } from "@/components/event/event-three-dots-menu-options";
 import { PageHeader } from "@/components/PageHeader";
+import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
   const eventParam = searchParams.get("event") as string | undefined;
-  const currentDateReadable = searchParams.get("currentDateReadable");
+  const {selectedDay} = useCalendarEventsContext()
+  const currentDateReadable = formatSelectedDay(selectedDay.dateString)
   const parsedEvent: Event | null = eventParam ? JSON.parse(eventParam) : null;
   const styles = useThemeStyles(eventDetailsStyles);
   const { session } = useSession();
@@ -51,19 +54,17 @@ export default function EventDetails() {
   return (
     <SafeAreaView style={styles.pageContainer}>
       <MyNavigationBar buttonsStyle="dark" />
+      <PageHeader
+        title={parsedEvent?.title}
+        rightComponent={
+          isAdmin && (
+            <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }}>
+              <EventTrheeDotsmenuOptions event={parsedEvent} />
+            </SimpleThreeDotsMenu>
+          )
+        }
+      />
       <ScrollView contentContainerStyle={styles.container}>
-        {/* Title */}
-        <PageHeader
-          title={parsedEvent?.title}
-          rightComponent={
-            isAdmin && (
-              <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }}>
-                <EventTrheeDotsmenuOptions event={parsedEvent} />
-              </SimpleThreeDotsMenu>
-            )
-          }
-        />
-
         {parsedEvent?.is_canceled && (
           <Text
             style={[
@@ -254,6 +255,7 @@ const eventDetailsStyles = (theme: AppTheme) => ({
   },
   container: {
     padding: 20,
+    paddingTop:0,
     backgroundColor: "#fff",
     flexDirection: "column",
   },
@@ -380,6 +382,7 @@ const eventDetailsStyles = (theme: AppTheme) => ({
     paddingVertical: 12,
     marginHorizontal: 20,
     marginBottom: 10,
+    marginTop:5,
     borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",

@@ -7,10 +7,8 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export function EventComponent({
   item,
-  currentDateReadable,
 }: {
   item: Event;
-  currentDateReadable: string;
 }) {
   const styles = useThemeStyles(eventComponentStyles);
   return (
@@ -20,7 +18,6 @@ export function EventComponent({
           pathname: "/event/details",
           params: {
             event: JSON.stringify(item),
-            currentDateReadable: currentDateReadable,
           },
         })
       }

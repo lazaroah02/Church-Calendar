@@ -2,21 +2,47 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { View, Text } from "react-native";
+import {
+  View,
+  Text,
+  Falsy,
+  ViewStyle,
+  RegisteredStyle,
+  RecursiveArray,
+} from "react-native";
 
-export function PageHeader({title = "", rightComponent}:{title?: string, rightComponent?: React.ReactNode}) {
-    const styles = useThemeStyles(pageHeaderStyles);
+export function PageHeader({
+  title = "",
+  rightComponent,
+  onBack = () => router.back(),
+  style = {},
+}: {
+  title?: string;
+  rightComponent?: React.ReactNode;
+  onBack?: () => void;
+  style?:
+    | Falsy
+    | ViewStyle
+    | RegisteredStyle<ViewStyle>
+    | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
+}) {
+  const styles = useThemeStyles(pageHeaderStyles);
   return (
-    <View style={styles.titleContainer}>
+    <View style={[styles.titleContainer, style]}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <Ionicons
           name="chevron-back"
           size={30}
           color="#000"
           style={{ marginLeft: -8, marginTop: 3 }}
-          onPress={() => router.back()}
+          onPress={onBack}
         />
-        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail" lineBreakMode="tail">
+        <Text
+          style={styles.title}
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          lineBreakMode="tail"
+        >
           {title}
         </Text>
       </View>
@@ -28,6 +54,8 @@ export function PageHeader({title = "", rightComponent}:{title?: string, rightCo
 const pageHeaderStyles = (theme: AppTheme) => ({
   titleContainer: {
     marginBottom: 10,
+    marginTop:10,
+    paddingHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -40,4 +68,3 @@ const pageHeaderStyles = (theme: AppTheme) => ({
     fontFamily: "LexendBold",
   },
 });
-

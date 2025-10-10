@@ -33,7 +33,6 @@ export function EventsBottomSheet({
         renderItem={(item) => (
           <EventComponent
             item={item.item}
-            currentDateReadable={currentDateReadable}
           />
         )}
         ListEmptyComponent={<Text style={styles.noEvents}>No hay eventos</Text>}

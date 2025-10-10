@@ -1,5 +1,7 @@
 import { EventForm } from "@/components/event/event-form";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
+import { PageHeader } from "@/components/PageHeader";
+import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { useManageEvents } from "@/hooks/events/useManageEvents";
 import { Event } from "@/types/event";
 import { router, useFocusEffect, useNavigation } from "expo-router";
@@ -51,6 +53,14 @@ export default function EventEdit() {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <MyNavigationBar buttonsStyle="dark" />
       <StatusBar style="dark" />
+      <PageHeader
+        title="Editar Evento"
+        rightComponent={
+          <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }}>
+            {null}
+          </SimpleThreeDotsMenu>
+        }
+      />
       <EventForm
         isPending={isUpdatingEvent}
         event={event}
