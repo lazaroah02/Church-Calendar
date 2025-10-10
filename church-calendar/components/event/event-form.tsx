@@ -22,7 +22,7 @@ export function EventForm({
   errors = null,
   isPending = false,
   handleSubmit = (values) => null,
-  onCancel = () => null
+  onCancel = () => null,
 }: {
   event?: Event | null;
   reset?: () => void;
@@ -48,6 +48,7 @@ export function EventForm({
     is_canceled: event?.is_canceled || false,
     visible: event?.visible || true,
     open_to_reservations: event?.open_to_reservations || false,
+    reservations_limit: event?.reservations_limit || null,
   });
 
   const [eventImage, setEventImage] = useState(
@@ -56,7 +57,7 @@ export function EventForm({
 
   const handleFieldChange = (
     key: keyof typeof formValues,
-    value: string | boolean | Date | number[] | undefined
+    value: string | boolean | Date | number[] | undefined | number | null
   ) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
     reset();
@@ -73,7 +74,7 @@ export function EventForm({
         contentContainerStyle={styles.scrollView}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid
-        extraScrollHeight={100}
+        extraScrollHeight={150}
         ref={scrollViewRef}
       >
         {/* Picture */}
@@ -203,13 +204,6 @@ export function EventForm({
         {/*State*/}
         <Text style={styles.label}>Estado:</Text>
         <CheckBox
-          label="Abierto a reservaciones"
-          checked={formValues.open_to_reservations}
-          onCheck={(checked) =>
-            handleFieldChange("open_to_reservations", checked)
-          }
-        />
-        <CheckBox
           label="Cancelado"
           checked={formValues.is_canceled}
           onCheck={(checked) => handleFieldChange("is_canceled", checked)}
@@ -219,6 +213,53 @@ export function EventForm({
           checked={formValues.visible}
           onCheck={(checked) => handleFieldChange("visible", checked)}
         />
+        <CheckBox
+          label="Abierto a reservaciones"
+          checked={formValues.open_to_reservations}
+          onCheck={(checked) => {
+            scrollViewRef.current?.scrollToEnd(true);
+            handleFieldChange("open_to_reservations", checked);
+          }}
+        />
+
+        {/*Reservations Limit*/}
+        {formValues.open_to_reservations && (
+          <View>
+            <View
+              style={{ flexDirection: "row", alignItems: "flex-end", gap: 20 }}
+            >
+              <Text style={styles.label}>Límite de Reservas:</Text>
+              <CheckBox
+                label="Sin límite"
+                checked={formValues.reservations_limit === null}
+                onCheck={(checked) => {
+                  if (checked) {
+                    handleFieldChange("reservations_limit", null);
+                  }else{
+                    handleFieldChange("reservations_limit", 100);
+                  }
+                }}
+              />
+            </View>
+            <CustomInput
+              value={formValues.reservations_limit?.toString() || ""}
+              error={errors?.reservations_limit}
+              placeholder="Número máximo de reservaciones"
+              inputStyle={{ backgroundColor: inputColor, height: "auto" }}
+              containerStyle={{ height: "auto", width: "100%" }}
+              keyboardType="number-pad"
+              onChangeText={(value) => {
+                if (isNaN(parseInt(value)) && value !== "") {
+                  return;
+                }
+                handleFieldChange(
+                  "reservations_limit",
+                  value ? parseInt(value) : null
+                );
+              }}
+            />
+          </View>
+        )}
       </KeyboardAwareScrollView>
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center" }}>
         <Button

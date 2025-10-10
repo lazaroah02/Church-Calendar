@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from church_group.models import ChurchGroup
+from django.core.validators import MinValueValidator
 
 EVENT_IMAGES_FOLDER = 'event_images'
 
@@ -31,6 +32,7 @@ class Event(models.Model):
     is_canceled = models.BooleanField(default=False)
     open_to_reservations = models.BooleanField(default=False)
     reservations_limit = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)],
         null=True,
         blank=True,
         help_text="Maximum number of reservations allowed. Leave blank for no limit.")

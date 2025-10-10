@@ -20,6 +20,7 @@ export function updateEvent({
   formData.append("is_canceled", data.is_canceled.toString());
   formData.append("open_to_reservations", data.open_to_reservations.toString());
   formData.append("visible", data.visible.toString());
+  formData.append('reservations_limit', data.reservations_limit?.toString() || "")
 
   data.groups.forEach((id) => {
     formData.append("groups", id.toString());
@@ -59,6 +60,10 @@ export function updateEvent({
 
         if (data.location) {
           errors.location = "Lugar Incorrecto. No puede estar vacío.";
+        }
+
+        if(data.reservations_limit){
+          errors.reservations_limit = "Número máximo de reservaciones inválido.";
         }
 
         if (data.non_field_errors) {
