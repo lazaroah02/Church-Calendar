@@ -12,7 +12,7 @@ import {
   Pressable,
   Alert,
 } from "react-native";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   formatTimeStamp,
   formatTimeRange,
@@ -29,6 +29,7 @@ import { UserInfo } from "@/types/auth";
 import { getImageUri } from "@/lib/get-image-uri";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { EventTrheeDotsmenuOptions } from "@/components/event/event-three-dots-menu-options";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
@@ -41,34 +42,27 @@ export default function EventDetails() {
   const [isGoing, setIsGoing] = useState(false);
   const [isImageOpen, setIsImageOpen] = useState(false);
 
-  if (!parsedEvent) {
-    return router.replace("/+not-found");
-  }
+  useEffect(() => {
+    if (!parsedEvent) {
+      router.replace("/+not-found");
+    }
+  }, [parsedEvent]);
 
   return (
     <SafeAreaView style={styles.pageContainer}>
       <MyNavigationBar buttonsStyle="dark" />
       <ScrollView contentContainerStyle={styles.container}>
         {/* Title */}
-        <View style={styles.titleContainer}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-            <Ionicons
-              name="chevron-back"
-              size={30}
-              color="#000"
-              style={{ marginLeft: -8, marginTop: 3 }}
-              onPress={() => router.back()}
-            />
-            <Text style={styles.title} numberOfLines={3}>
-              {parsedEvent.title}
-            </Text>
-          </View>
-          {isAdmin && (
-            <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }}>
-              <EventTrheeDotsmenuOptions event={parsedEvent} />
-            </SimpleThreeDotsMenu>
-          )}
-        </View>
+        <PageHeader
+          title={parsedEvent?.title}
+          rightComponent={
+            isAdmin && (
+              <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }}>
+                <EventTrheeDotsmenuOptions event={parsedEvent} />
+              </SimpleThreeDotsMenu>
+            )
+          }
+        />
 
         {parsedEvent?.is_canceled && (
           <Text

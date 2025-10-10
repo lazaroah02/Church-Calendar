@@ -1,6 +1,7 @@
 import { Entypo } from "@expo/vector-icons";
 import { ReactNode, useState } from "react";
-import { Modal, Pressable, TouchableOpacity, View } from "react-native";
+import { Modal, Pressable, View } from "react-native";
+import { HapticTab } from "./HapticTab";
 
 export function SimpleThreeDotsMenu({
   children,
@@ -13,9 +14,9 @@ export function SimpleThreeDotsMenu({
 
   return (
     <View style={{ alignItems: "flex-end", padding: 10, position: "relative" }}>
-      <TouchableOpacity onPress={() => setVisible(true)}>
+      <HapticTab onPress={() => setVisible(true)}  style={{ padding: 5 }}>
         <Entypo name="dots-three-vertical" size={22} color="black" />
-      </TouchableOpacity>
+      </HapticTab>
 
       <Modal transparent visible={visible} animationType="fade">
         <Pressable style={{ flex: 1 }} onPress={() => setVisible(false)}>
