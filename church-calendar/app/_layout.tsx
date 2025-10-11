@@ -88,6 +88,10 @@ function RootLayout() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="event/reservations"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="user/profile"
             options={{ headerShown: false }}
           />

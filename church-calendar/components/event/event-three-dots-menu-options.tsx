@@ -26,26 +26,13 @@ export function EventTrheeDotsmenuOptions({ event }: { event: Event }) {
   return (
     <>
       {confirm()}
-      <TouchableOpacity
-        style={{
-          flexDirection: "row",
-          gap: 5,
-          alignItems: "center",
-          padding: 10,
-        }}
-        onPress={showConfirm}
-      >
+      <TouchableOpacity style={styles.touchable} onPress={showConfirm}>
         <Ionicons name="trash-outline" size={20} />
         <Text style={styles.text}>Eliminar</Text>
       </TouchableOpacity>
-      <View style={{height:1, width:"100%", backgroundColor:"black"}}/>
+      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
       <TouchableOpacity
-        style={{
-          flexDirection: "row",
-          gap: 5,
-          alignItems: "center",
-          padding: 10,
-        }}
+        style={styles.touchable}
         onPress={() =>
           router.replace({
             pathname: "/event/edit",
@@ -58,6 +45,19 @@ export function EventTrheeDotsmenuOptions({ event }: { event: Event }) {
         <Ionicons name="pencil-outline" size={20} />
         <Text style={styles.text}>Editar</Text>
       </TouchableOpacity>
+      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
+      <TouchableOpacity
+        style={styles.touchable}
+        onPress={() =>
+          router.push({
+            pathname: "/event/reservations",
+            params: { eventId: event.id, eventTitle: event.title },
+          })
+        }
+      >
+        <Ionicons name="book-outline" size={20} />
+        <Text style={styles.text}>Reservaciones</Text>
+      </TouchableOpacity>
     </>
   );
 }
@@ -65,5 +65,11 @@ export function EventTrheeDotsmenuOptions({ event }: { event: Event }) {
 const OptionsStyles = (theme: AppTheme) => ({
   text: {
     fontSize: theme.fontSizes.lg,
+  },
+  touchable: {
+    flexDirection: "row",
+    gap: 5,
+    alignItems: "center",
+    padding: 10,
   },
 });

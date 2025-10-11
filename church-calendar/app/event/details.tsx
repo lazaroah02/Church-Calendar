@@ -10,9 +10,8 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
-  Alert,
 } from "react-native";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   formatTimeStamp,
   formatTimeRange,
@@ -26,13 +25,13 @@ import { BASE_URL } from "@/api-endpoints";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import Hyperlink from "react-native-hyperlink";
 import { useSession } from "@/hooks/auth/useSession";
-import { UserInfo } from "@/types/auth";
 import { getImageUri } from "@/lib/get-image-uri";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { EventTrheeDotsmenuOptions } from "@/components/event/event-three-dots-menu-options";
 import { PageHeader } from "@/components/PageHeader";
 import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
 import { ReserveEvent } from "@/components/event/reserv-event";
+import { UserAvatar } from "@/components/event/user-avatar";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
@@ -80,16 +79,16 @@ export default function EventDetails() {
         <Text style={styles.date}>{currentDateReadable}</Text>
         <Text style={styles.time}>
           Horario:{" "}
-          {formatTimeRange(parsedEvent.start_time, parsedEvent.end_time)}
+          {formatTimeRange(parsedEvent?.start_time || "", parsedEvent?.end_time || "")}
         </Text>
-        <Text style={styles.location}>Lugar: {parsedEvent.location}</Text>
+        <Text style={styles.location}>Lugar: {parsedEvent?.location}</Text>
 
         {/* Image */}
-        {parsedEvent.img && (
+        {parsedEvent?.img && (
           <>
             <TouchableOpacity onPress={() => setIsImageOpen(true)}>
               <Image
-                source={{ uri: getImageUri(parsedEvent.img) }}
+                source={{ uri: getImageUri(parsedEvent?.img || "") }}
                 style={styles.image}
               />
             </TouchableOpacity>
@@ -113,7 +112,7 @@ export default function EventDetails() {
                 </Pressable>
 
                 <Image
-                  source={{ uri: `${BASE_URL}${parsedEvent.img}` }}
+                  source={{ uri: `${BASE_URL}${parsedEvent?.img}` }}
                   style={styles.fullscreenImage}
                   resizeMode="contain"
                 />
@@ -124,35 +123,33 @@ export default function EventDetails() {
 
         {/* Description */}
         <Hyperlink linkDefault={true} linkStyle={{ color: "#2980b9" }}>
-          <Text style={styles.description}>{parsedEvent.description}</Text>
+          <Text style={styles.description}>{parsedEvent?.description}</Text>
         </Hyperlink>
 
         {/*Created by*/}
         <UserAvatar
           title={
             isAdmin
-              ? `Creado el ${formatTimeStamp(parsedEvent.created_at)} por:`
+              ? `Creado el ${formatTimeStamp(parsedEvent?.created_at || "")} por:`
               : "Creado por:"
           }
           user={parsedEvent?.created_by_full_info}
-          styles={styles}
         />
 
         {/*Last Edit by*/}
         {isAdmin && (
           <UserAvatar
             title={`Última edición el ${formatTimeStamp(
-              parsedEvent.updated_at
+              parsedEvent?.updated_at || ""
             )} por:`}
-            user={parsedEvent.last_edit_by_full_info}
-            styles={styles}
+            user={parsedEvent?.last_edit_by_full_info}
           />
         )}
 
         {/* Groups */}
         <Text style={styles.groupLabel}>Evento para:</Text>
         <View style={styles.groupsContainer}>
-          {parsedEvent.groups_full_info?.map((group) => (
+          {parsedEvent?.groups_full_info?.map((group) => (
             <View key={group.name} style={styles.group}>
               <View
                 style={[
@@ -170,14 +167,14 @@ export default function EventDetails() {
             {/* Estado */}
             <Text style={styles.groupLabel}>Estado del Evento:</Text>
             <Text style={styles.groupName}>
-              • {parsedEvent.is_canceled ? "Cancelado" : "No Cancelado"}
+              • {parsedEvent?.is_canceled ? "Cancelado" : "No Cancelado"}
             </Text>
             <Text style={styles.groupName}>
-              • {parsedEvent.visible ? "Visible" : "Oculto"}
+              • {parsedEvent?.visible ? "Visible" : "Oculto"}
             </Text>
             <Text style={styles.groupName}>
               •{" "}
-              {parsedEvent.open_to_reservations
+              {parsedEvent?.open_to_reservations
                 ? "Abierto a reservaciones"
                 : "Cerrado a reservaciones"}
             </Text>
@@ -189,47 +186,6 @@ export default function EventDetails() {
     </SafeAreaView>
   );
 }
-
-const UserAvatar = ({
-  title,
-  user,
-  styles,
-}: {
-  title: string;
-  user: UserInfo;
-  styles: any;
-}) => {
-  return (
-    <>
-      <Text style={styles.groupLabel}>{title}</Text>
-      <Pressable
-        onPress={() =>
-          router.push({
-            pathname: "/user/detail",
-            params: {
-              userInfo: JSON.stringify(user),
-            },
-          })
-        }
-        style={styles.createdByContainer}
-      >
-        <View style={styles.profilePictureContainer}>
-          {user?.profile_img ? (
-            <Image
-              style={styles.profilePicture}
-              source={{
-                uri: getImageUri(user?.profile_img),
-              }}
-            />
-          ) : (
-            <Ionicons name="person-outline" size={20} color="#fff" />
-          )}
-        </View>
-        <Text style={styles.userName}>{user?.full_name}</Text>
-      </Pressable>
-    </>
-  );
-};
 
 const eventDetailsStyles = (theme: AppTheme) => ({
   pageContainer: {
@@ -306,31 +262,6 @@ const eventDetailsStyles = (theme: AppTheme) => ({
     color: "#333",
     marginBottom: 15,
     fontFamily: "InterVariable",
-  },
-  createdByContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 15,
-  },
-  profilePictureContainer: {
-    backgroundColor: "#37C6FF",
-    width: 30,
-    height: 30,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  profilePicture: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 100,
-  },
-  userName: {
-    color: "#000",
-    fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.md,
-    fontWeight: 500,
   },
   groupLabel: {
     fontWeight: "900",

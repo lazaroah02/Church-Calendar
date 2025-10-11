@@ -30,14 +30,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         max_length=255,
         unique=True,
         default=None,
-        help_text="Unique user email address"
+        help_text="Unique user email address",
+        db_index=True
     )
     username = models.CharField(
         max_length=255,
         unique=True,
         default=None,
         blank=True,
-        help_text="Unique username"
+        help_text="Unique username",
+        db_index=True
     )
     is_active = models.BooleanField(
         default=True,
@@ -55,7 +57,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     full_name = models.CharField(
         max_length=255,
         default="",
-        help_text="Full name"
+        help_text="Full name",
+        db_index=True
     )
     description = models.TextField(blank=True, default="")
     phone_number = models.CharField(max_length=15, blank=True)
