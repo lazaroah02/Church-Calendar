@@ -58,7 +58,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         max_length=255,
         default="",
         help_text="Full name",
-        db_index=True
+        db_index=True,
     )
     description = models.TextField(blank=True, default="")
     phone_number = models.CharField(max_length=15, blank=True)
@@ -67,6 +67,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     profile_img = models.ImageField(
         upload_to=USER_PROFILE_IMAGE_MEDIA_FOLDER, blank=True, null=True
         )
+    born_at = models.DateField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

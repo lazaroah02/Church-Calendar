@@ -215,6 +215,7 @@ REST_FRAMEWORK = {
 # dj-rest-auth config
 REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'authentication.serializers.CustomUserDetailsSerializer',
+    'REGISTER_SERIALIZER': 'authentication.serializers.CustomRegisterSerializer'
 }
 
 
