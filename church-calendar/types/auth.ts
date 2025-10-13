@@ -38,8 +38,25 @@ export interface SignInProps {
   onLoginError: (err: Error) => void;
 }
 
+export interface RegisterProps {
+  data: RegisterData
+  onSuccess: () => void;
+  onError: (err: Error) => void;
+}
+
+export interface RegisterData {
+  email: string;
+  password1: string;
+  password2: string;
+  full_name: string;
+  born_at: string;
+  phone_number: string;
+  member_groups: number[];
+}
+
 export interface AuthContenxtProps {
   signIn: ({ email, pass, onLoginSuccess, onLoginError }: SignInProps) => void;
+  register: ({ data, onSuccess, onError }: RegisterProps) => void;
   signOut: () => void;
   session?: Session | null;
   isLoading: boolean;

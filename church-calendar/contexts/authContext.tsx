@@ -1,13 +1,20 @@
 import { createContext, type PropsWithChildren } from "react";
 import { useStorageState } from "@/hooks/useStorageState";
 import { login } from "@/services/auth/login";
-import { AuthContenxtProps, Session, SignInProps } from "@/types/auth";
+import {
+  AuthContenxtProps,
+  Session,
+  SignInProps,
+  RegisterProps,
+} from "@/types/auth";
 import { persister, queryClient } from "@/lib/query-client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { register } from "@/services/auth/register";
 
 export const AuthContext = createContext<AuthContenxtProps>({
   signIn: () => null,
   signOut: () => null,
+  register: () => null,
   session: null,
   isLoading: false,
   updateSession: () => null,
@@ -35,6 +42,16 @@ export function SessionProvider({ children }: PropsWithChildren) {
       });
   };
 
+  const handleRegister = ({ data, onSuccess, onError }: RegisterProps) => {
+    register(data)
+      .then(() => {
+        onSuccess();
+      })
+      .catch((err: Error) => {
+        onError(err);
+      });
+  };
+
   const handleSignOut = async () => {
     setSession(null);
     queryClient.clear();
@@ -58,6 +75,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
       value={{
         signIn: handleSignIn,
         signOut: handleSignOut,
+        register: handleRegister,
         session: session ? JSON.parse(session) : null,
         isLoading,
         updateSession: updateSession,

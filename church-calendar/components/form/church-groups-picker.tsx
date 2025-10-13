@@ -21,38 +21,47 @@ interface ChurchGroupsPickerProps {
     | ViewStyle
     | RegisteredStyle<ViewStyle>
     | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
+  selectStyle?:
+    | Falsy
+    | ViewStyle
+    | RegisteredStyle<ViewStyle>
+    | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
   onChange: (selectedGroups: number[]) => void;
   defaultSelectedGroups?: number[];
+  excluded_groups?: (number | string)[]
 }
 
 const ChurchGroupsPicker = ({
   containerStyle,
+  selectStyle,
   placeholder = "Dirigido a",
   onChange = () => null,
   defaultSelectedGroups = [],
+  excluded_groups = [],
 }: ChurchGroupsPickerProps) => {
-  const [selectedGroups, setSelectedGroups] = useState<number[]>(defaultSelectedGroups || []);
+  const [selectedGroups, setSelectedGroups] = useState<number[]>(
+    defaultSelectedGroups || []
+  );
   const styles = useThemeStyles(ChurchGroupsPickerStyles);
   const { groups, isLoading, isError, refetch } = useGroups();
 
   const data = useMemo(
     () =>
-      groups.map((group: Group) => ({
-        label: group.name,
-        value: group.id,
-      })),
-    [groups]
+      groups
+        .filter((group: Group) => !excluded_groups.includes(group.id) && !excluded_groups.includes(group.name))
+        .map((group: Group) => ({ label: group.name, value: group.id })),
+    [groups, excluded_groups]
   );
 
-  function handleSetSelectedGroups(groups: number[]){
-    setSelectedGroups(groups)
-    onChange(groups)
+  function handleSetSelectedGroups(groups: number[]) {
+    setSelectedGroups(groups);
+    onChange(groups);
   }
 
   return (
     <View style={[styles.container, containerStyle]}>
       <MultiSelect
-        style={styles.dropdown}
+        style={[styles.dropdown, selectStyle]}
         placeholderStyle={styles.placeholderStyle}
         inputSearchStyle={styles.inputSearchStyle}
         search={true}
