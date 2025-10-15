@@ -40,7 +40,9 @@ export const UserAvatar = ({
             <Ionicons name="person-outline" size={22} color="#fff" />
           )}
         </View>
-        <Text style={styles.userName}>{user?.full_name || user?.username || user?.email.split("@")[0]}</Text>
+        <Text style={styles.userName}>
+          {user?.full_name || user?.username || user?.email.split("@")[0]}
+        </Text>
       </Pressable>
     </>
   );

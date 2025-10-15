@@ -104,6 +104,10 @@ function RootLayout() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="user/edit"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="+not-found"
             options={{ headerShown: false }}
           />

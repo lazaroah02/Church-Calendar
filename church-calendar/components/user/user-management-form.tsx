@@ -1,20 +1,18 @@
 import { useState } from "react";
-import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { UserInfo } from "@/types/auth";
-import { UserProfileFormErrors } from "@/types/user";
+import { UserManagementFormErrors } from "@/types/user";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Image, Text, Pressable, Alert } from "react-native";
+import { View, Image, Text, Pressable } from "react-native";
 import { Button } from "../Button";
 import { CustomInput } from "../form/custom-input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { updateUserProfile } from "@/services/user/update-user-profile";
 import { getImageUri } from "@/lib/get-image-uri";
 import FormErrorBanner from "../form/form-banner-error";
 import { pickImage } from "@/lib/pick-image";
 
-export function UserProfileForm({
+export function UserManagementForm({
   user,
   onCancel = () => null,
   onSuccess = () => null,
@@ -23,14 +21,13 @@ export function UserProfileForm({
   onCancel?: () => void;
   onSuccess?: () => void;
 }) {
-  const styles = useThemeStyles(userForm);
+  const styles = useThemeStyles(userManagementForm);
   const inputColor = "#EBEBEB";
-  const { session, updateSession } = useSession();
 
   const [profileImage, setProfileImage] = useState(
     user?.profile_img ? getImageUri(user?.profile_img) : null
   );
-  const [errors, setErrors] = useState<UserProfileFormErrors | null>(null);
+  const [errors, setErrors] = useState<UserManagementFormErrors | null>(null);
 
   const [formValues, setFormValues] = useState({
     full_name: user?.full_name || "",
@@ -40,22 +37,12 @@ export function UserProfileForm({
   });
   const [loading, setLoading] = useState(false);
 
-  const handleTextChange = (key: keyof typeof formValues, value: string) => {
+  const handleChange = (key: keyof typeof formValues, value: string) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = () => {
-    setLoading(true);
-    updateUserProfile({
-      token: session?.token,
-      values: { profile_img: profileImage, ...formValues },
-    })
-      .then((data) => {
-        updateSession({ token: session?.token, userInfo: data });
-        onSuccess();
-      })
-      .catch((err) => setErrors(err as UserProfileFormErrors))
-      .finally(() => setLoading(false));
+    
   };
 
   return (
@@ -108,7 +95,7 @@ export function UserProfileForm({
           error={errors?.full_name}
           textContentType="name"
           value={formValues.full_name}
-          onChangeText={(value) => handleTextChange("full_name", value)}
+          onChangeText={(value) => handleChange("full_name", value)}
           inputStyle={{ backgroundColor: inputColor }}
           containerStyle={{ width: "100%" }}
         />
@@ -120,7 +107,7 @@ export function UserProfileForm({
           keyboardType="phone-pad"
           textContentType="telephoneNumber"
           value={formValues.phone_number}
-          onChangeText={(value) => handleTextChange("phone_number", value)}
+          onChangeText={(value) => handleChange("phone_number", value)}
           inputStyle={{ backgroundColor: inputColor }}
           containerStyle={{ width: "100%" }}
         />
@@ -132,7 +119,7 @@ export function UserProfileForm({
           keyboardType="email-address"
           textContentType="emailAddress"
           value={formValues.email}
-          onChangeText={(value) => handleTextChange("email", value)}
+          onChangeText={(value) => handleChange("email", value)}
           inputStyle={{ backgroundColor: inputColor }}
           containerStyle={{ width: "100%" }}
         />
@@ -142,7 +129,7 @@ export function UserProfileForm({
         <CustomInput
           error={null}
           value={formValues.description}
-          onChangeText={(value) => handleTextChange("description", value)}
+          onChangeText={(value) => handleChange("description", value)}
           inputStyle={{ backgroundColor: inputColor, height: "auto" }}
           containerStyle={{ height: "auto", width: "100%" }}
           scrollEnabled
@@ -164,7 +151,7 @@ export function UserProfileForm({
   );
 }
 
-const userForm = (theme: AppTheme) => {
+const userManagementForm = (theme: AppTheme) => {
   return {
     scrollView: {
       flexGrow: 1,

@@ -16,3 +16,4 @@ export const USER_PROFILE_URL = `${BASE_URL}/api/auth/user/`
 
 export const MANAGE_EVENTS_URL = `${BASE_URL}/api/events/manage/`
 export const MANAGE_RESERVATIONS_URL = `${BASE_URL}/api/reservations/manage/`
+export const MANAGE_USERS_URL = `${BASE_URL}/api/users/manage/`

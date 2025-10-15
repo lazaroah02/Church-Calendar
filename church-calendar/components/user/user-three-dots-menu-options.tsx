@@ -39,12 +39,12 @@ export function UserThreeDotsmenuOptions({
         style={styles.touchable}
         onPress={() => {
           closeParent();
-          // router.replace({
-          //   pathname: "/event/edit",
-          //   params: {
-          //     eventInfo: JSON.stringify(event),
-          //   },
-          // })
+          router.push({
+            pathname: "/user/edit",
+            params: {
+              userInfo: JSON.stringify(user),
+            },
+          })
         }}
       >
         <Ionicons name="pencil-outline" size={20} />
