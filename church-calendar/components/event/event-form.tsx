@@ -193,11 +193,12 @@ export function EventForm({
         />
 
         {/*Groups*/}
+        <Text style={styles.label}>Dirigido a:</Text>
         <ChurchGroupsPicker
-          containerStyle={{ marginTop: 25 }}
           onChange={(selectedGroups) =>
             handleFieldChange("groups", selectedGroups)
           }
+          placeholder="Seleccionar"
           defaultSelectedGroups={event?.groups}
         />
 
