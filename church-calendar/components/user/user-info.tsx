@@ -5,11 +5,12 @@ import { AppTheme } from "@/theme";
 import { UserInfo } from "@/types/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, View, Image, Text } from "react-native";
+import { CheckBox } from "../form/checkbox";
 
 export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
   const styles = useThemeStyles(userInfoStyles);
   const { session } = useSession();
-  
+
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       {/*Profile Picture*/}
@@ -32,17 +33,18 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
         )}
       </View>
 
-      {session?.userInfo.id === user?.id && (
-        <>
-          {/*Phone*/}
-          <Text style={styles.groupLabel}>Teléfono:</Text>
-          <Text style={styles.description}>{user?.phone_number}</Text>
+      {session?.userInfo.id === user?.id ||
+        (session?.userInfo.is_staff && (
+          <>
+            {/*Phone*/}
+            <Text style={styles.groupLabel}>Teléfono:</Text>
+            <Text style={styles.description}>{user?.phone_number}</Text>
 
-          {/*Email*/}
-          <Text style={styles.groupLabel}>Correo:</Text>
-          <Text style={styles.description}>{user?.email}</Text>
-        </>
-      )}
+            {/*Email*/}
+            <Text style={styles.groupLabel}>Correo:</Text>
+            <Text style={styles.description}>{user?.email}</Text>
+          </>
+        ))}
 
       {/*Description*/}
       <Text style={styles.groupLabel}>Descripción:</Text>
@@ -63,6 +65,23 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
           </View>
         ))}
       </View>
+
+      {/*Access and Permissions*/}
+      {session?.userInfo.is_staff && (
+        <>
+          <Text style={styles.groupLabel}>Acceso y Permisos:</Text>
+          <CheckBox
+            label="Tiene acceso a la aplicación"
+            checked={user?.is_active}
+            onCheck={() => null}
+          />
+          <CheckBox
+            label="Es Administrador"
+            checked={user?.is_staff}
+            onCheck={() => null}
+          />
+        </>
+      )}
     </ScrollView>
   );
 }

@@ -7,14 +7,15 @@ interface CheckBoxProps {
   label: string;
   checked: boolean;
   onCheck: (checked: boolean) => void;
+  disabled?: boolean
 }
 
-export function CheckBox({ label, checked, onCheck }: CheckBoxProps) {
+export function CheckBox({ label, checked, onCheck, disabled = false }: CheckBoxProps) {
   const styles = useThemeStyles(CheckBoxStyles);
   return (
     <Pressable
       style={styles.checkboxContainer}
-      onPress={() => onCheck(!checked)}
+      onPress={() => !disabled && onCheck(!checked)}
     >
       {checked ? (
         <Ionicons name="checkbox-outline" size={25} color="#000" />
