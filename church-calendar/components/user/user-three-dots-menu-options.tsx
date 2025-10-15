@@ -6,6 +6,7 @@ import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { router } from "expo-router";
 import { UserInfo } from "@/types/auth";
+import { useManageUsers } from "@/hooks/user/useManageUsers";
 
 export function UserThreeDotsmenuOptions({
   user,
@@ -14,17 +15,19 @@ export function UserThreeDotsmenuOptions({
   user: UserInfo;
   closeParent: () => void;
 }) {
+  const {handleDeleteUser, isDeletingUser, errorDeletingUser} = useManageUsers()
+
   const { confirm, showConfirm, hideConfirm } = useConfirm({
-    loading: false,
-    onConfirm: () => null,
+    loading: isDeletingUser,
+    onConfirm: () => handleDeleteUser(user.id),
     onCancel: closeParent
   });
 
   useEffect(() => {
-    if (false) {
+    if (errorDeletingUser) {
       hideConfirm();
     }
-  }, [hideConfirm]);
+  }, [hideConfirm, errorDeletingUser]);
 
   const styles = useThemeStyles(OptionsStyles);
   return (

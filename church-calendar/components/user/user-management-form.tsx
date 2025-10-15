@@ -11,6 +11,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { getImageUri } from "@/lib/get-image-uri";
 import FormErrorBanner from "../form/form-banner-error";
 import { pickImage } from "@/lib/pick-image";
+import { CheckBox } from "../form/checkbox";
+import { ChurchGroupsPicker } from "../form/church-groups-picker";
 
 export function UserManagementForm({
   user,
@@ -34,16 +36,20 @@ export function UserManagementForm({
     phone_number: user?.phone_number || "",
     email: user?.email || "",
     description: user?.description || "",
+    is_staff: user?.is_staff || false,
+    is_active: user?.is_active || true,
+    member_groups: user?.member_groups || [],
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (key: keyof typeof formValues, value: string) => {
+  const handleChange = (
+    key: keyof typeof formValues,
+    value: string | number[] | boolean
+  ) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = () => {
-    
-  };
+  const handleSubmit = () => {};
 
   return (
     <>
@@ -134,6 +140,30 @@ export function UserManagementForm({
           containerStyle={{ height: "auto", width: "100%" }}
           scrollEnabled
           multiline
+        />
+
+        {/*Groups*/}
+        <Text style={styles.groupLabel}>Grupos a los que pertenece:</Text>
+        <ChurchGroupsPicker
+          placeholder="Seleccionar"
+          defaultSelectedGroups={formValues.member_groups}
+          excluded_groups={[1, "Todos"]}
+          onChange={(selectedGroups) =>
+            handleChange("member_groups", selectedGroups)
+          }
+        />
+
+        {/*Access and Permissions*/}
+        <Text style={styles.groupLabel}>Acceso y Permisos:</Text>
+        <CheckBox
+          label="Tiene acceso a la aplicación"
+          checked={formValues.is_active}
+          onCheck={(checked) => handleChange("is_active", checked)}
+        />
+        <CheckBox
+          label="Es Administrador"
+          checked={formValues.is_staff}
+          onCheck={(checked) => handleChange("is_staff", checked)}
         />
       </KeyboardAwareScrollView>
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center" }}>

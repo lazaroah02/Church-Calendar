@@ -73,11 +73,13 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
           <CheckBox
             label="Tiene acceso a la aplicación"
             checked={user?.is_active}
+            disabled={true}
             onCheck={() => null}
           />
           <CheckBox
             label="Es Administrador"
             checked={user?.is_staff}
+            disabled={true}
             onCheck={() => null}
           />
         </>
