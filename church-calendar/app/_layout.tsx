@@ -76,6 +76,10 @@ function RootLayout() {
             options={{ headerShown: false, animation: "fade" }}
           />
           <Stack.Screen
+            name="account-created"
+            options={{ headerShown: false, animation: "fade" }}
+          />
+          <Stack.Screen
             name="event/details"
             options={{ headerShown: false }}
           />

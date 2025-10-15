@@ -11,6 +11,7 @@ export type UserInfo = {
   is_staff: boolean
   is_active: boolean
   is_superuser: boolean
+  born_at: string
   member_groups: number[]
   member_groups_full_info: GroupReducedInfo[]
 };
@@ -49,7 +50,7 @@ export interface RegisterData {
   password1: string;
   password2: string;
   full_name: string;
-  born_at: string;
+  born_at: Date;
   phone_number: string;
   member_groups: number[];
 }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-13 15:05-0400\n"
+"POT-Creation-Date: 2025-10-14 13:55-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,13 +19,17 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
-#: .\authentication\serializers.py:52 .\user\serializers.py:79
+#: .\authentication\serializers.py:54 .\user\serializers.py:79
 msgid "A user with this email already exists."
 msgstr "Ya existe un usuario con este correo electrónico."
 
-#: .\authentication\serializers.py:57 .\user\serializers.py:85
+#: .\authentication\serializers.py:59 .\user\serializers.py:85
 msgid "A user with this username already exists."
 msgstr "Ya existe un usuario con este nombre de usuario."
+
+#: .\authentication\serializers.py:66
+msgid "You must be at least 10 years old to use the app."
+msgstr "Debes tener al menos 10 años para usar la aplicación."
 
 #: .\event\views.py:135 .\event\views.py:169 .\event\views.py:211
 msgid "Authentication required to make reservations."

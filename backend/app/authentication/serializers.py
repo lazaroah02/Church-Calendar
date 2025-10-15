@@ -1,3 +1,4 @@
+from datetime import timedelta
 from church_group.models import ChurchGroup
 from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
@@ -6,6 +7,7 @@ from church_group.serializers import ChurchGroupsReducedSerializer
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from django.db import transaction
 from django.utils.translation import gettext as _
+from django.utils.timezone import now
 
 User = get_user_model()
 
@@ -48,13 +50,20 @@ class CustomRegisterSerializer(RegisterSerializer):
     )
 
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+        if User.objects.filter(email=value.lower()).exists():
             raise serializers.ValidationError(_("A user with this email already exists."))
         return value
 
     def validate_username(self, value):
-        if User.objects.filter(username=value).exists():
+        if User.objects.filter(username=value.lower()).exists():
             raise serializers.ValidationError(_("A user with this username already exists."))
+        return value
+
+    def validate_born_at(self, value):
+        today = now().date()
+        delta = today - value
+        if delta < timedelta(days=365*10):
+            raise serializers.ValidationError(_("You must be at least 10 years old to use the app."))
         return value
 
     @transaction.atomic
