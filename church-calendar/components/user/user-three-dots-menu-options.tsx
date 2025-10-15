@@ -1,5 +1,3 @@
-import { useManageEvents } from "@/hooks/events/useManageEvents";
-import { Event } from "@/types/event";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, Text, View } from "react-native";
 import { useConfirm } from "../../hooks/useConfirm";
@@ -7,27 +5,26 @@ import { useEffect } from "react";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { router } from "expo-router";
+import { UserInfo } from "@/types/auth";
 
-export function EventTrheeDotsmenuOptions({
-  event,
+export function UserThreeDotsmenuOptions({
+  user,
   closeParent,
 }: {
-  event: Event;
+  user: UserInfo;
   closeParent: () => void;
 }) {
-  const { handleDeleteEvent, isDeletingEvent, errorDeletingEvent } =
-    useManageEvents();
   const { confirm, showConfirm, hideConfirm } = useConfirm({
-    loading: isDeletingEvent,
-    onConfirm: () => handleDeleteEvent(event.id),
+    loading: false,
+    onConfirm: () => null,
     onCancel: closeParent
   });
 
   useEffect(() => {
-    if (errorDeletingEvent) {
+    if (false) {
       hideConfirm();
     }
-  }, [errorDeletingEvent, hideConfirm]);
+  }, [hideConfirm]);
 
   const styles = useThemeStyles(OptionsStyles);
   return (
@@ -42,30 +39,16 @@ export function EventTrheeDotsmenuOptions({
         style={styles.touchable}
         onPress={() => {
           closeParent();
-          router.replace({
-            pathname: "/event/edit",
-            params: {
-              eventInfo: JSON.stringify(event),
-            },
-          });
+          // router.replace({
+          //   pathname: "/event/edit",
+          //   params: {
+          //     eventInfo: JSON.stringify(event),
+          //   },
+          // })
         }}
       >
         <Ionicons name="pencil-outline" size={20} />
         <Text style={styles.text}>Editar</Text>
-      </TouchableOpacity>
-      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
-      <TouchableOpacity
-        style={styles.touchable}
-        onPress={() => {
-          closeParent();
-          router.push({
-            pathname: "/event/reservations",
-            params: { eventId: event.id, eventTitle: event.title },
-          });
-        }}
-      >
-        <Ionicons name="book-outline" size={20} />
-        <Text style={styles.text}>Reservaciones</Text>
       </TouchableOpacity>
     </>
   );

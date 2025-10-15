@@ -2,6 +2,7 @@ import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { UserInfoComponent } from "@/components/user/user-info";
+import { UserThreeDotsmenuOptions } from "@/components/user/user-three-dots-menu-options";
 import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
@@ -15,6 +16,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function UserDetail() {
   const styles = useThemeStyles(userDetailStyles);
   const { session } = useSession();
+
+  const isAdmin = session?.userInfo.is_staff;
 
   const searchParams = useSearchParams();
   const userInfoParam = searchParams.get("userInfo") as string | undefined;
@@ -40,9 +43,16 @@ export default function UserDetail() {
       <PageHeader
         title="Detalles de Usuario"
         rightComponent={
-          <SimpleThreeDotsMenu
-            childrenComponentFunction={(closeParent) => null}
-          />
+          isAdmin && (
+            <SimpleThreeDotsMenu
+              childrenComponentFunction={(closeParent) => (
+                <UserThreeDotsmenuOptions
+                  closeParent={closeParent}
+                  user={parsedUserInfo}
+                />
+              )}
+            />
+          )
         }
       />
       <UserInfoComponent user={parsedUserInfo} />
