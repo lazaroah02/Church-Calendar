@@ -57,9 +57,15 @@ export default function EventDetails() {
         title={parsedEvent?.title}
         rightComponent={
           isAdmin && (
-            <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }}>
-              <EventTrheeDotsmenuOptions event={parsedEvent} />
-            </SimpleThreeDotsMenu>
+            <SimpleThreeDotsMenu
+              modalStyles={{ right: 30, top: 70 }}
+              childrenComponentFunction={(closeParent) => (
+                <EventTrheeDotsmenuOptions
+                  event={parsedEvent}
+                  closeParent={closeParent}
+                />
+              )}
+            ></SimpleThreeDotsMenu>
           )
         }
       />
@@ -79,7 +85,10 @@ export default function EventDetails() {
         <Text style={styles.date}>{currentDateReadable}</Text>
         <Text style={styles.time}>
           Horario:{" "}
-          {formatTimeRange(parsedEvent?.start_time || "", parsedEvent?.end_time || "")}
+          {formatTimeRange(
+            parsedEvent?.start_time || "",
+            parsedEvent?.end_time || ""
+          )}
         </Text>
         <Text style={styles.location}>Lugar: {parsedEvent?.location}</Text>
 
@@ -130,7 +139,9 @@ export default function EventDetails() {
         <UserAvatar
           title={
             isAdmin
-              ? `Creado el ${formatTimeStamp(parsedEvent?.created_at || "")} por:`
+              ? `Creado el ${formatTimeStamp(
+                  parsedEvent?.created_at || ""
+                )} por:`
               : "Creado por:"
           }
           user={parsedEvent?.created_by_full_info}

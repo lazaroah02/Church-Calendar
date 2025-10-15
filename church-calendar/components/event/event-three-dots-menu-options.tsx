@@ -8,7 +8,13 @@ import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { router } from "expo-router";
 
-export function EventTrheeDotsmenuOptions({ event }: { event: Event }) {
+export function EventTrheeDotsmenuOptions({
+  event,
+  closeParent,
+}: {
+  event: Event;
+  closeParent: () => void;
+}) {
   const { handleDeleteEvent, isDeletingEvent, errorDeletingEvent } =
     useManageEvents();
   const { confirm, showConfirm, hideConfirm } = useConfirm({
@@ -48,12 +54,13 @@ export function EventTrheeDotsmenuOptions({ event }: { event: Event }) {
       <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
       <TouchableOpacity
         style={styles.touchable}
-        onPress={() =>
+        onPress={() => {
+          closeParent();
           router.push({
             pathname: "/event/reservations",
             params: { eventId: event.id, eventTitle: event.title },
-          })
-        }
+          });
+        }}
       >
         <Ionicons name="book-outline" size={20} />
         <Text style={styles.text}>Reservaciones</Text>

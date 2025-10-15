@@ -46,7 +46,7 @@ interface ButtonProps {
   onPress: () => void;
   loading?: boolean;
   loadingText?: string | null;
-  disabled: boolean
+  disabled?: boolean
   style?:
     | Falsy
     | ViewStyle

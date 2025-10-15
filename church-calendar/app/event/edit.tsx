@@ -56,9 +56,10 @@ export default function EventEdit() {
       <PageHeader
         title="Editar Evento"
         rightComponent={
-          <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }}>
-            {null}
-          </SimpleThreeDotsMenu>
+          <SimpleThreeDotsMenu
+            modalStyles={{ right: 30, top: 70 }}
+            childrenComponentFunction={(closeParent) => null}
+          ></SimpleThreeDotsMenu>
         }
       />
       <EventForm

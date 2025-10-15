@@ -23,8 +23,7 @@ export default function CreateEvent() {
       <PageHeader
         title="Crear Evento"
         rightComponent={
-          <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }}>
-            {null}
+          <SimpleThreeDotsMenu modalStyles={{ right: 30, top: 70 }} childrenComponentFunction={(closeParent) => null}>
           </SimpleThreeDotsMenu>
         }
       />

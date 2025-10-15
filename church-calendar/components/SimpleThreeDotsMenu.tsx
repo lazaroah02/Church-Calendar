@@ -4,17 +4,17 @@ import { Modal, Pressable, View } from "react-native";
 import { HapticTab } from "./HapticTab";
 
 export function SimpleThreeDotsMenu({
-  children,
+  childrenComponentFunction,
   modalStyles = {},
 }: {
-  children: ReactNode;
-  modalStyles: any;
+  childrenComponentFunction: (closeParent: () => void) => ReactNode;
+  modalStyles?: any;
 }) {
   const [visible, setVisible] = useState(false);
 
   return (
     <View style={{ alignItems: "flex-end", padding: 10, position: "relative" }}>
-      <HapticTab onPress={() => setVisible(true)}  style={{ padding: 5 }}>
+      <HapticTab onPress={() => setVisible(true)} style={{ padding: 5 }}>
         <Entypo name="dots-three-vertical" size={22} color="black" />
       </HapticTab>
 
@@ -38,7 +38,7 @@ export function SimpleThreeDotsMenu({
                 modalStyles,
               ]}
             >
-              {children}
+              {childrenComponentFunction(() => setVisible(false))}
             </View>
           )}
         </Pressable>
