@@ -1,5 +1,6 @@
 import logging
 from django.utils.translation import gettext as _
+from user.paginators import UsersPagination
 from rest_framework.response import Response
 from rest_framework import status, viewsets, filters
 from rest_framework.decorators import action
@@ -44,6 +45,7 @@ class UsersManagment(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsSuperUser]
     queryset = User.objects.all()
     serializer_class = UserManagmentSerializer
+    pagination_class = UsersPagination
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['id', "is_active", "is_staff", "is_superuser"]
     search_fields = ["full_name", "email", "username"]

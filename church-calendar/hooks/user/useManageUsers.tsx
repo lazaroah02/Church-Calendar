@@ -1,14 +1,26 @@
 import { useSession } from "../auth/useSession";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useCustomToast } from "../useCustomToast";
 import { deleteUser } from "@/services/user/management/delete-user";
-import { UserManagementData, UserManagementFormErrors } from "@/types/user";
+import { UserManagementData } from "@/types/user";
 import { updateUser } from "@/services/user/management/update-user";
+import { getUsers } from "@/services/user/management/get-users";
+import { UserInfo } from "@/types/auth";
+import { useMemo } from "react";
 
 export function useManageUsers() {
   const { session } = useSession();
   const { showSuccessToast, showErrorToast } = useCustomToast();
+
+  //GET USERS
+  const { data, isLoading: isGettingUsers, isError: errorGettingUsers, refetch: refetchUsers } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getUsers({ token: session?.token || "" }),
+  });
+
+  const users: UserInfo[] = useMemo(() => data?.results || [], [data])
+  const totalUsers: number = useMemo(() => data?.count || 0,[data])
 
   //UPDATE USER
   const {
@@ -70,5 +82,10 @@ export function useManageUsers() {
     handleUpdateUser,
     isUpdatingUser,
     resetUpdateUserMutation,
+    users,
+    totalUsers,
+    isGettingUsers,
+    errorGettingUsers,
+    refetchUsers
   };
 }
