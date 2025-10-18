@@ -3,11 +3,44 @@ import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useCustomToast } from "../useCustomToast";
 import { deleteUser } from "@/services/user/management/delete-user";
+import { UserManagementData, UserManagementFormErrors } from "@/types/user";
+import { updateUser } from "@/services/user/management/update-user";
 
 export function useManageUsers() {
   const { session } = useSession();
   const { showSuccessToast, showErrorToast } = useCustomToast();
 
+  //UPDATE USER
+  const {
+    mutate: handleUpdateUser,
+    isPending: isUpdatingUser,
+    error: errorUpdatingUser,
+    reset: resetUpdateUserMutation,
+  } = useMutation({
+    mutationFn: ({
+      data,
+      userId,
+    }: {
+      data: UserManagementData;
+      userId: number | string | undefined;
+    }) =>
+      updateUser({
+        token: session?.token || "",
+        data: data,
+        userId: userId,
+      }),
+    onSuccess: (data) => {
+      //refreshUsers()
+      router.replace({
+        pathname: "/user/detail",
+        params: {
+          userInfo: JSON.stringify(data),
+        },
+      });
+    },
+  });
+
+  //DELETE USER
   const {
     mutate: handleDeleteUser,
     isPending: isDeletingUser,
@@ -33,5 +66,9 @@ export function useManageUsers() {
     isDeletingUser,
     errorDeletingUser,
     resetDeleteEventMutation,
+    errorUpdatingUser,
+    handleUpdateUser,
+    isUpdatingUser,
+    resetUpdateUserMutation,
   };
 }

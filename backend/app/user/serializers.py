@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
+from church_group.serializers import ChurchGroupsReducedSerializer
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy, gettext as _
 
@@ -14,7 +15,8 @@ class UserManagmentSerializer(serializers.ModelSerializer):
     Handles password hashing and validation.
     """
     email = serializers.EmailField(required=True)
-    username = serializers.CharField(required=True)
+    username = serializers.CharField(required=False)
+    full_name = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True)
     is_active = serializers.BooleanField(
         initial=True,
@@ -24,13 +26,14 @@ class UserManagmentSerializer(serializers.ModelSerializer):
         initial=False,
         help_text=gettext_lazy("Designates whether the user can access the admin panel")
         )
+    member_groups_full_info = ChurchGroupsReducedSerializer(many=True, source="member_groups", read_only=True)
 
     class Meta:
         model = User
         fields = [
             'id', 'email', 'username', 'password', 'phone_number', 'description',
-            'full_name', 'profile_img', 'member_groups',
-            'is_staff', 'is_superuser', 'is_active', 'updated_at', 'created_at'
+            'full_name', 'profile_img', 'member_groups', 'born_at',
+            'is_staff', 'is_superuser', 'is_active', 'updated_at', 'created_at', "member_groups_full_info"
         ]
 
     def get_fields(self):

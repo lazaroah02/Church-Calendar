@@ -42,7 +42,7 @@ export function UserThreeDotsmenuOptions({
         style={styles.touchable}
         onPress={() => {
           closeParent();
-          router.push({
+          router.replace({
             pathname: "/user/edit",
             params: {
               userInfo: JSON.stringify(user),

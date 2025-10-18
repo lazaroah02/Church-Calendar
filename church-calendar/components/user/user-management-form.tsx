@@ -13,6 +13,7 @@ import FormErrorBanner from "../form/form-banner-error";
 import { pickImage } from "@/lib/pick-image";
 import { CheckBox } from "../form/checkbox";
 import { ChurchGroupsPicker } from "../form/church-groups-picker";
+import { useManageUsers } from "@/hooks/user/useManageUsers";
 
 export function UserManagementForm({
   user,
@@ -29,7 +30,6 @@ export function UserManagementForm({
   const [profileImage, setProfileImage] = useState(
     user?.profile_img ? getImageUri(user?.profile_img) : null
   );
-  const [errors, setErrors] = useState<UserManagementFormErrors | null>(null);
 
   const [formValues, setFormValues] = useState({
     full_name: user?.full_name || "",
@@ -40,7 +40,12 @@ export function UserManagementForm({
     is_active: user?.is_active || true,
     member_groups: user?.member_groups || [],
   });
-  const [loading, setLoading] = useState(false);
+
+  const {
+    handleUpdateUser,
+    isUpdatingUser: loading,
+    errorUpdatingUser: errors,
+  } = useManageUsers();
 
   const handleChange = (
     key: keyof typeof formValues,
@@ -49,7 +54,12 @@ export function UserManagementForm({
     setFormValues((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    handleUpdateUser({
+      userId: user?.id,
+      data: { ...formValues, profile_img: profileImage },
+    });
+  };
 
   return (
     <>
@@ -59,6 +69,22 @@ export function UserManagementForm({
         enableOnAndroid
         extraScrollHeight={100}
       >
+        {/*Warning*/}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 10,
+            marginBottom: 10,
+            paddingRight:10,
+          }}
+        >
+          <Ionicons name="warning-outline" size={30}/>
+          <Text style={[styles.groupLabel, {marginTop:0}]}>
+            Los cambios realizados pueden tardar unos minutos en reflejarse en
+            los datos de los eventos.
+          </Text>
+        </View>
         {/* Profile Picture */}
         <Pressable
           style={styles.profilePictureContainer}
@@ -90,7 +116,7 @@ export function UserManagementForm({
               errors.phone_number ||
               errors.email ||
               errors.description ||
-              "Ocurrió un error inesperado."
+              "Ocurrió un error inesperado. Revisa tu conexión a internet."
             }
           />
         )}

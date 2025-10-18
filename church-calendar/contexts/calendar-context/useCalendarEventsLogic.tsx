@@ -6,6 +6,7 @@ import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
 import { CalendarUtils, DateData } from "react-native-calendars";
 import { useSession } from "@/hooks/auth/useSession";
 import { getEventsToManage } from "@/services/events/management/get-events-to-manage";
+import { DEFAUL_STALE_TIME, DEFAULT_STALE_TIME } from "@/lib/query-client";
 
 /**
  * Custom hook for handling calendar events with caching and refetching logic.
@@ -85,7 +86,8 @@ export function useCalendarEventsLogic() {
             start_date: interval.start_date,
             end_date: interval.end_date,
             token: session?.token,
-          }),  
+          }),
+    staleTime: isAdmin ? 1000 * 60 * 1 : DEFAULT_STALE_TIME,
   });
 
   /**
@@ -108,15 +110,15 @@ export function useCalendarEventsLogic() {
    */
   const currentDayEvents = useMemo(() => {
     const date = selectedDay.dateString;
-      const sameMonth =
-        selectedDay.month === parseInt(interval.start_date.split("-")[1]);
+    const sameMonth =
+      selectedDay.month === parseInt(interval.start_date.split("-")[1]);
 
-      if (!events.hasOwnProperty(date) && sameMonth) {
-        return [];
-      } else if (!events.hasOwnProperty(date) && !sameMonth) {
-        return undefined;
-      }
-      return events[date];
+    if (!events.hasOwnProperty(date) && sameMonth) {
+      return [];
+    } else if (!events.hasOwnProperty(date) && !sameMonth) {
+      return undefined;
+    }
+    return events[date];
   }, [selectedDay, events, interval.start_date]);
 
   /**

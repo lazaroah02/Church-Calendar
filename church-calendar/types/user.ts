@@ -13,3 +13,14 @@ export interface UserManagementFormErrors{
     description?: string;
     profile_img: any;
 }
+
+export interface UserManagementData {
+  profile_img?: string | null  
+  full_name: string;
+  phone_number: string;
+  email: string;
+  description: string;
+  member_groups: number[];
+  is_staff: boolean;
+  is_active: boolean
+}

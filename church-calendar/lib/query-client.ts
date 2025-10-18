@@ -12,13 +12,13 @@ import { Persister, persistQueryClient } from "@tanstack/react-query-persist-cli
  * - retry: Number of retry attempts for failed queries
  */
 
-export const DEFAUL_STALE_TIME = 1000 * 60 * 5   // 5 minutes
+export const DEFAULT_STALE_TIME = 1000 * 60 * 5   // 5 minutes
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       gcTime: 1000 * 60 * 60 * 24, // 24 hours
-      staleTime: DEFAUL_STALE_TIME,
+      staleTime: DEFAULT_STALE_TIME,
       retry: process.env.NODE_ENV === "development" ? 2 : 0,
       networkMode: 'offlineFirst'
     },

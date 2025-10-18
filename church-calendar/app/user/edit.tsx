@@ -22,10 +22,27 @@ export default function EditUser() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <PageHeader title="Editar Usuario" />
+      <PageHeader
+        title="Editar Usuario"
+        onBack={() =>
+          router.replace({
+            pathname: "/user/detail",
+            params: {
+              userInfo: JSON.stringify(parsedUserInfo),
+            },
+          })
+        }
+      />
       <UserManagementForm
         user={parsedUserInfo}
-        onCancel={() => router.back()}
+        onCancel={() =>
+          router.replace({
+            pathname: "/user/detail",
+            params: {
+              userInfo: JSON.stringify(parsedUserInfo),
+            },
+          })
+        }
       />
     </SafeAreaView>
   );

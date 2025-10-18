@@ -29,7 +29,6 @@ export function register(data: RegisterData): Promise<null> {
       return null;
     }
     return res.json().then((data) => {
-      console.log(data);
       const errors: Record<string, string> = {};
 
       if (data.email) {
