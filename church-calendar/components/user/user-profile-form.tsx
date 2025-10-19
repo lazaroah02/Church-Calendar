@@ -103,7 +103,7 @@ export function UserProfileForm({
         )}
 
         {/* Full Name */}
-        <Text style={styles.groupLabel}>Nombre Completo</Text>
+        <Text style={styles.label}>Nombre Completo</Text>
         <CustomInput
           error={errors?.full_name}
           textContentType="name"
@@ -114,7 +114,7 @@ export function UserProfileForm({
         />
 
         {/* Phone */}
-        <Text style={styles.groupLabel}>Teléfono:</Text>
+        <Text style={styles.label}>Teléfono:</Text>
         <CustomInput
           error={errors?.phone_number}
           keyboardType="phone-pad"
@@ -126,7 +126,7 @@ export function UserProfileForm({
         />
 
         {/* Email */}
-        <Text style={styles.groupLabel}>Correo:</Text>
+        <Text style={styles.label}>Correo:</Text>
         <CustomInput
           error={errors?.email}
           keyboardType="email-address"
@@ -138,7 +138,7 @@ export function UserProfileForm({
         />
 
         {/* Description */}
-        <Text style={styles.groupLabel}>Descripción:</Text>
+        <Text style={styles.label}>Descripción:</Text>
         <CustomInput
           error={null}
           value={formValues.description}
@@ -197,7 +197,7 @@ const userForm = (theme: AppTheme) => {
       borderRadius: 20,
       padding: 6,
     },
-    groupLabel: {
+    label: {
       fontWeight: 500,
       marginBottom: 5,
       marginTop: 20,

@@ -63,3 +63,8 @@ export interface AuthContenxtProps {
   isLoading: boolean;
   updateSession: (newSession: Session) => void;
 }
+
+export type ChangePasswordFormData = {
+  password1: string,
+  password2: string
+}

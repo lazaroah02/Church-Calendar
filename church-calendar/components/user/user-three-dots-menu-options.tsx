@@ -43,7 +43,7 @@ export function UserThreeDotsmenuOptions({
         onPress={() => {
           closeParent();
           router.replace({
-            pathname: "/user/edit",
+            pathname: "/user/management/edit",
             params: {
               userInfo: JSON.stringify(user),
             },
@@ -52,6 +52,22 @@ export function UserThreeDotsmenuOptions({
       >
         <Ionicons name="pencil-outline" size={20} />
         <Text style={styles.text}>Editar</Text>
+      </TouchableOpacity>
+      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
+      <TouchableOpacity
+        style={styles.touchable}
+        onPress={() => {
+          closeParent();
+          router.push({
+            pathname: "/user/management/change-user-password",
+            params: {
+              userId: user.id,
+            },
+          })
+        }}
+      >
+        <Ionicons name="key-outline" size={20} />
+        <Text style={styles.text}>Cambiar Contraseña</Text>
       </TouchableOpacity>
     </>
   );

@@ -15,8 +15,12 @@ export async function changePassword({
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Token ${token}` } : {}),
       credentials: "omit",
+      "Accept-Language": "es",
     },
-    body:JSON.stringify({"new_password1": new_password1, "new_password2": new_password2})
+    body: JSON.stringify({
+      new_password1: new_password1,
+      new_password2: new_password2,
+    }),
   };
   const res = await fetch(`${CHANGE_PASSWORD_URL}`, options);
   if (res.ok) {
@@ -26,12 +30,19 @@ export async function changePassword({
     const errors: Record<string, string> = {};
 
     if (data.new_password1) {
-      errors.new_password1 = data.new_password1[0];
+      errors.password1 = data.new_password1[0];
     }
     if (data.new_password2) {
-      errors.new_password2 = data.new_password2[0];
+      if (data.new_password2[0].includes("short")) {
+        errors.password2 =
+          "La contraseña es muy corta. Debe contener al menos 8 caracteres";
+        errors.password1 =
+          "La contraseña es muy corta. Debe contener al menos 8 caracteres";
+      } else {
+        errors.password2 = data.new_password2[0];
+      }
     }
 
-    return errors;
+    throw errors;
   }
 }

@@ -1,6 +1,6 @@
 import { MANAGE_USERS_URL } from "@/api-endpoints";
 
-export async function changePassword({
+export async function changeUserPassword({
   new_password,
   userId,
   token = "",
@@ -15,6 +15,7 @@ export async function changePassword({
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Token ${token}` } : {}),
       credentials: "omit",
+      "Accept-Language":"es"
     },
     body: JSON.stringify({ new_password: new_password }),
   };
@@ -29,15 +30,17 @@ export async function changePassword({
     const errors: Record<string, string> = {};
 
     if (data.message) {
-      errors.new_password1 = data.message;
+      errors.password1 = data.message;
     }
     if (data.password[0].includes("short")) {
-      errors.new_password1 =
+      errors.password1 =
+        "La contraseña es muy corta. Debe contener al menos 8 caracteres";
+      errors.password2 =
         "La contraseña es muy corta. Debe contener al menos 8 caracteres";
     } else {
-      errors.new_password1 = data.password[0];
+      errors.password1 = data.password[0];
     }
 
-    return errors;
+    throw errors;
   }
 }

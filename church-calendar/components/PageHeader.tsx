@@ -61,7 +61,7 @@ const pageHeaderStyles = (theme: AppTheme) => ({
     justifyContent: "space-between",
   },
   title: {
-    width: "80%",
+    width: "82%",
     fontSize: 23,
     fontWeight: "500",
     color: "#000",
