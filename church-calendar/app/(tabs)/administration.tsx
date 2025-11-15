@@ -1,49 +1,20 @@
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-import { useState } from "react";
-import { View, Text, useWindowDimensions } from "react-native";
+import { View, Text } from "react-native";
 import { TabView, TabBar } from "react-native-tab-view";
-
-const UsersRoute = () => {
-  return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text>Lista de usuarios</Text>
-    </View>
-  );
-};
-
-const GroupsRoute = () => {
-  return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text>Lista de grupos</Text>
-    </View>
-  );
-};
+import { useAdministrationTabs } from "@/hooks/administration/useAdministrationTabs";
+import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
+import { StatusBar } from "expo-status-bar";
 
 export default function Administration() {
-  const layout = useWindowDimensions();
-
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: "users", title: "Usuarios" },
-    { key: "groups", title: "Grupos" },
-  ]);
-
-  const renderScene = ({ route }) => {
-    switch (route.key) {
-      case "users":
-        return <UsersRoute />;
-      case "groups":
-        return <GroupsRoute />;
-      default:
-        return null;
-    }
-  };
+  const { index, routes, renderScene, setIndex, layout } =
+    useAdministrationTabs();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <MyNavigationBar buttonsStyle="dark" />
+      <StatusBar style="dark" />
       <PageHeader
         title="Administración"
         rightComponent={
