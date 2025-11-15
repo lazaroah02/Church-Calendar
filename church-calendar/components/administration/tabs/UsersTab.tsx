@@ -31,6 +31,8 @@ export const UsersTab = () => {
             <UserAvatar user={item} title="" />
           </Pressable>
         )}
+        ListFooterComponent={<View></View>}
+        onEndReached={() => console.log("end reached")}
       />
     </View>
   );
