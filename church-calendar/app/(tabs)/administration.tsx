@@ -12,7 +12,7 @@ export default function Administration() {
     useAdministrationTabs();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }} edges={['top']}>
       <MyNavigationBar buttonsStyle="dark" />
       <StatusBar style="dark" />
       <PageHeader
@@ -24,8 +24,8 @@ export default function Administration() {
           />
         }
       />
-
       <TabView
+        style={{ flex: 1 }}
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
