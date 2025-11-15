@@ -12,11 +12,13 @@
       "supportsTablet": true
     },
     "android": {
+      "devClient": false,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.lazaroah02.churchcalendar"
     },
     "splash": {
       "image": "./assets/images/splash.png",
@@ -41,6 +43,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "73dda39a-4f80-494a-b4ee-cb447821f509"
+      }
+    },
+    "owner": "lazaroah02"
   }
 }
