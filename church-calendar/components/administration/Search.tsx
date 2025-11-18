@@ -1,16 +1,33 @@
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
-export function Search({containerStyle}: {containerStyle?: any}) {
+export function Search({
+  containerStyle,
+  initialSearchValue,
+  onSearch,
+}: {
+  containerStyle?: any;
+  initialSearchValue?: string;
+  onSearch: (searchValue: string) => void;
+}) {
   const styles = useThemeStyles(SearchStyles);
+  const [searchValue, setSearchValue] = useState(initialSearchValue || "")
 
   return (
     <View style={[styles.container, containerStyle]}>
       <Ionicons name="search-outline" size={22} color="black" />
-      <TextInput placeholder="Buscar:" style={styles.input} />
+      <TextInput
+        placeholder="Buscar:"
+        style={styles.input}
+        value={searchValue}
+        onChangeText={(text) => {
+          onSearch(text)
+          setSearchValue(text)}}
+      />
     </View>
   );
 }

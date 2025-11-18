@@ -4,8 +4,11 @@ import { router } from "expo-router";
 import { UserAvatar } from "@/components/event/user-avatar";
 import { Search } from "../Search";
 import { Filters } from "../Filters";
+import { useMemo, useState } from "react";
+import { debounce } from "@/lib/debounce";
 
 export const UsersTab = () => {
+  const [search, setSearch] = useState("");
   const {
     users,
     fetchNextPageOfUsers,
@@ -13,12 +16,21 @@ export const UsersTab = () => {
     hasMoreUsers,
     refetchUsers,
     isGettingUsers,
-  } = useManageUsers();
+  } = useManageUsers({searchTerm: search});
+
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => setSearch(value), 500),
+    []
+  );
 
   return (
     <View style={{ flex: 1, padding: 20, paddingBottom: 0 }}>
       <View style={styles.searchContainer}>
-        <Search containerStyle={{ width: "85%" }} />
+        <Search
+          containerStyle={{ width: "85%" }}
+          initialSearchValue={search}
+          onSearch={(searchValue: string) => debouncedSearch(searchValue)}
+        />
         <Filters />
       </View>
       <FlatList
@@ -41,9 +53,15 @@ export const UsersTab = () => {
           </Pressable>
         )}
         ListFooterComponent={
-          <View style={{ padding: 20, justifyContent:"center" }}>
-            {isGettingMoreUsers && <Text style={{textAlign:"center"}}>Cargando mas usuarios...</Text>}
-            {!isGettingMoreUsers && !hasMoreUsers && <Text style={{textAlign:"center"}}>No hay mas usuarios</Text>}
+          <View style={{ padding: 20, justifyContent: "center" }}>
+            {isGettingMoreUsers && (
+              <Text style={{ textAlign: "center" }}>
+                Cargando mas usuarios...
+              </Text>
+            )}
+            {!isGettingMoreUsers && !isGettingUsers && !hasMoreUsers && (
+              <Text style={{ textAlign: "center" }}>No hay mas usuarios</Text>
+            )}
           </View>
         }
         onEndReached={() =>

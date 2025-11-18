@@ -9,7 +9,7 @@ import { getUsers } from "@/services/user/management/get-users";
 import { UserInfo } from "@/types/auth";
 import { useMemo } from "react";
 
-export function useManageUsers() {
+export function useManageUsers({searchTerm = ""}: {searchTerm?: string}) {
   const { session } = useSession();
   const { showSuccessToast, showErrorToast } = useCustomToast();
 
@@ -23,9 +23,9 @@ export function useManageUsers() {
     hasNextPage: hasMoreUsers,
     isFetchingNextPage: isGettingMoreUsers,
   } = useInfiniteQuery({
-    queryKey: ["users"],
+    queryKey: ["users", searchTerm],
     queryFn: ({ pageParam = 1 }) =>
-      getUsers({ token: session?.token || "", pageParam: pageParam }),
+      getUsers({ token: session?.token || "", pageParam: pageParam, search: searchTerm }),
     getNextPageParam: (lastPage) => {
       if (lastPage.next) {
         return parseInt(new URL(lastPage.next).searchParams.get("page") || "1");
