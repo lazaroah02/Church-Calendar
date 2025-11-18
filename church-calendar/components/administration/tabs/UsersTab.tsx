@@ -6,6 +6,7 @@ import { Search } from "../Search";
 import { UserFiltersBottomSheet } from "../UserFilters";
 import { useMemo, useState } from "react";
 import { debounce } from "@/lib/debounce";
+import { HapticTab } from "@/components/HapticTab";
 
 export const UsersTab = () => {
   const [search, setSearch] = useState("");
@@ -43,18 +44,7 @@ export const UsersTab = () => {
         refreshing={isGettingUsers}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Pressable
-            onPress={() =>
-              router.push({
-                pathname: "/user/detail",
-                params: {
-                  userInfo: JSON.stringify(item),
-                },
-              })
-            }
-          >
             <UserAvatar user={item} title="" />
-          </Pressable>
         )}
         ListFooterComponent={
           <View style={{ padding: 20, justifyContent: "center" }}>
