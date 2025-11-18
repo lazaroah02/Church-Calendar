@@ -15,7 +15,7 @@ export function UserThreeDotsmenuOptions({
   user: UserInfo;
   closeParent: () => void;
 }) {
-  const {handleDeleteUser, isDeletingUser, errorDeletingUser} = useManageUsers()
+  const {handleDeleteUser, isDeletingUser, errorDeletingUser} = useManageUsers({})
 
   const { confirm, showConfirm, hideConfirm } = useConfirm({
     loading: isDeletingUser,

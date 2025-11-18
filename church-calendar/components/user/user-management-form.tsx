@@ -45,7 +45,7 @@ export function UserManagementForm({
     handleUpdateUser,
     isUpdatingUser: loading,
     errorUpdatingUser: errors,
-  } = useManageUsers();
+  } = useManageUsers({});
 
   const handleChange = (
     key: keyof typeof formValues,

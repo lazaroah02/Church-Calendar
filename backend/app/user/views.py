@@ -47,7 +47,7 @@ class UsersManagment(viewsets.ModelViewSet):
     serializer_class = UserManagmentSerializer
     pagination_class = UsersPagination
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['id', "is_active", "is_staff", "is_superuser"]
+    filterset_fields = ['id', "is_active", "is_staff", "is_superuser", "member_groups"]
     search_fields = ["full_name", "email", "username"]
 
     def perform_create(self, serializer):

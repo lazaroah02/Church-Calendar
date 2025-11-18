@@ -1,7 +1,6 @@
 import { MANAGE_USERS_URL } from "@/api-endpoints";
 
 export async function getUsers({ token = "", search = "", pageParam = 1 }: { token: string, search?: string, pageParam?: number }) {
-  console.log("page", pageParam)
   const options: RequestInit = {
     method: "GET",
     headers: {

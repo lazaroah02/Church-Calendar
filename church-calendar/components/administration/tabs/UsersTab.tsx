@@ -3,12 +3,13 @@ import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { router } from "expo-router";
 import { UserAvatar } from "@/components/event/user-avatar";
 import { Search } from "../Search";
-import { Filters } from "../Filters";
+import { UserFiltersBottomSheet } from "../UserFilters";
 import { useMemo, useState } from "react";
 import { debounce } from "@/lib/debounce";
 
 export const UsersTab = () => {
   const [search, setSearch] = useState("");
+
   const {
     users,
     fetchNextPageOfUsers,
@@ -16,12 +17,15 @@ export const UsersTab = () => {
     hasMoreUsers,
     refetchUsers,
     isGettingUsers,
-  } = useManageUsers({searchTerm: search});
+  } = useManageUsers({ searchTerm: search });
 
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearch(value), 500),
     []
   );
+
+  const { userFiltersBottomSheet, openUserFiltersBottomSheetButton } =
+    UserFiltersBottomSheet();
 
   return (
     <View style={{ flex: 1, padding: 20, paddingBottom: 0 }}>
@@ -31,7 +35,7 @@ export const UsersTab = () => {
           initialSearchValue={search}
           onSearch={(searchValue: string) => debouncedSearch(searchValue)}
         />
-        <Filters />
+        {openUserFiltersBottomSheetButton()}
       </View>
       <FlatList
         data={users}
@@ -68,6 +72,7 @@ export const UsersTab = () => {
           !isGettingMoreUsers && hasMoreUsers && fetchNextPageOfUsers()
         }
       />
+      {userFiltersBottomSheet()}
     </View>
   );
 };

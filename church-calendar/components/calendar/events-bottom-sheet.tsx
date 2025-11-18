@@ -52,10 +52,9 @@ interface EventsBottomSheetProps {
   selectedDayEvents: Event[] | undefined;
 }
 
-const CustomBottomSheetBackground: React.FC<BottomSheetBackgroundProps> = ({
+export const CustomBottomSheetBackground: React.FC<BottomSheetBackgroundProps> = ({
   style,
 }) => {
-  // combina el style que el BottomSheet pasa internamente con el tuyo
   const styles = useThemeStyles(bottomSheetStyles);
   const containerStyle = useMemo(
     () => [style, styles.sheetBackground],
