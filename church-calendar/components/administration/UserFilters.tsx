@@ -2,23 +2,37 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { useMemo, useRef } from "react";
-import {
-  Animated,
-  Pressable,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { useMemo, useRef, useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { CustomBottomSheetBackground } from "../calendar/events-bottom-sheet";
 import { CheckBox } from "../form/checkbox";
 import { ChurchGroupsPicker } from "../form/church-groups-picker";
 import { Button } from "../Button";
 
-export function UserFiltersBottomSheet() {
+export type UserFilters = {
+  is_staff: boolean | "";
+  is_active: boolean | "";
+  member_groups: number[];
+};
+
+export const defaultFiltersValues: UserFilters = {
+  is_active: "",
+  is_staff: "",
+  member_groups: [],
+};
+
+export function UserFiltersBottomSheet({
+  handleFilterChange,
+  defaultFilters,
+}: {
+  handleFilterChange: (filters: UserFilters) => void;
+  defaultFilters: UserFilters;
+}) {
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["98%"], []);
   const styles = useThemeStyles(bottomSheetStyles);
+
+  const [filters, setFilters] = useState<UserFilters>(defaultFilters);
 
   const openUserFiltersBottomSheet = () => {
     sheetRef.current?.expand();
@@ -31,8 +45,29 @@ export function UserFiltersBottomSheet() {
   const openUserFiltersBottomSheetButton = () => (
     <TouchableOpacity onPress={() => openUserFiltersBottomSheet()}>
       <Ionicons name="filter-outline" size={27} color="black" />
+      {filters.is_active !== "" ||
+      filters.is_staff !== "" ||
+      filters.member_groups.length > 0 ? (
+        <View style={styles.filtersActiveIndicator} />
+      ) : null}
     </TouchableOpacity>
   );
+
+  const handleChange = (
+    key: keyof typeof filters,
+    value: string | number[] | boolean
+  ) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const [groupsPickerKey, setGroupsPickerKey] = useState(0);
+
+  const resetFilters = () => {
+    setFilters(defaultFiltersValues);
+    handleFilterChange(defaultFiltersValues);
+    closeUserFiltersBottomSheet();
+    setGroupsPickerKey((prev) => prev + 1);
+  };
 
   const userFiltersBottomSheet = () => (
     <BottomSheet
@@ -49,26 +84,38 @@ export function UserFiltersBottomSheet() {
         <View style={styles.content}>
           <CheckBox
             label="Solo Administradores"
-            checked={false}
-            onCheck={(checked) => null}
+            checked={filters.is_staff === "" ? false : filters.is_staff}
+            onCheck={(checked) =>
+              handleChange("is_staff", checked === false ? "" : true)
+            }
           />
           <CheckBox
             label="No Administradores"
-            checked={false}
-            onCheck={(checked) => null}
+            checked={filters.is_staff === "" ? false : !filters.is_staff}
+            onCheck={(checked) =>
+              handleChange("is_staff", checked === false ? "" : false)
+            }
           />
           <CheckBox
             label="Tiene acceso a la aplicación"
-            checked={false}
-            onCheck={(checked) => null}
+            checked={filters.is_active === "" ? false : filters.is_active}
+            onCheck={(checked) =>
+              handleChange("is_active", checked === false ? "" : true)
+            }
           />
           <CheckBox
             label="No tiene acceso a la aplicación"
-            checked={false}
-            onCheck={(checked) => null}
+            checked={filters.is_active === "" ? false : !filters.is_active}
+            onCheck={(checked) =>
+              handleChange("is_active", checked === false ? "" : false)
+            }
           />
           <ChurchGroupsPicker
-            onChange={(selectedGroups) => null}
+            onChange={(selectedGroups) =>
+              handleChange("member_groups", selectedGroups)
+            }
+            key={groupsPickerKey}
+            defaultSelectedGroups={filters.member_groups}
             placeholder="Filtrar por grupo"
             containerStyle={{ marginTop: 10 }}
           />
@@ -77,15 +124,14 @@ export function UserFiltersBottomSheet() {
         <View style={styles.buttonsContainer}>
           <Button
             text="Limpiar"
-            onPress={() => {
-              closeUserFiltersBottomSheet()
-            }}
+            onPress={resetFilters}
             style={{ width: "45%" }}
           />
           <Button
             text="Aplicar"
             onPress={() => {
-              closeUserFiltersBottomSheet()
+              handleFilterChange(filters);
+              closeUserFiltersBottomSheet();
             }}
             style={{ width: "50%" }}
             variant="submit"
@@ -118,5 +164,13 @@ const bottomSheetStyles = (theme: AppTheme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 15,
+  },
+  filtersActiveIndicator: {
+    backgroundColor: "red",
+    width: 10,
+    height: 10,
+    position: "absolute",
+    right: 0,
+    borderRadius: "100%",
   },
 });

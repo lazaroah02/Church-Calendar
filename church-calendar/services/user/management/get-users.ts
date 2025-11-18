@@ -1,6 +1,26 @@
 import { MANAGE_USERS_URL } from "@/api-endpoints";
+import {
+  defaultFiltersValues,
+  UserFilters,
+} from "@/components/administration/UserFilters";
 
-export async function getUsers({ token = "", search = "", pageParam = 1 }: { token: string, search?: string, pageParam?: number }) {
+export async function getUsers({
+  token = "",
+  search = "",
+  pageParam = 1,
+  filters = defaultFiltersValues,
+}: {
+  token: string;
+  search?: string;
+  pageParam?: number;
+  filters?: UserFilters;
+}) {
+  const url = `${MANAGE_USERS_URL}?search=${search}&page=${pageParam}&is_staff=${
+    filters.is_staff
+  }&is_active=${filters.is_active}${filters.member_groups
+    .map((groupId) => `&member_groups=${groupId}`)
+    .join("")}`;
+
   const options: RequestInit = {
     method: "GET",
     headers: {
@@ -10,7 +30,7 @@ export async function getUsers({ token = "", search = "", pageParam = 1 }: { tok
     },
   };
   try {
-    const res = await fetch(`${MANAGE_USERS_URL}?search=${search}&page=${pageParam}`, options);
+    const res = await fetch(url, options);
     if (res.ok) {
       return res.json().then((data) => {
         return data;

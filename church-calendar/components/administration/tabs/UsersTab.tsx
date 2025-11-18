@@ -3,13 +3,17 @@ import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { router } from "expo-router";
 import { UserAvatar } from "@/components/event/user-avatar";
 import { Search } from "../Search";
-import { UserFiltersBottomSheet } from "../UserFilters";
+import { UserFilters, UserFiltersBottomSheet } from "../UserFilters";
 import { useMemo, useState } from "react";
 import { debounce } from "@/lib/debounce";
-import { HapticTab } from "@/components/HapticTab";
 
 export const UsersTab = () => {
   const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<UserFilters>({
+    is_staff: "",
+    is_active: "",
+    member_groups: [],
+  });
 
   const {
     users,
@@ -18,7 +22,7 @@ export const UsersTab = () => {
     hasMoreUsers,
     refetchUsers,
     isGettingUsers,
-  } = useManageUsers({ searchTerm: search });
+  } = useManageUsers({ searchTerm: search, filters: filters });
 
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearch(value), 500),
@@ -26,7 +30,10 @@ export const UsersTab = () => {
   );
 
   const { userFiltersBottomSheet, openUserFiltersBottomSheetButton } =
-    UserFiltersBottomSheet();
+    UserFiltersBottomSheet({
+      handleFilterChange: setFilters,
+      defaultFilters: filters,
+    });
 
   return (
     <View style={{ flex: 1, padding: 20, paddingBottom: 0 }}>
@@ -43,9 +50,7 @@ export const UsersTab = () => {
         onRefresh={refetchUsers}
         refreshing={isGettingUsers}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-            <UserAvatar user={item} title="" />
-        )}
+        renderItem={({ item }) => <UserAvatar user={item} title="" />}
         ListFooterComponent={
           <View style={{ padding: 20, justifyContent: "center" }}>
             {isGettingMoreUsers && (

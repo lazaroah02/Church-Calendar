@@ -8,8 +8,18 @@ import { updateUser } from "@/services/user/management/update-user";
 import { getUsers } from "@/services/user/management/get-users";
 import { UserInfo } from "@/types/auth";
 import { useMemo } from "react";
+import {
+  defaultFiltersValues,
+  UserFilters,
+} from "@/components/administration/UserFilters";
 
-export function useManageUsers({searchTerm = ""}: {searchTerm?: string}) {
+export function useManageUsers({
+  searchTerm = "",
+  filters = defaultFiltersValues,
+}: {
+  searchTerm?: string;
+  filters?: UserFilters;
+}) {
   const { session } = useSession();
   const { showSuccessToast, showErrorToast } = useCustomToast();
 
@@ -23,9 +33,14 @@ export function useManageUsers({searchTerm = ""}: {searchTerm?: string}) {
     hasNextPage: hasMoreUsers,
     isFetchingNextPage: isGettingMoreUsers,
   } = useInfiniteQuery({
-    queryKey: ["users", searchTerm],
+    queryKey: ["users", searchTerm, filters],
     queryFn: ({ pageParam = 1 }) =>
-      getUsers({ token: session?.token || "", pageParam: pageParam, search: searchTerm }),
+      getUsers({
+        token: session?.token || "",
+        pageParam: pageParam,
+        search: searchTerm,
+        filters: filters
+      }),
     getNextPageParam: (lastPage) => {
       if (lastPage.next) {
         return parseInt(new URL(lastPage.next).searchParams.get("page") || "1");
