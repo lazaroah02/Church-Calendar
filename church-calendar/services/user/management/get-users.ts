@@ -1,6 +1,7 @@
 import { MANAGE_USERS_URL } from "@/api-endpoints";
 
-export async function getUsers({ token = "" }: { token: string }) {
+export async function getUsers({ token = "", search = "", pageParam = 1 }: { token: string, search?: string, pageParam?: number }) {
+  console.log("page", pageParam)
   const options: RequestInit = {
     method: "GET",
     headers: {
@@ -10,7 +11,7 @@ export async function getUsers({ token = "" }: { token: string }) {
     },
   };
   try {
-    const res = await fetch(`${MANAGE_USERS_URL}`, options);
+    const res = await fetch(`${MANAGE_USERS_URL}?search=${search}&page=${pageParam}`, options);
     if (res.ok) {
       return res.json().then((data) => {
         return data;

@@ -1,4 +1,4 @@
-import { View, Pressable, FlatList } from "react-native";
+import { View, Pressable, FlatList, Text } from "react-native";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { router } from "expo-router";
 import { UserAvatar } from "@/components/event/user-avatar";
@@ -6,7 +6,14 @@ import { Search } from "../Search";
 import { Filters } from "../Filters";
 
 export const UsersTab = () => {
-  const { users } = useManageUsers();
+  const {
+    users,
+    fetchNextPageOfUsers,
+    isGettingMoreUsers,
+    hasMoreUsers,
+    refetchUsers,
+    isGettingUsers,
+  } = useManageUsers();
 
   return (
     <View style={{ flex: 1, padding: 20, paddingBottom: 0 }}>
@@ -16,6 +23,8 @@ export const UsersTab = () => {
       </View>
       <FlatList
         data={users}
+        onRefresh={refetchUsers}
+        refreshing={isGettingUsers}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <Pressable
@@ -31,8 +40,15 @@ export const UsersTab = () => {
             <UserAvatar user={item} title="" />
           </Pressable>
         )}
-        ListFooterComponent={<View></View>}
-        onEndReached={() => console.log("end reached")}
+        ListFooterComponent={
+          <View style={{ padding: 20, justifyContent:"center" }}>
+            {isGettingMoreUsers && <Text style={{textAlign:"center"}}>Cargando mas usuarios...</Text>}
+            {!isGettingMoreUsers && !hasMoreUsers && <Text style={{textAlign:"center"}}>No hay mas usuarios</Text>}
+          </View>
+        }
+        onEndReached={() =>
+          !isGettingMoreUsers && hasMoreUsers && fetchNextPageOfUsers()
+        }
       />
     </View>
   );

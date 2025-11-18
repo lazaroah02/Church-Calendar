@@ -1,5 +1,5 @@
 import { useSession } from "../auth/useSession";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useInfiniteQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useCustomToast } from "../useCustomToast";
 import { deleteUser } from "@/services/user/management/delete-user";
@@ -14,13 +14,32 @@ export function useManageUsers() {
   const { showSuccessToast, showErrorToast } = useCustomToast();
 
   //GET USERS
-  const { data, isLoading: isGettingUsers, isError: errorGettingUsers, refetch: refetchUsers } = useQuery({
+  const {
+    data,
+    isLoading: isGettingUsers,
+    isError: errorGettingUsers,
+    refetch: refetchUsers,
+    fetchNextPage: fetchNextPageOfUsers,
+    hasNextPage: hasMoreUsers,
+    isFetchingNextPage: isGettingMoreUsers,
+  } = useInfiniteQuery({
     queryKey: ["users"],
-    queryFn: () => getUsers({ token: session?.token || "" }),
+    queryFn: ({ pageParam = 1 }) =>
+      getUsers({ token: session?.token || "", pageParam: pageParam }),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.next) {
+        return parseInt(new URL(lastPage.next).searchParams.get("page") || "1");
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
   });
 
-  const users: UserInfo[] = useMemo(() => data?.results || [], [data])
-  const totalUsers: number = useMemo(() => data?.count || 0,[data])
+  const users: UserInfo[] = useMemo(
+    () => data?.pages.flatMap((page) => page.results) || [],
+    [data]
+  );
+  const totalUsers: number = useMemo(() => data?.pages[0]?.count || 0, [data]);
 
   //UPDATE USER
   const {
@@ -86,6 +105,9 @@ export function useManageUsers() {
     totalUsers,
     isGettingUsers,
     errorGettingUsers,
-    refetchUsers
+    refetchUsers,
+    isGettingMoreUsers,
+    hasMoreUsers,
+    fetchNextPageOfUsers,
   };
 }
