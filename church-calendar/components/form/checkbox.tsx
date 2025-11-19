@@ -8,9 +8,10 @@ interface CheckBoxProps {
   checked: boolean;
   onCheck: (checked: boolean) => void;
   disabled?: boolean
+  variant?: "strong" | "light";
 }
 
-export function CheckBox({ label, checked, onCheck, disabled = false }: CheckBoxProps) {
+export function CheckBox({ label, checked, onCheck, disabled = false, variant = "strong" }: CheckBoxProps) {
   const styles = useThemeStyles(CheckBoxStyles);
   return (
     <Pressable
@@ -22,7 +23,7 @@ export function CheckBox({ label, checked, onCheck, disabled = false }: CheckBox
       ) : (
         <Ionicons name="square-outline" size={25} color="#000" />
       )}
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, variant === "light"? {fontWeight:"500"}:{}]}>{label}</Text>
     </Pressable>
   );
 }

@@ -33,6 +33,7 @@ export function UserFiltersBottomSheet({
   const styles = useThemeStyles(bottomSheetStyles);
 
   const [filters, setFilters] = useState<UserFilters>(defaultFilters);
+  const [showActiveFiltersStatus, setShowActiveFiltersStatus] = useState(false);
 
   const openUserFiltersBottomSheet = () => {
     sheetRef.current?.expand();
@@ -42,12 +43,22 @@ export function UserFiltersBottomSheet({
     sheetRef.current?.close();
   };
 
+  const handleShowActiveFiltersStatus = () => {
+    if (
+      filters.is_active !== "" ||
+      filters.is_staff !== "" ||
+      filters.member_groups.length > 0
+    ) {
+      setShowActiveFiltersStatus(true);
+    }else{
+      setShowActiveFiltersStatus(false);
+    }
+  };
+
   const openUserFiltersBottomSheetButton = () => (
     <TouchableOpacity onPress={() => openUserFiltersBottomSheet()}>
       <Ionicons name="filter-outline" size={27} color="black" />
-      {filters.is_active !== "" ||
-      filters.is_staff !== "" ||
-      filters.member_groups.length > 0 ? (
+      {showActiveFiltersStatus ? (
         <View style={styles.filtersActiveIndicator} />
       ) : null}
     </TouchableOpacity>
@@ -67,6 +78,7 @@ export function UserFiltersBottomSheet({
     handleFilterChange(defaultFiltersValues);
     closeUserFiltersBottomSheet();
     setGroupsPickerKey((prev) => prev + 1);
+    setShowActiveFiltersStatus(false);
   };
 
   const userFiltersBottomSheet = () => (
@@ -88,6 +100,7 @@ export function UserFiltersBottomSheet({
             onCheck={(checked) =>
               handleChange("is_staff", checked === false ? "" : true)
             }
+            variant="light"
           />
           <CheckBox
             label="No Administradores"
@@ -95,6 +108,7 @@ export function UserFiltersBottomSheet({
             onCheck={(checked) =>
               handleChange("is_staff", checked === false ? "" : false)
             }
+            variant="light"
           />
           <CheckBox
             label="Tiene acceso a la aplicación"
@@ -102,6 +116,7 @@ export function UserFiltersBottomSheet({
             onCheck={(checked) =>
               handleChange("is_active", checked === false ? "" : true)
             }
+            variant="light"
           />
           <CheckBox
             label="No tiene acceso a la aplicación"
@@ -109,6 +124,7 @@ export function UserFiltersBottomSheet({
             onCheck={(checked) =>
               handleChange("is_active", checked === false ? "" : false)
             }
+            variant="light"
           />
           <ChurchGroupsPicker
             onChange={(selectedGroups) =>
@@ -132,6 +148,7 @@ export function UserFiltersBottomSheet({
             onPress={() => {
               handleFilterChange(filters);
               closeUserFiltersBottomSheet();
+              handleShowActiveFiltersStatus();
             }}
             style={{ width: "50%" }}
             variant="submit"
