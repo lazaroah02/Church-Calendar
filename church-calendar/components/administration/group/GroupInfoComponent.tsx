@@ -1,3 +1,4 @@
+import { Button } from "@/components/Button";
 import { UserAvatar } from "@/components/event/user-avatar";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
@@ -5,7 +6,7 @@ import { getImageUri } from "@/lib/get-image-uri";
 import { AppTheme } from "@/theme";
 import { Group } from "@/types/group";
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView, View, Image, Text, FlatList } from "react-native";
+import { ScrollView, View, Image, Text, Pressable } from "react-native";
 
 export function GroupInfoComponent({ group }: { group: Group | null }) {
   const styles = useThemeStyles(groupInfoStyles);
@@ -15,7 +16,8 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
     isGettingUsers,
     isGettingMoreUsers,
     hasMoreUsers,
-    refetchUsers,
+    fetchNextPageOfUsers,
+    totalUsers,
   } = useManageUsers({
     filters: { member_groups: [group?.id], is_active: "", is_staff: "" },
   });
@@ -75,20 +77,29 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
       </View>
 
       {/*Members*/}
-      <Text style={styles.groupLabel}>Integrantes ({users.length}):</Text>
-      {isGettingUsers && (
-        <Text style={{ textAlign: "center", marginTop: 15 }}>
-          Cargando integrantes...
-        </Text>
-      )}
+      <Text style={styles.groupLabel}>Integrantes ({totalUsers}):</Text>
+      {users.map((user) => (
+        <UserAvatar key={user.id} user={user} title="" />
+      ))}
+      {isGettingUsers ||
+        (isGettingMoreUsers && (
+          <Text style={{ textAlign: "center", marginTop: 15 }}>
+            Cargando integrantes...
+          </Text>
+        ))}
       {users.length === 0 && (
         <Text style={{ textAlign: "center", marginTop: 15 }}>
           Sin integrantes
         </Text>
       )}
-      {!isGettingUsers &&
-        users.length > 0 &&
-        users.map((user) => <UserAvatar key={user.id} user={user} title="" />)}
+      {hasMoreUsers && !isGettingMoreUsers && !isGettingUsers && (
+        <Button
+          onPress={() => fetchNextPageOfUsers()}
+          style={{ marginTop: 15, alignItems: "center" }}
+          variant="cancel"
+          text="Cargar más usuarios"
+        />
+      )}
     </ScrollView>
   );
 }
