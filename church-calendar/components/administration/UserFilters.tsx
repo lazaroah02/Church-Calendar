@@ -12,7 +12,7 @@ import { Button } from "../Button";
 export type UserFilters = {
   is_staff: boolean | "";
   is_active: boolean | "";
-  member_groups: number[];
+  member_groups: (number | undefined)[];
 };
 
 export const defaultFiltersValues: UserFilters = {

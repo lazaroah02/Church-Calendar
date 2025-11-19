@@ -1,6 +1,7 @@
 import { useManageGroups } from "@/hooks/groups/useManageGroups";
 import { View, FlatList } from "react-native";
 import { GroupAvatar } from "../group/GroupAvatar";
+import { router } from "expo-router";
 
 export const GroupsTab = () => {
   const { groups, loadingGroups, errorGettingGroups, refetchGroups } =
@@ -14,7 +15,17 @@ export const GroupsTab = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={{ marginVertical: 15 }}>
-            <GroupAvatar group={item} />
+            <GroupAvatar
+              group={item}
+              onPress={() =>
+                router.push({
+                  pathname: "/group/management/detail",
+                  params: {
+                    groupInfo: JSON.stringify(item),
+                  },
+                })
+              }
+            />
           </View>
         )}
       />
