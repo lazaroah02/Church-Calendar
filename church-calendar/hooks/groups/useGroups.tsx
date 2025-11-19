@@ -1,4 +1,5 @@
 import { getGroups } from "@/services/groups/get-groups";
+import { Group } from "@/types/group";
 import { useQuery } from "@tanstack/react-query";
 
 export function useGroups() {
@@ -6,7 +7,7 @@ export function useGroups() {
     queryKey: ["groups"],
     queryFn: getGroups,
   });
-  const groups = data || [];
+  const groups: Group[] = data || [];
 
   return { groups, isLoading, isError, refetch };
 }

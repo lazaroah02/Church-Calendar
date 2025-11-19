@@ -1,6 +1,5 @@
-import { View, Pressable, FlatList, Text } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
-import { router } from "expo-router";
 import { UserAvatar } from "@/components/event/user-avatar";
 import { Search } from "../Search";
 import { UserFilters, UserFiltersBottomSheet } from "../UserFilters";
