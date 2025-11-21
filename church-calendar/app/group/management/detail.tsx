@@ -1,4 +1,5 @@
 import { GroupInfoComponent } from "@/components/administration/group/GroupInfoComponent";
+import { GroupThreeDotsMenuOptions } from "@/components/administration/group/GroupThreeDotsOptions";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
@@ -41,7 +42,12 @@ export default function GroupDetail() {
         title="Detalles del Grupo"
         rightComponent={
           <SimpleThreeDotsMenu
-            childrenComponentFunction={(closeParent) => null}
+            childrenComponentFunction={(closeParent) => (
+              <GroupThreeDotsMenuOptions
+                group={parsedGroupInfo}
+                closeParent={closeParent}
+              />
+            )}
           />
         }
       />
