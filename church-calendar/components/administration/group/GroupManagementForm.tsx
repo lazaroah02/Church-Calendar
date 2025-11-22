@@ -11,6 +11,7 @@ import FormErrorBanner from "@/components/form/form-banner-error";
 import { pickImage } from "@/lib/pick-image";
 import { Group } from "@/types/group";
 import { useManageGroups } from "@/hooks/groups/useManageGroups";
+import ColorPicker from "react-native-wheel-color-picker";
 
 export function GroupManagementForm({
   group,
@@ -28,10 +29,11 @@ export function GroupManagementForm({
     group?.img ? getImageUri(group?.img) : null
   );
 
+  const [groupColor, setGroupColor] = useState(group?.color || "ffe066");
+
   const [formValues, setFormValues] = useState({
     name: group?.name || "",
     description: group?.description || "",
-    color: group?.color || "",
   });
 
   const {
@@ -50,7 +52,7 @@ export function GroupManagementForm({
   const handleSubmit = () => {
     handleUpdateGroup({
       groupId: group?.id,
-      data: { ...formValues, img: profileImage },
+      data: { ...formValues, img: profileImage, color: groupColor },
     });
   };
 
@@ -107,6 +109,7 @@ export function GroupManagementForm({
             message={
               errors.name ||
               errors.description ||
+              errors.color ||
               "Ocurrió un error inesperado. Revisa tu conexión a internet."
             }
           />
@@ -137,14 +140,15 @@ export function GroupManagementForm({
 
         {/* Color */}
         <Text style={styles.groupLabel}>Color</Text>
-        <CustomInput
-          error={errors?.color}
-          value={formValues.color}
-          onChangeText={(value) => handleChange("color", value)}
-          inputStyle={{ backgroundColor: inputColor }}
-          containerStyle={{ width: "100%" }}
-        />
-
+        <View style={{ flex: 1, paddingBottom: 30 }}>
+          <ColorPicker
+            color={groupColor}
+            onColorChange={setGroupColor}
+            onColorChangeComplete={setGroupColor}
+            sliderSize={30}
+            thumbSize={40}
+          />
+        </View>
       </KeyboardAwareScrollView>
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center" }}>
         <Button text="Cancelar" onPress={onCancel} style={{ width: "40%" }} />

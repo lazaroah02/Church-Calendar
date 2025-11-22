@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 13:55-0400\n"
+"POT-Creation-Date: 2025-11-21 21:48-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,17 +19,29 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
-#: .\authentication\serializers.py:54 .\user\serializers.py:79
+#: .\authentication\serializers.py:54 .\user\serializers.py:82
 msgid "A user with this email already exists."
 msgstr "Ya existe un usuario con este correo electrónico."
 
-#: .\authentication\serializers.py:59 .\user\serializers.py:85
+#: .\authentication\serializers.py:59 .\user\serializers.py:88
 msgid "A user with this username already exists."
 msgstr "Ya existe un usuario con este nombre de usuario."
 
 #: .\authentication\serializers.py:66
 msgid "You must be at least 10 years old to use the app."
 msgstr "Debes tener al menos 10 años para usar la aplicación."
+
+#: .\church_group\serializers.py:19
+msgid "This color is being used by other group."
+msgstr "Este color está siendo usado por otro grupo. Por favor usa otro."
+
+#: .\church_group\serializers.py:21
+msgid "White color is not allowed. Please choose another color."
+msgstr "El color blanco no puede ser usado. Por favor utiliza otro."
+
+#: .\church_group\serializers.py:26
+msgid "Invalid color format. Please provide a valid hex color code."
+msgstr "Formato de color inválido. Por favor utiliza otro."
 
 #: .\event\views.py:135 .\event\views.py:169 .\event\views.py:211
 msgid "Authentication required to make reservations."
@@ -67,19 +79,19 @@ msgstr "Reserva creada exitosamente."
 msgid "Reservation deleted successfully."
 msgstr "Reserva eliminada correctamente."
 
-#: .\user\serializers.py:21
+#: .\user\serializers.py:23
 msgid "Designates whether the user can log in"
 msgstr "Indica si el usuario puede iniciar sesión"
 
-#: .\user\serializers.py:25
+#: .\user\serializers.py:27
 msgid "Designates whether the user can access the admin panel"
 msgstr "Indica si el usuario puede acceder al panel de administración"
 
-#: .\user\serializers.py:71
+#: .\user\serializers.py:74
 msgid "An admin/superuser user must be staff too"
 msgstr ""
 "Un usuario administrador o superusuario también debe ser parte del personal"
 
-#: .\user\views.py:93
+#: .\user\views.py:95
 msgid "Password was not provided"
 msgstr "No se proporcionó una contraseña."

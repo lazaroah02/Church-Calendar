@@ -58,8 +58,9 @@ const GroupAvatarStyles = (theme: AppTheme) => ({
   },
   profilePictureContainer: {
     backgroundColor: "#37C6FF",
-    width: 35,
-    height: 35,
+    width: 45,
+    height: 45,
+    padding: 3,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",

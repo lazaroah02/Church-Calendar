@@ -53,7 +53,8 @@ class ChurchGroup(models.Model):
 def ensure_general_group_exists(sender, **kwargs):
     '''This signal ensures that the general group exists.'''
     ChurchGroup.objects.get_or_create(name=GENERAL_GROUP_NAME, defaults={
-        'description': GENERAL_GROUP_DESCRIPTION
+        'description': GENERAL_GROUP_DESCRIPTION,
+        'color': '#eca100'
         })
 
 
