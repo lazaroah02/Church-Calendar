@@ -109,6 +109,10 @@ function RootLayout() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="user/management/create"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="user/management/change-user-password"
             options={{ headerShown: false }}
           />

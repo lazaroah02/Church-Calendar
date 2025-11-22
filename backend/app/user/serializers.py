@@ -52,6 +52,9 @@ class UserManagmentSerializer(serializers.ModelSerializer):
         Create a new user instance with a hashed password.
         """
         validated_data["password"] = make_password(validated_data["password"])
+        validated_data["username"] = validated_data.get(
+            "username", validated_data["email"].split("@")[0]
+            ).lower()
         return super().create(validated_data)
 
     def validate(self, data):
@@ -87,4 +90,3 @@ class UserManagmentSerializer(serializers.ModelSerializer):
         if User.objects.exclude(id=user_id).filter(username=value.lower()).exists():
             raise serializers.ValidationError(_("A user with this username already exists."))
         return value
-    

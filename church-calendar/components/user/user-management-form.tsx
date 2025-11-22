@@ -18,10 +18,12 @@ export function UserManagementForm({
   user,
   onCancel = () => null,
   onSuccess = () => null,
+  action = "update",
 }: {
-  user: UserInfo | undefined;
+  user?: UserInfo | undefined | null;
   onCancel?: () => void;
   onSuccess?: () => void;
+  action: "update" | "create";
 }) {
   const styles = useThemeStyles(userManagementForm);
   const inputColor = "#EBEBEB";
@@ -29,6 +31,9 @@ export function UserManagementForm({
   const [profileImage, setProfileImage] = useState(
     user?.profile_img ? getImageUri(user?.profile_img) : null
   );
+
+  // password only for user creation
+  const [password, setPassword] = useState("");
 
   const [formValues, setFormValues] = useState({
     full_name: user?.full_name || "",
@@ -42,9 +47,15 @@ export function UserManagementForm({
 
   const {
     handleUpdateUser,
-    isUpdatingUser: loading,
-    errorUpdatingUser: errors,
+    isUpdatingUser,
+    errorUpdatingUser,
+    handleCreateUser,
+    isCreatingUser,
+    errorCreatingUser,
   } = useManageUsers({});
+
+  const loading = isCreatingUser || isUpdatingUser;
+  const errors = errorCreatingUser || errorUpdatingUser;
 
   const handleChange = (
     key: keyof typeof formValues,
@@ -54,10 +65,17 @@ export function UserManagementForm({
   };
 
   const handleSubmit = () => {
-    handleUpdateUser({
-      userId: user?.id,
-      data: { ...formValues, profile_img: profileImage },
-    });
+    if (action === "update") {
+      handleUpdateUser({
+        userId: user?.id,
+        data: { ...formValues, profile_img: profileImage },
+      });
+    } else {
+      handleCreateUser({
+        data: { ...formValues, profile_img: profileImage },
+        password: password,
+      });
+    }
   };
 
   return (
@@ -75,11 +93,11 @@ export function UserManagementForm({
             alignItems: "center",
             gap: 10,
             marginBottom: 10,
-            paddingRight:10,
+            paddingRight: 10,
           }}
         >
-          <Ionicons name="warning-outline" size={30}/>
-          <Text style={[styles.groupLabel, {marginTop:0}]}>
+          <Ionicons name="warning-outline" size={30} />
+          <Text style={[styles.groupLabel, { marginTop: 0 }]}>
             Los cambios realizados pueden tardar unos minutos en reflejarse en
             los datos de los eventos.
           </Text>
@@ -112,6 +130,7 @@ export function UserManagementForm({
             style={{ marginTop: 10, marginBottom: 0 }}
             message={
               errors.full_name ||
+              errors.password ||
               errors.phone_number ||
               errors.email ||
               errors.description ||
@@ -130,6 +149,22 @@ export function UserManagementForm({
           inputStyle={{ backgroundColor: inputColor }}
           containerStyle={{ width: "100%" }}
         />
+
+        {/* Password */}
+        {action === "create" && (
+          <>
+            <Text style={styles.groupLabel}>Contraseña</Text>
+            <CustomInput
+              error={errors?.password}
+              textContentType="password"
+              value={password}
+              onChangeText={(value) => setPassword(value)}
+              inputStyle={{ backgroundColor: inputColor }}
+              containerStyle={{ width: "100%" }}
+              isPassword={true}
+            />
+          </>
+        )}
 
         {/* Phone */}
         <Text style={styles.groupLabel}>Teléfono:</Text>

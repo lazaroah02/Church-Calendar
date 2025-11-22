@@ -71,7 +71,7 @@ export const UsersTab = () => {
       />
       <Button
         variant="submit"
-        onPress={() => router.push("/group/management/create")}
+        onPress={() => router.push("/user/management/create")}
         text=""
         style={{
           width: 50,

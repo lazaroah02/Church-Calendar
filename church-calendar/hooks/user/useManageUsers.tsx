@@ -12,6 +12,7 @@ import {
   defaultFiltersValues,
   UserFilters,
 } from "@/components/administration/UserFilters";
+import { createUser } from "@/services/user/management/create-user";
 
 export function useManageUsers({
   searchTerm = "",
@@ -86,6 +87,31 @@ export function useManageUsers({
     },
   });
 
+  //CREATE USER
+  const {
+    mutate: handleCreateUser,
+    isPending: isCreatingUser,
+    error: errorCreatingUser,
+    reset: resetCreateUserMutation,
+  } = useMutation({
+    mutationFn: ({
+      data,
+      password
+    }: {
+      data: UserManagementData;
+      password: string
+    }) =>
+      createUser({
+        token: session?.token || "",
+        data: data,
+        password: password
+      }),
+    onSuccess: (data) => {
+      refetchUsers()
+      router.back()
+    },
+  });
+
   //DELETE USER
   const {
     mutate: handleDeleteUser,
@@ -124,5 +150,9 @@ export function useManageUsers({
     isGettingMoreUsers,
     hasMoreUsers,
     fetchNextPageOfUsers,
+    handleCreateUser,
+    isCreatingUser,
+    errorCreatingUser,
+    resetCreateUserMutation,
   };
 }

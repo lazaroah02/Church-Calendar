@@ -46,7 +46,7 @@ export default function EditUser() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar barStyle={"dark-content"} />
+      <StatusBar style="dark" />
       <PageHeader
         title="Editar Usuario"
         onBack={() =>
@@ -60,6 +60,7 @@ export default function EditUser() {
       />
       <UserManagementForm
         user={parsedUserInfo}
+        action="update"
         onCancel={() =>
           router.replace({
             pathname: "/user/detail",
