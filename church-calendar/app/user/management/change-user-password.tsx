@@ -8,7 +8,7 @@ import { ChangePasswordFormData } from "@/types/auth";
 import { router } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useState } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ChangeUserPassword() {

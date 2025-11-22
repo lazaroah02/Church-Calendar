@@ -56,6 +56,7 @@ function RootLayout() {
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
+        <StatusBar style="dark" />
         <Stack>
           <Stack.Protected guard={!session}>
             <Stack.Screen
@@ -124,11 +125,14 @@ function RootLayout() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="group/management/create"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="+not-found"
             options={{ headerShown: false }}
           />
         </Stack>
-        <StatusBar style={"auto"} />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

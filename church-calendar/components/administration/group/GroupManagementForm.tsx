@@ -18,7 +18,7 @@ export function GroupManagementForm({
   onCancel = () => null,
   onSuccess = () => null,
 }: {
-  group: Group | undefined | null;
+  group?: Group | undefined | null;
   onCancel?: () => void;
   onSuccess?: () => void;
 }) {
