@@ -1,25 +1,23 @@
 import { useState } from "react";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
-import { UserInfo } from "@/types/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { View, Image, Text, Pressable } from "react-native";
-import { Button } from "../Button";
-import { CustomInput } from "../form/custom-input";
+import { Button } from "@/components/Button";
+import { CustomInput } from "@/components/form/custom-input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { getImageUri } from "@/lib/get-image-uri";
-import FormErrorBanner from "../form/form-banner-error";
+import FormErrorBanner from "@/components/form/form-banner-error";
 import { pickImage } from "@/lib/pick-image";
-import { CheckBox } from "../form/checkbox";
-import { ChurchGroupsPicker } from "../form/church-groups-picker";
-import { useManageUsers } from "@/hooks/user/useManageUsers";
+import { Group } from "@/types/group";
+import { useManageGroups } from "@/hooks/groups/useManageGroups";
 
-export function UserManagementForm({
-  user,
+export function GroupManagementForm({
+  group,
   onCancel = () => null,
   onSuccess = () => null,
 }: {
-  user: UserInfo | undefined;
+  group: Group | undefined | null;
   onCancel?: () => void;
   onSuccess?: () => void;
 }) {
@@ -27,24 +25,20 @@ export function UserManagementForm({
   const inputColor = "#EBEBEB";
 
   const [profileImage, setProfileImage] = useState(
-    user?.profile_img ? getImageUri(user?.profile_img) : null
+    group?.img ? getImageUri(group?.img) : null
   );
 
   const [formValues, setFormValues] = useState({
-    full_name: user?.full_name || "",
-    phone_number: user?.phone_number || "",
-    email: user?.email || "",
-    description: user?.description || "",
-    is_staff: user?.is_staff || false,
-    is_active: user?.is_active || true,
-    member_groups: user?.member_groups || [],
+    name: group?.name || "",
+    description: group?.description || "",
+    color: group?.color || "",
   });
 
   const {
-    handleUpdateUser,
-    isUpdatingUser: loading,
-    errorUpdatingUser: errors,
-  } = useManageUsers({});
+    handleUpdateGroup,
+    isUpdatingGroup: loading,
+    errorUpdatingGroup: errors,
+  } = useManageGroups();
 
   const handleChange = (
     key: keyof typeof formValues,
@@ -54,9 +48,9 @@ export function UserManagementForm({
   };
 
   const handleSubmit = () => {
-    handleUpdateUser({
-      userId: user?.id,
-      data: { ...formValues, profile_img: profileImage },
+    handleUpdateGroup({
+      groupId: group?.id,
+      data: { ...formValues, img: profileImage },
     });
   };
 
@@ -75,11 +69,11 @@ export function UserManagementForm({
             alignItems: "center",
             gap: 10,
             marginBottom: 10,
-            paddingRight:10,
+            paddingRight: 10,
           }}
         >
-          <Ionicons name="warning-outline" size={30}/>
-          <Text style={[styles.groupLabel, {marginTop:0}]}>
+          <Ionicons name="warning-outline" size={30} />
+          <Text style={[styles.groupLabel, { marginTop: 0 }]}>
             Los cambios realizados pueden tardar unos minutos en reflejarse en
             los datos de los eventos.
           </Text>
@@ -100,7 +94,7 @@ export function UserManagementForm({
               source={{ uri: profileImage }}
             />
           ) : (
-            <Ionicons name="person-outline" size={100} color="#fff" />
+            <Ionicons name="image-outline" size={100} color="#fff" />
           )}
           <View style={styles.cameraIconContainer}>
             <Ionicons name="camera" size={24} color="#fff" />
@@ -111,46 +105,20 @@ export function UserManagementForm({
           <FormErrorBanner
             style={{ marginTop: 10, marginBottom: 0 }}
             message={
-              errors.full_name ||
-              errors.phone_number ||
-              errors.email ||
+              errors.name ||
               errors.description ||
               "Ocurrió un error inesperado. Revisa tu conexión a internet."
             }
           />
         )}
 
-        {/* Full Name */}
-        <Text style={styles.groupLabel}>Nombre Completo</Text>
+        {/* Name */}
+        <Text style={styles.groupLabel}>Nombre</Text>
         <CustomInput
-          error={errors?.full_name}
+          error={errors?.name}
           textContentType="name"
-          value={formValues.full_name}
-          onChangeText={(value) => handleChange("full_name", value)}
-          inputStyle={{ backgroundColor: inputColor }}
-          containerStyle={{ width: "100%" }}
-        />
-
-        {/* Phone */}
-        <Text style={styles.groupLabel}>Teléfono:</Text>
-        <CustomInput
-          error={errors?.phone_number}
-          keyboardType="phone-pad"
-          textContentType="telephoneNumber"
-          value={formValues.phone_number}
-          onChangeText={(value) => handleChange("phone_number", value)}
-          inputStyle={{ backgroundColor: inputColor }}
-          containerStyle={{ width: "100%" }}
-        />
-
-        {/* Email */}
-        <Text style={styles.groupLabel}>Correo:</Text>
-        <CustomInput
-          error={errors?.email}
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          value={formValues.email}
-          onChangeText={(value) => handleChange("email", value)}
+          value={formValues.name}
+          onChangeText={(value) => handleChange("name", value)}
           inputStyle={{ backgroundColor: inputColor }}
           containerStyle={{ width: "100%" }}
         />
@@ -167,29 +135,16 @@ export function UserManagementForm({
           multiline
         />
 
-        {/*Groups*/}
-        <Text style={styles.groupLabel}>Grupos a los que pertenece:</Text>
-        <ChurchGroupsPicker
-          placeholder="Seleccionar"
-          defaultSelectedGroups={formValues.member_groups}
-          excluded_groups={[1, "Todos"]}
-          onChange={(selectedGroups) =>
-            handleChange("member_groups", selectedGroups)
-          }
+        {/* Color */}
+        <Text style={styles.groupLabel}>Color</Text>
+        <CustomInput
+          error={errors?.color}
+          value={formValues.color}
+          onChangeText={(value) => handleChange("color", value)}
+          inputStyle={{ backgroundColor: inputColor }}
+          containerStyle={{ width: "100%" }}
         />
 
-        {/*Access and Permissions*/}
-        <Text style={styles.groupLabel}>Acceso y Permisos:</Text>
-        <CheckBox
-          label="Tiene acceso a la aplicación"
-          checked={formValues.is_active}
-          onCheck={(checked) => handleChange("is_active", checked)}
-        />
-        <CheckBox
-          label="Es Administrador"
-          checked={formValues.is_staff}
-          onCheck={(checked) => handleChange("is_staff", checked)}
-        />
       </KeyboardAwareScrollView>
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center" }}>
         <Button text="Cancelar" onPress={onCancel} style={{ width: "40%" }} />

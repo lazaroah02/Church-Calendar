@@ -4,6 +4,8 @@ import { deleteGroup } from "@/services/groups/management/delete-group";
 import { useSession } from "../auth/useSession";
 import { router } from "expo-router";
 import { useCustomToast } from "../useCustomToast";
+import { updateGroup } from "@/services/groups/management/update-group";
+import { GroupManagementData } from "@/types/group";
 
 export function useManageGroups() {
   const { session } = useSession();
@@ -27,13 +29,43 @@ export function useManageGroups() {
     mutationFn: (groupId: number | string) =>
       deleteGroup({ token: session?.token || "", groupId: groupId }),
     onSuccess: () => {
-      refetchGroups()
+      refetchGroups();
       router.back();
       showSuccessToast({ message: "Grupo eliminado con éxito!" });
     },
     onError: () => {
       showErrorToast({
         message: "Error al eliminar el grupo. Revisa tu conexión a internet.",
+      });
+    },
+  });
+
+  //UPDATE GROUP
+  const {
+    mutate: handleUpdateGroup,
+    isPending: isUpdatingGroup,
+    error: errorUpdatingGroup,
+    reset: resetUpdateGroupMutation,
+  } = useMutation({
+    mutationFn: ({
+      data,
+      groupId,
+    }: {
+      data: GroupManagementData;
+      groupId: number | string | undefined;
+    }) =>
+      updateGroup({
+        token: session?.token || "",
+        data: data,
+        groupId: groupId,
+      }),
+    onSuccess: (data) => {
+      refetchGroups();
+      router.replace({
+        pathname: "/group/management/detail",
+        params: {
+          groupInfo: JSON.stringify(data),
+        },
       });
     },
   });
@@ -47,5 +79,9 @@ export function useManageGroups() {
     isDeletingGroup,
     errorDeletingGroup,
     resetDeleteGroupMutation,
+    handleUpdateGroup,
+    isUpdatingGroup,
+    errorUpdatingGroup,
+    resetUpdateGroupMutation,
   };
 }

@@ -120,6 +120,10 @@ function RootLayout() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="group/management/edit"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="+not-found"
             options={{ headerShown: false }}
           />

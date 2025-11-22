@@ -10,3 +10,10 @@ export type GroupReducedInfo = {
     name: string
     color: string
 }
+
+export interface GroupManagementData {
+  img?: string | null  
+  name: string;
+  description: string;
+  color: string;
+}

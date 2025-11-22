@@ -43,7 +43,7 @@ export function GroupThreeDotsMenuOptions({
         onPress={() => {
           closeParent();
           router.replace({
-            pathname: "/user/management/edit",
+            pathname: "/group/management/edit",
             params: {
               groupInfo: JSON.stringify(group),
             },
