@@ -5,6 +5,9 @@ import { Search } from "../Search";
 import { UserFilters, UserFiltersBottomSheet } from "../UserFilters";
 import { useMemo, useState } from "react";
 import { debounce } from "@/lib/debounce";
+import { Button } from "@/components/Button";
+import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 export const UsersTab = () => {
   const [search, setSearch] = useState("");
@@ -66,6 +69,20 @@ export const UsersTab = () => {
           !isGettingMoreUsers && hasMoreUsers && fetchNextPageOfUsers()
         }
       />
+      <Button
+        variant="submit"
+        onPress={() => router.push("/group/management/create")}
+        text=""
+        style={{
+          width: 50,
+          height: 50,
+          position: "absolute",
+          bottom: 20,
+          right: 20,
+        }}
+      >
+        <Ionicons name="add" size={30} color="#fff" />
+      </Button>
       {userFiltersBottomSheet()}
     </View>
   );
