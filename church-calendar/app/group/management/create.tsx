@@ -19,7 +19,7 @@ export default function CreateGroup() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <PageHeader title="Crear Grupo" onBack={() => router.back()} />
-      <GroupManagementForm onCancel={() => router.back()} />
+      <GroupManagementForm onCancel={() => router.back()} action="create"/>
     </SafeAreaView>
   );
 }

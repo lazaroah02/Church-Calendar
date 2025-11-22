@@ -60,7 +60,7 @@ const GroupAvatarStyles = (theme: AppTheme) => ({
     backgroundColor: "#37C6FF",
     width: 45,
     height: 45,
-    padding: 3,
+    padding: 2,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",

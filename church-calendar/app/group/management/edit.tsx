@@ -67,6 +67,7 @@ export default function EditGroup() {
       />
       <GroupManagementForm
         group={parsedGroupInfo}
+        action="update"
         onCancel={() =>
           router.replace({
             pathname: "/group/management/detail",

@@ -17,10 +17,12 @@ export function GroupManagementForm({
   group,
   onCancel = () => null,
   onSuccess = () => null,
+  action = "update",
 }: {
   group?: Group | undefined | null;
   onCancel?: () => void;
   onSuccess?: () => void;
+  action: "update" | "create";
 }) {
   const styles = useThemeStyles(userManagementForm);
   const inputColor = "#EBEBEB";
@@ -38,9 +40,15 @@ export function GroupManagementForm({
 
   const {
     handleUpdateGroup,
-    isUpdatingGroup: loading,
-    errorUpdatingGroup: errors,
+    isUpdatingGroup,
+    errorUpdatingGroup,
+    handleCreateGroup,
+    isCreatingGroup,
+    errorCreatingGroup,
   } = useManageGroups();
+
+  const loading = isUpdatingGroup || isCreatingGroup;
+  const errors = errorUpdatingGroup || errorCreatingGroup;
 
   const handleChange = (
     key: keyof typeof formValues,
@@ -50,10 +58,16 @@ export function GroupManagementForm({
   };
 
   const handleSubmit = () => {
-    handleUpdateGroup({
-      groupId: group?.id,
-      data: { ...formValues, img: profileImage, color: groupColor },
-    });
+    if (action === "update") {
+      handleUpdateGroup({
+        groupId: group?.id,
+        data: { ...formValues, img: profileImage, color: groupColor },
+      });
+    } else {
+      handleCreateGroup({
+        data: { ...formValues, img: profileImage, color: groupColor },
+      });
+    }
   };
 
   return (
