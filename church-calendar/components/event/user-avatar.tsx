@@ -9,24 +9,31 @@ import { Pressable, View, Text, Image } from "react-native";
 export const UserAvatar = ({
   title,
   user,
+  onPress = (user) =>
+    router.push({
+      pathname: "/user/detail",
+      params: {
+        userInfo: JSON.stringify(user),
+      },
+    }),
+  onLongPress = () => null,
+  pressableStyle = {},
 }: {
-  title: string;
+  title?: string;
   user?: UserInfo;
+  onPress?: (user: UserInfo | undefined) => void;
+  onLongPress?: (user: UserInfo | undefined) => void;
+  pressableStyle?: object;
 }) => {
   const styles = useThemeStyles(UserAvatarStyles);
   return (
     <>
-      <Text style={styles.label}>{title}</Text>
+      {title != null? <Text style={styles.label}>{title}</Text> : null}
+
       <Pressable
-        onPress={() =>
-          router.push({
-            pathname: "/user/detail",
-            params: {
-              userInfo: JSON.stringify(user),
-            },
-          })
-        }
-        style={styles.createdByContainer}
+        onPress={() => onPress(user)}
+        onLongPress={() => onLongPress(user)}
+        style={[styles.createdByContainer, pressableStyle]}
       >
         <View style={styles.profilePictureContainer}>
           {user?.profile_img ? (

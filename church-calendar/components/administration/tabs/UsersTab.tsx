@@ -2,20 +2,16 @@ import { View, FlatList, Text } from "react-native";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { UserAvatar } from "@/components/event/user-avatar";
 import { Search } from "../Search";
-import { UserFilters, UserFiltersBottomSheet } from "../UserFilters";
-import { useMemo, useState } from "react";
-import { debounce } from "@/lib/debounce";
+import { UserFiltersBottomSheet } from "../UserFilters";
 import { Button } from "@/components/Button";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useUserAdministrationFilters } from "@/hooks/administration/useUserAdministrationFilters";
+import { useSelectedItems } from "@/hooks/administration/useSelectedItems";
 
 export const UsersTab = () => {
-  const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState<UserFilters>({
-    is_staff: "",
-    is_active: "",
-    member_groups: [],
-  });
+  const { search, setFilters, filters, debouncedSearch } =
+    useUserAdministrationFilters();
 
   const {
     users,
@@ -26,16 +22,13 @@ export const UsersTab = () => {
     isGettingUsers,
   } = useManageUsers({ searchTerm: search, filters: filters });
 
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearch(value), 500),
-    []
-  );
-
   const { userFiltersBottomSheet, openUserFiltersBottomSheetButton } =
     UserFiltersBottomSheet({
       handleFilterChange: setFilters,
       defaultFilters: filters,
     });
+
+  const { selected, toggleSelect } = useSelectedItems<number | undefined>();
 
   return (
     <View style={{ flex: 1, padding: 20, paddingBottom: 0 }}>
@@ -52,7 +45,32 @@ export const UsersTab = () => {
         onRefresh={refetchUsers}
         refreshing={isGettingUsers}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <UserAvatar user={item} title="" />}
+        renderItem={({ item }) => {
+          const isSelected = selected.includes(item.id);
+          return (
+            <UserAvatar
+              user={item}
+              pressableStyle={{
+                backgroundColor: isSelected ? "#a5aab053" : "transparent",
+                borderRadius: isSelected ? 10 : 0,
+                padding: 20,
+                paddingLeft: 5,
+                marginBottom: 5,
+              }}
+              onPress={(user) =>
+                selected.length > 0
+                  ? toggleSelect(user?.id)
+                  : router.push({
+                      pathname: "/user/detail",
+                      params: {
+                        userInfo: JSON.stringify(user),
+                      },
+                    })
+              }
+              onLongPress={(user) => toggleSelect(user?.id)}
+            />
+          );
+        }}
         ListFooterComponent={
           <View style={{ padding: 20, justifyContent: "center" }}>
             {isGettingMoreUsers && (

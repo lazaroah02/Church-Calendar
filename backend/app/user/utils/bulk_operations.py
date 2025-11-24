@@ -29,6 +29,11 @@ def handle_bulk_delete(
     try:
         ids_to_delete = request.data.get(ids_field_name)
 
+        if request.user.id in ids_to_delete:
+            logger.warning(f"User {user} tried to delete himself.")
+            return Response({"message": gettext("You can't delete yourself while you're logged in")},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
         if not ids_to_delete:
             logger.warning(f"User {user} tried bulk delete without '{ids_field_name}' field.")
             return Response({"message": gettext(f"missing '{ids_field_name}' in query body")},

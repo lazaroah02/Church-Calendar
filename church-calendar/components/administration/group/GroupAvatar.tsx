@@ -8,15 +8,18 @@ import { Pressable, View, Text, Image } from "react-native";
 export const GroupAvatar = ({
   group,
   onPress = () => null,
+  onLongPress = () => null,
 }: {
   group?: Group;
   onPress?: (group: Group | undefined) => void;
+  onLongPress?: (group: Group | undefined) => void;
 }) => {
   const styles = useThemeStyles(GroupAvatarStyles);
   return (
     <>
       <Pressable
         onPress={() => onPress(group)}
+        onLongPress={() => onLongPress(group)}
         style={styles.createdByContainer}
       >
         <View
