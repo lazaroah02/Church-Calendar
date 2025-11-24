@@ -1,13 +1,14 @@
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList, Text, Pressable } from "react-native";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { UserAvatar } from "@/components/event/user-avatar";
 import { Search } from "../Search";
 import { UserFiltersBottomSheet } from "../UserFilters";
-import { Button } from "@/components/Button";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useUserAdministrationFilters } from "@/hooks/administration/useUserAdministrationFilters";
 import { useSelectedItems } from "@/hooks/administration/useSelectedItems";
+import { CustomMenu } from "@/components/CustomMenu";
+import { UserOptions } from "../user/UserOptions";
 
 export const UsersTab = () => {
   const { search, setFilters, filters, debouncedSearch } =
@@ -28,17 +29,25 @@ export const UsersTab = () => {
       defaultFilters: filters,
     });
 
-  const { selected, toggleSelect } = useSelectedItems<number | undefined>();
+  const { selected, toggleSelect, clearSelected } = useSelectedItems<
+    number | undefined
+  >();
 
   return (
     <View style={{ flex: 1, padding: 20, paddingBottom: 0 }}>
       <View style={styles.searchContainer}>
         <Search
-          containerStyle={{ width: "85%" }}
+          containerStyle={{ flex: 1 }}
           initialSearchValue={search}
           onSearch={(searchValue: string) => debouncedSearch(searchValue)}
         />
         {openUserFiltersBottomSheetButton()}
+
+        <CustomMenu
+          renderItems={(closeParent) => (
+            <UserOptions closeParent={closeParent} selected={selected} />
+          )}
+        />
       </View>
       <FlatList
         data={users}
@@ -87,21 +96,14 @@ export const UsersTab = () => {
           !isGettingMoreUsers && hasMoreUsers && fetchNextPageOfUsers()
         }
       />
-      <Button
-        variant="submit"
-        onPress={() => router.push("/user/management/create")}
-        text=""
-        style={{
-          width: 50,
-          height: 50,
-          position: "absolute",
-          bottom: 20,
-          right: 20,
-        }}
-      >
-        <Ionicons name="add" size={30} color="#fff" />
-      </Button>
       {userFiltersBottomSheet()}
+
+      {/*Clear selected items button*/}
+      {selected.length > 0 && (
+        <Pressable onPress={clearSelected} style={styles.clearSelectedButton}>
+          <Ionicons name="close-outline" size={27} color="black" />
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -111,7 +113,18 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 20,
+    gap: 30,
     marginBottom: 10,
+  },
+  clearSelectedButton: {
+    width: 40,
+    height: 40,
+    position: "absolute",
+    bottom: 30,
+    left: "50%",
+    borderRadius: "100%",
+    backgroundColor: "gray",
+    alignItems: "center",
+    justifyContent: "center",
   },
 };

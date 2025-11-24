@@ -36,20 +36,26 @@ def handle_bulk_delete(
         
         if not ids_to_delete:
             logger.warning(f"User {user} tried bulk delete without '{ids_field_name}' field.")
-            return Response({"message": gettext(f"missing '{ids_field_name}' in query body")},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": gettext("Missing '{field}' in query body").format(field=ids_field_name)},
+                status=status.HTTP_400_BAD_REQUEST
+                )
 
         if not all(isinstance(id_, int) for id_ in ids_to_delete):
             logger.warning(f"User {user} sent invalid {log_name} IDs: {ids_to_delete}")
-            return Response({"message": gettext(f"Invalid {log_name} IDs.")},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": gettext("Invalid {log_name} IDs.").format(log_name=log_name)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         deleted_count, _ = model.objects.filter(id__in=ids_to_delete).delete()
 
         if deleted_count == 0:
             logger.info(f"User {user} attempted bulk delete but no {log_name} deleted. IDs: {ids_to_delete}")
-            return Response({"message": gettext(f"No {log_name} were deleted. Check if the IDs are correct.")},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": gettext("No {log_name} were deleted. Check if the IDs are correct.").format(log_name=log_name)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         logger.info(f"User {user} bulk deleted {deleted_count} {log_name}. IDs: {ids_to_delete}")
         return Response([], status=status.HTTP_200_OK)

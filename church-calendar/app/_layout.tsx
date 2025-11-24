@@ -13,6 +13,7 @@ import { AppThemeProvider } from "@/contexts/theme-context";
 import { queryClient, persister } from "@/lib/query-client";
 import { CalendarContextProvider } from "@/contexts/calendar-context/calendarContext";
 import { ToastProvider } from "expo-toast";
+import {MD3LightTheme, PaperProvider} from "react-native-paper"
 
 export default function Root() {
   const [hydrated, setHydrated] = useState(false);
@@ -32,7 +33,9 @@ export default function Root() {
           <CalendarContextProvider>
             <AppThemeProvider>
               <SplashScreenController />
-              <RootLayout />
+              <PaperProvider theme={MD3LightTheme}>
+                <RootLayout />
+              </PaperProvider>
             </AppThemeProvider>
           </CalendarContextProvider>
         </SessionProvider>

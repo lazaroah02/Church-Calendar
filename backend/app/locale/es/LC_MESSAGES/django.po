@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-21 21:48-0500\n"
+"POT-Creation-Date: 2025-11-24 17:11-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
-#: .\authentication\serializers.py:54 .\user\serializers.py:82
+#: .\authentication\serializers.py:54 .\user\serializers.py:85
 msgid "A user with this email already exists."
 msgstr "Ya existe un usuario con este correo electrónico."
 
-#: .\authentication\serializers.py:59 .\user\serializers.py:88
+#: .\authentication\serializers.py:59 .\user\serializers.py:91
 msgid "A user with this username already exists."
 msgstr "Ya existe un usuario con este nombre de usuario."
 
@@ -87,10 +87,29 @@ msgstr "Indica si el usuario puede iniciar sesión"
 msgid "Designates whether the user can access the admin panel"
 msgstr "Indica si el usuario puede acceder al panel de administración"
 
-#: .\user\serializers.py:74
+#: .\user\serializers.py:77
 msgid "An admin/superuser user must be staff too"
 msgstr ""
 "Un usuario administrador o superusuario también debe ser parte del personal"
+
+#: .\user\utils\bulk_operations.py:34
+msgid "You can't delete yourself while you're logged in"
+msgstr "No puedes borrar tu propio usuario mientras estas logeado."
+
+#: .\user\utils\bulk_operations.py:40
+#, python-brace-format
+msgid "Missing '{field}' in query body"
+msgstr "Debes seleccionar al menos un '{field}'."
+
+#: .\user\utils\bulk_operations.py:47
+#, python-brace-format
+msgid "Invalid {log_name} IDs."
+msgstr "IDs de {log_name} inválido."
+
+#: .\user\utils\bulk_operations.py:56
+#, python-brace-format
+msgid "No {log_name} were deleted. Check if the IDs are correct."
+msgstr "Ningún {log_name} fue borrado. Verifica que sus IDs sean correctos."
 
 #: .\user\views.py:95
 msgid "Password was not provided"

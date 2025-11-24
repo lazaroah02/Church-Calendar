@@ -13,6 +13,7 @@ import {
   UserFilters,
 } from "@/components/administration/UserFilters";
 import { createUser } from "@/services/user/management/create-user";
+import { bulkDeleteUsers } from "@/services/user/management/bulk-delete-users";
 
 export function useManageUsers({
   searchTerm = "",
@@ -117,7 +118,7 @@ export function useManageUsers({
     mutate: handleDeleteUser,
     isPending: isDeletingUser,
     error: errorDeletingUser,
-    reset: resetDeleteEventMutation,
+    reset: resetDeleteUserMutation,
   } = useMutation({
     mutationFn: (userId: number | string) =>
       deleteUser({ token: session?.token || "", userId: userId }),
@@ -133,11 +134,33 @@ export function useManageUsers({
     },
   });
 
+  //BULK DELETE USERS
+  const {
+    mutate: handleBulkDeleteUsers,
+    isPending: isBulkDeletingUsers,
+    error: errorBulkDeletingUsers,
+    status: bulkDeleteUsersStatus,
+    reset: resetBulkDeleteUsersMutation,
+  } = useMutation({
+    mutationFn: (userIds: number[]) => {
+      return bulkDeleteUsers({ token: session?.token || "", userIds: userIds })
+    },
+    onSuccess: () => {
+      refetchUsers()
+      showSuccessToast({ message: "Usuarios eliminados con éxito!" });
+    },
+    onError: (error) => {
+      showErrorToast({
+        message: error.message,
+      });
+    },
+  });
+
   return {
     handleDeleteUser,
     isDeletingUser,
     errorDeletingUser,
-    resetDeleteEventMutation,
+    resetDeleteUserMutation,
     errorUpdatingUser,
     handleUpdateUser,
     isUpdatingUser,
@@ -154,5 +177,10 @@ export function useManageUsers({
     isCreatingUser,
     errorCreatingUser,
     resetCreateUserMutation,
+    handleBulkDeleteUsers,
+    isBulkDeletingUsers,
+    errorBulkDeletingUsers,
+    resetBulkDeleteUsersMutation,
+    bulkDeleteUsersStatus
   };
 }

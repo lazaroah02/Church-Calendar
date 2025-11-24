@@ -1,5 +1,4 @@
 import { PageHeader } from "@/components/PageHeader";
-import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text } from "react-native";
 import { TabView, TabBar } from "react-native-tab-view";
@@ -17,12 +16,6 @@ export default function Administration() {
       <StatusBar style="dark" />
       <PageHeader
         title="Administración"
-        rightComponent={
-          <SimpleThreeDotsMenu
-            modalStyles={{ right: 30, top: 70 }}
-            childrenComponentFunction={(closeParent) => null}
-          />
-        }
       />
       <TabView
         style={{ flex: 1 }}

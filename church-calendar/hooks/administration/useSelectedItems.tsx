@@ -10,8 +10,11 @@ export function useSelectedItems<T>() {
     );
   };
 
+  const clearSelected = () => setSelected([])
+
   return {
     selected,
     toggleSelect,
+    clearSelected
   };
 }
