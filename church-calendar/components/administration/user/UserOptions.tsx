@@ -7,14 +7,15 @@ import { Menu } from "react-native-paper";
 export function UserOptions({
   closeParent,
   selected = [],
+  clearSelected = () => null
 }: {
   closeParent: () => void;
   selected?: any[];
+  clearSelected: () => void
 }) {
   const {
     handleBulkDeleteUsers,
     isBulkDeletingUsers,
-    errorBulkDeletingUsers,
     bulkDeleteUsersStatus,
   } = useManageUsers({});
 
@@ -25,15 +26,16 @@ export function UserOptions({
   });
 
   useEffect(() => {
-    if (errorBulkDeletingUsers) {
+    if (bulkDeleteUsersStatus === "error" || bulkDeleteUsersStatus === "success") {
       hideConfirm();
       closeParent();
     }
     if (bulkDeleteUsersStatus === "success") {
       hideConfirm();
       closeParent();
+      clearSelected()
     }
-  }, [errorBulkDeletingUsers, hideConfirm, bulkDeleteUsersStatus, closeParent]);
+  }, [hideConfirm, bulkDeleteUsersStatus, closeParent, clearSelected]);
 
   return (
     <>

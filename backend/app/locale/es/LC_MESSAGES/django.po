@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 17:11-0500\n"
+"POT-Creation-Date: 2025-11-25 16:54-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,24 @@ msgstr "El color blanco no puede ser usado. Por favor utiliza otro."
 #: .\church_group\serializers.py:26
 msgid "Invalid color format. Please provide a valid hex color code."
 msgstr "Formato de color inválido. Por favor utiliza otro."
+
+#: .\church_group\views.py:60
+msgid "You cannot remove users from the general group."
+msgstr "No puedes eliminar usuarios del grupo general."
+
+#: .\church_group\views.py:66
+#, fuzzy
+msgid "Missing users_to_delete in query body"
+msgstr "Debes seleccionar al menos un usuario."
+
+#: .\church_group\views.py:72
+#, fuzzy
+msgid "Invalid users IDs."
+msgstr "Los IDs de usuario proporcionados no son correctos."
+
+#: .\church_group\views.py:81
+msgid "Error on the request. Verify the group exists."
+msgstr "Error en la operación. Verifica que el grupo exista."
 
 #: .\event\views.py:135 .\event\views.py:169 .\event\views.py:211
 msgid "Authentication required to make reservations."

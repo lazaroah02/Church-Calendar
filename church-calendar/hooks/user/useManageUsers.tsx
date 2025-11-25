@@ -14,6 +14,7 @@ import {
 } from "@/components/administration/UserFilters";
 import { createUser } from "@/services/user/management/create-user";
 import { bulkDeleteUsers } from "@/services/user/management/bulk-delete-users";
+import { bulkRemoveUsersFromGroup } from "@/services/user/management/bulk-remove-users-from-group";
 
 export function useManageUsers({
   searchTerm = "",
@@ -50,6 +51,7 @@ export function useManageUsers({
       return undefined;
     },
     initialPageParam: 1,
+    staleTime: 0
   });
 
   const users: UserInfo[] = useMemo(
@@ -78,7 +80,6 @@ export function useManageUsers({
         userId: userId,
       }),
     onSuccess: (data) => {
-      //refreshUsers()
       router.replace({
         pathname: "/user/detail",
         params: {
@@ -123,7 +124,6 @@ export function useManageUsers({
     mutationFn: (userId: number | string) =>
       deleteUser({ token: session?.token || "", userId: userId }),
     onSuccess: () => {
-      //refreshUsers()
       router.back();
       showSuccessToast({ message: "Usuario eliminado con éxito!" });
     },
@@ -148,6 +148,26 @@ export function useManageUsers({
     onSuccess: () => {
       refetchUsers()
       showSuccessToast({ message: "Usuarios eliminados con éxito!" });
+    },
+    onError: (error) => {
+      showErrorToast({
+        message: error.message,
+      });
+    },
+  });
+
+  //BULK REMOVE USERS FROM GROUP
+  const {
+    mutate: handleBulkRemoveUsersFromGroup,
+    isPending: isRemovingUsersFromGroup,
+    error: errorRemovingUsersFromGroup,
+    reset: resetBulkRemoveUsersFromGroupMutation,
+    status: bulkRemoveUsersFromGroupStatus
+  } = useMutation({
+    mutationFn: ({groupId, userIds}:{groupId: number | string, userIds: number[]}) =>
+      bulkRemoveUsersFromGroup({ token: session?.token || "", groupId: groupId, userIds: userIds }),
+    onSuccess: () => {
+      showSuccessToast({ message: "Operación exitosa!" });
     },
     onError: (error) => {
       showErrorToast({
@@ -181,6 +201,11 @@ export function useManageUsers({
     isBulkDeletingUsers,
     errorBulkDeletingUsers,
     resetBulkDeleteUsersMutation,
-    bulkDeleteUsersStatus
+    bulkDeleteUsersStatus,
+    handleBulkRemoveUsersFromGroup,
+    isRemovingUsersFromGroup,
+    errorRemovingUsersFromGroup,
+    resetBulkRemoveUsersFromGroupMutation,
+    bulkRemoveUsersFromGroupStatus
   };
 }

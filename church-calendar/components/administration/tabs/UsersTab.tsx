@@ -45,7 +45,7 @@ export const UsersTab = () => {
 
         <CustomMenu
           renderItems={(closeParent) => (
-            <UserOptions closeParent={closeParent} selected={selected} />
+            <UserOptions closeParent={closeParent} selected={selected} clearSelected={clearSelected}/>
           )}
         />
       </View>

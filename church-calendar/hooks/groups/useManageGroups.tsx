@@ -105,6 +105,6 @@ export function useManageGroups() {
     handleCreateGroup,
     isCreatingGroup,
     errorCreatingGroup,
-    resetCreateGroupMutation,
+    resetCreateGroupMutation
   };
 }

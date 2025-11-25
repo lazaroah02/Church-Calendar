@@ -143,6 +143,7 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
       <BulkDeleteUsersFromGroupButton
         selected={selected}
         clearSelected={clearSelected}
+        group={group}
       />
     </>
   );
