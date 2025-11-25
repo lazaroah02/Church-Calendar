@@ -40,6 +40,7 @@ export function UserOptions({
       {confirm()}
       <Menu.Item
         title="Crear"
+        leadingIcon="plus"
         onPress={() => {
           router.push("/user/management/create");
           closeParent();
@@ -47,6 +48,7 @@ export function UserOptions({
       />
       <Menu.Item
         title="Eliminar"
+        leadingIcon="delete"
         onPress={() => {
           showConfirm();
         }}

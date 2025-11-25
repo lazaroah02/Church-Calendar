@@ -1,17 +1,51 @@
 import { useManageGroups } from "@/hooks/groups/useManageGroups";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import { GroupAvatar } from "../group/GroupAvatar";
 import { router } from "expo-router";
-import { Button } from "@/components/Button";
-import { Ionicons } from "@expo/vector-icons";
+import { Search } from "../Search";
+import { CustomMenu } from "@/components/CustomMenu";
+import { Menu } from "react-native-paper";
+import { useGroupAdministrationFilters } from "@/hooks/administration/useGroupAdministrationFilters";
 
 export const GroupsTab = () => {
   const { groups, loadingGroups, errorGettingGroups, refetchGroups } =
     useManageGroups();
+
+  const { filteredGroups, handleSearch } = useGroupAdministrationFilters({
+    groups: groups,
+  });
+
   return (
     <View style={{ flex: 1, padding: 20 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 30,
+          marginBottom: 10,
+        }}
+      >
+        <Search
+          initialSearchValue=""
+          onSearch={(searchValue) => handleSearch(searchValue)}
+          containerStyle={{ width: "85%" }}
+        />
+        <CustomMenu
+          renderItems={(closeParent) => (
+            <Menu.Item
+              title="Crear Grupo"
+              leadingIcon="plus"
+              onPress={() => {
+                router.push("/group/management/create");
+                closeParent();
+              }}
+            />
+          )}
+        />
+      </View>
       <FlatList
-        data={groups}
+        data={filteredGroups}
         onRefresh={refetchGroups}
         refreshing={loadingGroups}
         keyExtractor={(item) => item.id.toString()}
@@ -30,21 +64,16 @@ export const GroupsTab = () => {
             />
           </View>
         )}
+        ListFooterComponent={
+          <View style={{ padding: 20, justifyContent: "center" }}>
+            {!loadingGroups && errorGettingGroups && (
+              <Text style={{ textAlign: "center" }}>
+                Error al obtener los grupos. Revisa tu conexión a internet.
+              </Text>
+            )}
+          </View>
+        }
       />
-      <Button
-        variant="submit"
-        onPress={() => router.push("/group/management/create")}
-        text=""
-        style={{
-          width: 50,
-          height: 50,
-          position: "absolute",
-          bottom: 20,
-          right: 20,
-        }}
-      >
-        <Ionicons name="add" size={30} color="#fff" />
-      </Button>
     </View>
   );
 };
