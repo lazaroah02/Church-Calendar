@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://192.168.1.229:8000'
+export const BASE_URL = 'http://192.168.1.199:8000'
 
 export const EVENTS_URL = `${BASE_URL}/api/events`
 export const CHURCH_GROUPS_URL = `${BASE_URL}/api/church-groups/`

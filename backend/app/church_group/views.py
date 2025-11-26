@@ -1,4 +1,5 @@
 import logging
+from backend.app import user
 from rest_framework import viewsets
 from church_group.models import GENERAL_GROUP_NAME, ChurchGroup
 from church_group.serializers import (
@@ -63,7 +64,7 @@ class ChurchGroupsManagement(viewsets.ModelViewSet):
 
             if not ids_to_delete:
                 return Response(
-                    {"message": gettext("Missing users_to_delete in query body")},
+                    {"message": gettext("Missing users_to_remove in query body")},
                     status=status.HTTP_400_BAD_REQUEST
                     )
 
@@ -74,6 +75,32 @@ class ChurchGroupsManagement(viewsets.ModelViewSet):
                 )
 
             group.members.remove(*ids_to_delete)
+
+            return Response([], status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"message": gettext("Error on the request. Verify the group exists.")}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=["PUT"], detail=True)
+    def bulk_add_users_to_group(self, request, pk):
+        try:
+            user_ids = request.data.get("users")
+
+            group = ChurchGroup.objects.get(id=pk)
+
+            if not user_ids:
+                return Response(
+                    {"message": gettext("Missing users in query body")},
+                    status=status.HTTP_400_BAD_REQUEST
+                    )
+
+            if not all(isinstance(id_, int) for id_ in user_ids):
+                return Response(
+                    {"message": gettext("Invalid users IDs.")},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            group.members.add(*user_ids)
 
             return Response([], status=status.HTTP_200_OK)
 

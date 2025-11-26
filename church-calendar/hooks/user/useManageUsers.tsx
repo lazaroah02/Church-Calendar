@@ -15,6 +15,7 @@ import {
 import { createUser } from "@/services/user/management/create-user";
 import { bulkDeleteUsers } from "@/services/user/management/bulk-delete-users";
 import { bulkRemoveUsersFromGroup } from "@/services/user/management/bulk-remove-users-from-group";
+import { bulkAddUsersToGroup } from "@/services/user/management/bulk-add-users-to-group";
 
 export function useManageUsers({
   searchTerm = "",
@@ -175,6 +176,26 @@ export function useManageUsers({
       });
     },
   });
+  
+  //BULK ADD USERS TO GROUP
+  const {
+    mutate: handleBulkAddUsersToGroup,
+    isPending: isAddingUsersToGroup,
+    error: errorAddingUsersToGroup,
+    reset: resetBulkAddUserstoGroupMutation,
+    status: bulkAddUsersToGroupStatus
+  } = useMutation({
+    mutationFn: ({groupId, userIds}:{groupId: number | string, userIds: number[]}) =>
+      bulkAddUsersToGroup({ token: session?.token || "", groupId: groupId, userIds: userIds }),
+    onSuccess: () => {
+      showSuccessToast({ message: "Operación exitosa!" });
+    },
+    onError: (error) => {
+      showErrorToast({
+        message: error.message,
+      });
+    },
+  });
 
   return {
     handleDeleteUser,
@@ -206,6 +227,10 @@ export function useManageUsers({
     isRemovingUsersFromGroup,
     errorRemovingUsersFromGroup,
     resetBulkRemoveUsersFromGroupMutation,
-    bulkRemoveUsersFromGroupStatus
+    bulkRemoveUsersFromGroupStatus,
+    bulkAddUsersToGroup,
+    isAddingUsersToGroup,
+    errorAddingUsersToGroup,
+    bulkAddUsersToGroupStatus
   };
 }

@@ -55,6 +55,13 @@ export function UserOptions({
           showConfirm();
         }}
       />
+      <Menu.Item
+        title="Agregar a Grupo"
+        leadingIcon="link"
+        onPress={() => {
+          
+        }}
+      />
     </>
   );
 }
