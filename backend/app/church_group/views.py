@@ -1,5 +1,4 @@
 import logging
-from backend.app import user
 from rest_framework import viewsets
 from church_group.models import GENERAL_GROUP_NAME, ChurchGroup
 from church_group.serializers import (

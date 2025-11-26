@@ -35,7 +35,7 @@ export function GroupThreeDotsMenuOptions({
       {confirm()}
       <TouchableOpacity style={styles.touchable} onPress={showConfirm}>
         <Ionicons name="trash-outline" size={20} />
-        <Text style={styles.text}>Eliminar</Text>
+        <Text style={styles.text}>Eliminar Grupo</Text>
       </TouchableOpacity>
       <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
       <TouchableOpacity
@@ -51,7 +51,7 @@ export function GroupThreeDotsMenuOptions({
         }}
       >
         <Ionicons name="pencil-outline" size={20} />
-        <Text style={styles.text}>Editar</Text>
+        <Text style={styles.text}>Editar Grupo</Text>
       </TouchableOpacity>
     </>
   );

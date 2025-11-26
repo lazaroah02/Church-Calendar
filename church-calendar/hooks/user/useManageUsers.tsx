@@ -52,7 +52,6 @@ export function useManageUsers({
       return undefined;
     },
     initialPageParam: 1,
-    staleTime: 0
   });
 
   const users: UserInfo[] = useMemo(
@@ -228,7 +227,7 @@ export function useManageUsers({
     errorRemovingUsersFromGroup,
     resetBulkRemoveUsersFromGroupMutation,
     bulkRemoveUsersFromGroupStatus,
-    bulkAddUsersToGroup,
+    handleBulkAddUsersToGroup,
     isAddingUsersToGroup,
     errorAddingUsersToGroup,
     bulkAddUsersToGroupStatus

@@ -151,7 +151,7 @@ const ChurchGroupsPicker = ({
             }}
           />
 
-          {/* Botón Confirmar */}
+          {/* Confirm Button */}
           <TouchableOpacity
             onPress={confirmSelection}
             style={styles.confirmButton}
@@ -159,7 +159,7 @@ const ChurchGroupsPicker = ({
             <Text style={styles.confirmButtonText}>Confirmar selección</Text>
           </TouchableOpacity>
 
-          {/* Botón Cancelar */}
+          {/* Cancel Button */}
           <TouchableOpacity
             onPress={() => {
               setTempGroups(selectedGroups);
