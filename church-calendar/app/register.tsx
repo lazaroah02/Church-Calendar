@@ -4,11 +4,9 @@ import {
   Text,
   View,
   Pressable,
-  TextInput,
   ActivityIndicator,
 } from "react-native";
 import DateTimePicker, {
-  DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 
 import { useSession } from "@/hooks/auth/useSession";
