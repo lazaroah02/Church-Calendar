@@ -4,7 +4,7 @@
     "slug": "church-calendar",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/adaptive-icon.png",
     "scheme": "churchcalendar",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -12,7 +12,6 @@
       "supportsTablet": true
     },
     "android": {
-      "devClient": false,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -39,7 +38,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
