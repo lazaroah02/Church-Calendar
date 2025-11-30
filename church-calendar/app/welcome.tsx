@@ -16,7 +16,7 @@ export default function Welcome() {
           source={require("@/assets/images/Logo.png")}
           style={styles.logo}
         />
-        <Text style={styles.title}>La Resurrección Calendar</Text>
+        <Text style={styles.title}>Calendario La Resurrección</Text>
       </View>
       <View style={styles.container}>
         <Text style={styles.containerTitle}>Bienvenido</Text>
