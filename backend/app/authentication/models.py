@@ -12,14 +12,14 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError('User most have email')
         email = self.normalize_email(email)
-        user = self.model(email=email)
+        username = email.split('@')[0].lower()
+        user = self.model(email=email, username=username)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password=None):
         user = self.create_user(email, password)
-        user.username = user.email.split('@')[0].lower()
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
