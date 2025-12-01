@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from church_group.models import ChurchGroup
 from django.core.validators import MinValueValidator
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+import os
 
 EVENT_IMAGES_FOLDER = 'event_images'
 
@@ -46,3 +49,17 @@ class Event(models.Model):
     class Meta:
         ordering = ['start_time']
 
+
+@receiver(post_delete, sender=Event)
+def delete_event_image(sender, instance, **kwargs):
+    """
+    Delete related image from the filesystem when an event is deleted.
+    """
+    try:
+        img = getattr(instance, "img")
+        if img is not None:
+            img_path = img.path
+            if os.path.exists(img_path):
+                os.remove(img_path)
+    except Exception:
+        pass

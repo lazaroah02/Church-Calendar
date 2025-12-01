@@ -1,8 +1,9 @@
 from django.db import models
 from django.db import transaction
-from django.db.models.signals import post_save, post_migrate, pre_save
-from django.dispatch import receiver
+from django.db.models.signals import post_save, post_migrate, pre_save, post_delete
 from django.contrib.auth import get_user_model
+from django.dispatch import receiver
+import os
 
 GROUPS_IMAGES_FILDER = 'church_groups_images'
 GENERAL_GROUP_NAME = "Todos"
@@ -79,3 +80,18 @@ def ensure_general_group_is_not_modified(sender, instance, **kwargs):
             # Prevent modification of the general group
             instance.name = GENERAL_GROUP_NAME
             instance.description = GENERAL_GROUP_DESCRIPTION
+
+
+@receiver(post_delete, sender=ChurchGroup)
+def delete_group_image(sender, instance, **kwargs):
+    """
+    Delete related image from the filesystem when a group is deleted.
+    """
+    try:
+        img = getattr(instance, "img")
+        if img is not None:
+            img_path = img.path
+            if os.path.exists(img_path):
+                os.remove(img_path)
+    except Exception:
+        pass

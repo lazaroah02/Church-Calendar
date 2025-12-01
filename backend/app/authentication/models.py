@@ -3,6 +3,9 @@ from django.contrib.auth.models import (
     )
 from django.db import models
 from church_group.models import ChurchGroup
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+import os
 
 USER_PROFILE_IMAGE_MEDIA_FOLDER = 'user-profile-image'
 
@@ -79,3 +82,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+
+@receiver(post_delete, sender=CustomUser)
+def delete_user_image(sender, instance, **kwargs):
+    """
+    Delete related image from the filesystem when an user is deleted.
+    """
+    try:
+        img = getattr(instance, "profile_img")
+        if img is not None:
+            img_path = img.path
+            if os.path.exists(img_path):
+                os.remove(img_path)
+    except Exception:
+        pass
