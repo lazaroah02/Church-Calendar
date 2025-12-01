@@ -24,6 +24,7 @@ export function Search({
         placeholder="Buscar:"
         style={styles.input}
         value={searchValue}
+        placeholderTextColor={"black"}
         onChangeText={(text) => {
           onSearch(text)
           setSearchValue(text)}}
@@ -43,6 +44,7 @@ const SearchStyles = (theme: AppTheme) => ({
   input: {
     fontSize: theme.fontSizes.md,
     backgroundColor: "rgba(211, 211, 211, 1)",
+    color: "black",
     width: "100%",
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
