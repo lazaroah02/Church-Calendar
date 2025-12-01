@@ -1,15 +1,17 @@
 import { Interval } from "@/types/event";
-import { CalendarUtils } from "react-native-calendars";
 
 const TIMEZONE = undefined
 
 export function getMonthIntervalFromDate(date: Date): Interval {
-  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-  const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth();
+
+  const firstDay = new Date(Date.UTC(year, month, 1));
+  const lastDay = new Date(Date.UTC(year, month + 1, 0));
 
   return {
-    start_date: CalendarUtils.getCalendarDateString(firstDay),
-    end_date: CalendarUtils.getCalendarDateString(lastDay),
+    start_date: firstDay.toISOString().slice(0, 10),
+    end_date: lastDay.toISOString().slice(0, 10),
   };
 }
 
@@ -37,7 +39,8 @@ export function formatSelectedDay(dateString: string): string {
     timeZone: TIMEZONE,
   });
 
-  const parts = formatter.formatToParts(new Date(dateString));
+  // Force local parsing to avoid shifting back a day
+  const parts = formatter.formatToParts(new Date(dateString + "T00:00:00"));
 
   const weekday = parts.find((p) => p.type === "weekday")?.value ?? "";
   const day = parts.find((p) => p.type === "day")?.value ?? "";

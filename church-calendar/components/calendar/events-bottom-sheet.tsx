@@ -16,7 +16,7 @@ export function EventsBottomSheet({
   selectedDayEvents,
 }: EventsBottomSheetProps) {
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["25%", "95%"], []);
+  const snapPoints = useMemo(() => ["18%", "95%"], []);
   const currentDateReadable = formatSelectedDay(selectedDay.dateString);
   const styles = useThemeStyles(bottomSheetStyles);
 
