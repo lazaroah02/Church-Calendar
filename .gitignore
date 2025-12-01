@@ -19,6 +19,7 @@ __pycache__/
 
 # dependencies
 node_modules/
+church-calendar/node_modules/
 
 # Expo
 .expo/
