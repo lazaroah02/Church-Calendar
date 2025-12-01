@@ -5,7 +5,7 @@ import { AppTheme } from "@/theme";
 import { UserInfo } from "@/types/auth";
 import { UserProfileFormErrors } from "@/types/user";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Image, Text, Pressable, Alert } from "react-native";
+import { View, Image, Text, Pressable } from "react-native";
 import { Button } from "../Button";
 import { CustomInput } from "../form/custom-input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
