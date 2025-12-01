@@ -24,7 +24,7 @@ export function AppThemeProvider({ children }: PropsWithChildren) {
     return <SplashScreenController/>;
   }
 
-  const theme: AppTheme = themeName === "normal" ? normalTheme : largeTheme;
+  const theme: AppTheme = themeName === "large" ? largeTheme: normalTheme;
 
   return (
     <ThemeContext.Provider value={{ themeName, setThemeName }}>

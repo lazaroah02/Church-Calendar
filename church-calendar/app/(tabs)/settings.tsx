@@ -20,7 +20,7 @@ export default function Settings() {
         <Collapsible title="Tamaño de Letra" style={styles.optionCollapsible}>
           <CheckBox
             label="Normal"
-            checked={themeName === "normal"}
+            checked={themeName === "normal" || themeName == null}
             onCheck={() => setThemeName("normal")}
           />
           <CheckBox
