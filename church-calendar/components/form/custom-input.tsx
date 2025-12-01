@@ -28,6 +28,7 @@ export function CustomInput({
       <TextInput
         style={[styles.input, inputStyle, error && styles.inputError]}
         secureTextEntry={isPassword && !showPassword}
+        placeholderTextColor={"#000"}
         {...props}
       />
 
