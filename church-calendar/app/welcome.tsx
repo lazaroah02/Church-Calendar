@@ -1,5 +1,6 @@
 import { Link } from "expo-router";
-import { StatusBar, Text, View, Pressable } from "react-native";
+import { Text, View, Pressable } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import { navigate } from "expo-router/build/global-state/routing";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
@@ -44,7 +45,7 @@ export default function Welcome() {
           Continuar como invitado
         </Link>
       </View>
-      <StatusBar barStyle={"dark-content"} />
+      <StatusBar style="dark" />
     </View>
   );
 }

@@ -7,7 +7,8 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { router } from "expo-router";
 import { useState } from "react";
-import { StatusBar, TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
@@ -22,7 +23,7 @@ export default function UserProfile() {
   return (
     <SafeAreaView style={styles.pageContainer}>
       <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar barStyle={"dark-content"} />
+      <StatusBar style="dark" />
       <PageHeader
         title={"Perfil de Usuario"}
         rightComponent={
