@@ -15,11 +15,25 @@ export function deleteGroup({
     },
   };
 
-  return fetch(`${MANAGE_GROUPS_URL}${groupId}/`, options).then((res) => {
-    if (res.ok) {
-      return;
-    } else {
-      throw new Error("Error al eliminar el grupo.");
-    }
-  });
+  return fetch(`${MANAGE_GROUPS_URL}${groupId}/`, options)
+    .then((res) => {
+      if (res.ok) {
+        return;
+      } else {
+        throw new Error("Error al eliminar el grupo.");
+      }
+    })
+    .catch((error) => {
+      if (
+        error instanceof TypeError &&
+        error.message === "Network request failed"
+      ) {
+        throw new Error(
+          "Error en la operación. Revisa tu conexión de internet."
+        );
+      }
+      throw new Error(
+        "Error al conectar con el servidor. Inténtalo mas tarde."
+      );
+    });
 }

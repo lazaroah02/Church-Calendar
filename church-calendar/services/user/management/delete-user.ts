@@ -15,11 +15,25 @@ export function deleteUser({
     },
   };
 
-  return fetch(`${MANAGE_USERS_URL}${userId}/`, options).then((res) => {
-    if (res.ok) {
-      return;
-    } else {
-      throw new Error("Error al eliminar el usuario.");
-    }
-  });
+  return fetch(`${MANAGE_USERS_URL}${userId}/`, options)
+    .then((res) => {
+      if (res.ok) {
+        return;
+      } else {
+        throw new Error("Error al eliminar el usuario.");
+      }
+    })
+    .catch((error) => {
+      if (
+        error instanceof TypeError &&
+        error.message === "Network request failed"
+      ) {
+        throw new Error(
+          "Error en la operación. Revisa tu conexión de internet."
+        );
+      }
+      throw new Error(
+        "Error al conectar con el servidor. Inténtalo mas tarde."
+      );
+    });
 }

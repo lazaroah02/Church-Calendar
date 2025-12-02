@@ -36,5 +36,22 @@ export function login({
 
         throw errors;
       }
+    })
+    .catch((error) => {
+      if (
+        error instanceof TypeError &&
+        error.message === "Network request failed"
+      ) {
+        throw new Error(
+          JSON.stringify({
+            general: "Error en la operación. Revisa tu conexión de internet.",
+          })
+        );
+      }
+      throw new Error(
+        JSON.stringify({
+          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
+        })
+      );
     });
 }

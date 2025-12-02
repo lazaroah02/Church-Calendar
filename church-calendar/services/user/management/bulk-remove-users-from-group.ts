@@ -6,7 +6,7 @@ export function bulkRemoveUsersFromGroup({
   userIds,
 }: {
   token: string;
-  groupId: number | string,
+  groupId: number | string;
   userIds: number[];
 }) {
   const options: RequestInit = {
@@ -20,13 +20,30 @@ export function bulkRemoveUsersFromGroup({
     body: JSON.stringify({ users_to_remove: userIds }),
   };
 
-  return fetch(`${MANAGE_GROUPS_URL}${groupId}/bulk_remove_users_from_group/`, options).then((res) => {
-    return res.json().then((data) => {
-      if (res.ok) {
-        return;
-      } else {
-        throw new Error(data.message)
+  return fetch(
+    `${MANAGE_GROUPS_URL}${groupId}/bulk_remove_users_from_group/`,
+    options
+  )
+    .then((res) => {
+      return res.json().then((data) => {
+        if (res.ok) {
+          return;
+        } else {
+          throw new Error(data.message);
+        }
+      });
+    })
+    .catch((error) => {
+      if (
+        error instanceof TypeError &&
+        error.message === "Network request failed"
+      ) {
+        throw new Error(
+          "Error en la operación. Revisa tu conexión de internet."
+        );
       }
+      throw new Error(
+        "Error al conectar con el servidor. Inténtalo mas tarde."
+      );
     });
-  });
 }

@@ -4,6 +4,7 @@ export interface UserProfileFormErrors{
     phone_number: string;
     description?: string;
     profile_img: any;
+    general?: string;
 }
 
 export interface UserManagementFormErrors{

@@ -45,28 +45,46 @@ export function updateUser({
     body: formData,
   };
 
-  return fetch(`${MANAGE_USERS_URL}${userId}/`, options).then((res) => {
-    return res.json().then((data) => {
-      if (res.ok) {
-        return data;
-      } else {
-        const errors: Record<string, string> = {};
+  return fetch(`${MANAGE_USERS_URL}${userId}/`, options)
+    .then((res) => {
+      return res.json().then((data) => {
+        if (res.ok) {
+          return data;
+        } else {
+          const errors: Record<string, string> = {};
 
-        if (data.email) {
-          errors.email = data.email[0];
-        }
-        if (data.full_name) {
-          errors.full_name = data.full_name[0];
-        }
-        if (data.phone_number) {
-          errors.phone_number = data.phone_number[0];
-        }
-        if (data.non_field_errors) {
-          errors.general = data.non_field_errors[0];
-        }
+          if (data.email) {
+            errors.email = data.email[0];
+          }
+          if (data.full_name) {
+            errors.full_name = data.full_name[0];
+          }
+          if (data.phone_number) {
+            errors.phone_number = data.phone_number[0];
+          }
+          if (data.non_field_errors) {
+            errors.general = data.non_field_errors[0];
+          }
 
-        throw errors;
+          throw errors;
+        }
+      });
+    })
+    .catch((error) => {
+      if (
+        error instanceof TypeError &&
+        error.message === "Network request failed"
+      ) {
+        throw new Error(
+          JSON.stringify({
+            general: "Error en la operación. Revisa tu conexión de internet.",
+          })
+        );
       }
+      throw new Error(
+        JSON.stringify({
+          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
+        })
+      );
     });
-  });
 }

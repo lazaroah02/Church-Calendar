@@ -36,28 +36,46 @@ export function createGroup({
     body: formData,
   };
 
-  return fetch(`${MANAGE_GROUPS_URL}`, options).then((res) => {
-    return res.json().then((data) => {
-      if (res.ok) {
-        return data;
-      } else {
-        const errors: Record<string, string> = {};
+  return fetch(`${MANAGE_GROUPS_URL}`, options)
+    .then((res) => {
+      return res.json().then((data) => {
+        if (res.ok) {
+          return data;
+        } else {
+          const errors: Record<string, string> = {};
 
-        if (data.name) {
-          errors.name = data.name[0];
-        }
-        if (data.description) {
-          errors.description = data.description[0];
-        }
-        if (data.color) {
-          errors.color = data.color[0];
-        }
-        if (data.non_field_errors) {
-          errors.general = data.non_field_errors[0];
-        }
+          if (data.name) {
+            errors.name = data.name[0];
+          }
+          if (data.description) {
+            errors.description = data.description[0];
+          }
+          if (data.color) {
+            errors.color = data.color[0];
+          }
+          if (data.non_field_errors) {
+            errors.general = data.non_field_errors[0];
+          }
 
-        throw errors;
+          throw errors;
+        }
+      });
+    })
+    .catch((error) => {
+      if (
+        error instanceof TypeError &&
+        error.message === "Network request failed"
+      ) {
+        throw new Error(
+          JSON.stringify({
+            general: "Error en la operación. Revisa tu conexión de internet.",
+          })
+        );
       }
+      throw new Error(
+        JSON.stringify({
+          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
+        })
+      );
     });
-  });
 }

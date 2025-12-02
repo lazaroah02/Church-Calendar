@@ -43,26 +43,43 @@ export function updateUserProfile({
     body: formData,
   };
 
-  return fetch(USER_PROFILE_URL, options).then((res) => {
-    return res.json()
-    .then(data => {
-      if(res.ok){
-        return data
-      }else{
-        const errors: Record<string, string> = {};
+  return fetch(USER_PROFILE_URL, options)
+    .then((res) => {
+      return res.json().then((data) => {
+        if (res.ok) {
+          return data;
+        } else {
+          const errors: Record<string, string> = {};
 
-        if (data.full_name) {
-          errors.full_name = "Nombre Incorrecto";
-        }
-        if (data.phone_number) {
-          errors.phone_number = "Teléfono inválido";
-        }
-        if (data.email) {
-          errors.email = "Correo inválido";
-        }
+          if (data.full_name) {
+            errors.full_name = "Nombre Incorrecto";
+          }
+          if (data.phone_number) {
+            errors.phone_number = "Teléfono inválido";
+          }
+          if (data.email) {
+            errors.email = "Correo inválido";
+          }
 
-        throw errors;
-      }
+          throw errors;
+        }
+      });
     })
-  });
+    .catch((error) => {
+      if (
+        error instanceof TypeError &&
+        error.message === "Network request failed"
+      ) {
+        throw new Error(
+          JSON.stringify({
+            general: "Error en la operación. Revisa tu conexión de internet.",
+          })
+        );
+      }
+      throw new Error(
+        JSON.stringify({
+          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
+        })
+      );
+    });
 }

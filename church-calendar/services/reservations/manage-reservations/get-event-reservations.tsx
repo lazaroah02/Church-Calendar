@@ -16,14 +16,25 @@ export async function getEventReservations({
       "Content-Type": "application/json",
     },
   };
-
-  const res = await fetch(
-    `${MANAGE_RESERVATIONS_URL}?event=${eventId}`,
-    options
-  );
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.message || "Error en la operación. Inténtalo mas tarde");
+  try {
+    const res = await fetch(
+      `${MANAGE_RESERVATIONS_URL}?event=${eventId}`,
+      options
+    );
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(
+        data.message || "Error en la operación. Inténtalo mas tarde"
+      );
+    }
+    return data;
+  } catch (error) {
+    if (
+      error instanceof TypeError &&
+      error.message === "Network request failed"
+    ) {
+      throw new Error("Error en la operación. Revisa tu conexión de internet.");
+    }
+    throw new Error("Error al conectar con el servidor. Inténtalo mas tarde.");
   }
-  return data
 }

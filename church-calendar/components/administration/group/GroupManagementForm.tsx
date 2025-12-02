@@ -124,6 +124,7 @@ export function GroupManagementForm({
               errors.name ||
               errors.description ||
               errors.color ||
+              errors.general ||
               "Ocurrió un error inesperado. Revisa tu conexión a internet."
             }
           />

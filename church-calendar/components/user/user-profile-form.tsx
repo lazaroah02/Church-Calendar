@@ -97,6 +97,7 @@ export function UserProfileForm({
               errors.phone_number ||
               errors.email ||
               errors.description ||
+              errors.general ||
               "Ocurrió un error inesperado."
             }
           />

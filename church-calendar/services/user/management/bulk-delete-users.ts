@@ -17,19 +17,33 @@ export function bulkDeleteUsers({
     body: JSON.stringify({ users_to_delete: userIds }),
   };
 
-  return fetch(`${MANAGE_USERS_URL}bulk_delete_users/`, options).then((res) => {
-    return res.json().then((data) => {
-      if (res.ok) {
-        return;
-      } else {
-        if(data.message.includes("Missing")){
-          throw new Error('Debes seleccionar al menos un usuario.');
+  return fetch(`${MANAGE_USERS_URL}bulk_delete_users/`, options)
+    .then((res) => {
+      return res.json().then((data) => {
+        if (res.ok) {
+          return;
+        } else {
+          if (data.message.includes("Missing")) {
+            throw new Error("Debes seleccionar al menos un usuario.");
+          }
+          if (data.message.includes("You can't delete yourself")) {
+            throw new Error("No puedes eliminar tu propio usuario.");
+          }
+          throw new Error("Error al eliminar los usuarios.");
         }
-        if(data.message.includes("You can't delete yourself")){
-          throw new Error('No puedes eliminar tu propio usuario.');
-        }
-        throw new Error('Error al eliminar los usuarios.');
+      });
+    })
+    .catch((error) => {
+      if (
+        error instanceof TypeError &&
+        error.message === "Network request failed"
+      ) {
+        throw new Error(
+          "Error en la operación. Revisa tu conexión de internet."
+        );
       }
+      throw new Error(
+        "Error al conectar con el servidor. Inténtalo mas tarde."
+      );
     });
-  });
 }

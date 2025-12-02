@@ -4,11 +4,11 @@ import { EventFormType } from "@/types/event";
 export function updateEvent({
   token = "",
   data,
-  eventId
+  eventId,
 }: {
   token: string;
   data: EventFormType;
-  eventId?: number | string
+  eventId?: number | string;
 }) {
   const formData = new FormData();
 
@@ -20,7 +20,10 @@ export function updateEvent({
   formData.append("is_canceled", data.is_canceled.toString());
   formData.append("open_to_reservations", data.open_to_reservations.toString());
   formData.append("visible", data.visible.toString());
-  formData.append('reservations_limit', data.reservations_limit?.toString() || "")
+  formData.append(
+    "reservations_limit",
+    data.reservations_limit?.toString() || ""
+  );
 
   data.groups.forEach((id) => {
     formData.append("groups", id.toString());
@@ -47,36 +50,55 @@ export function updateEvent({
     body: formData,
   };
 
-  return fetch(`${MANAGE_EVENTS_URL}${eventId}/`, options).then((res) => {
-    return res.json().then((data) => {
-      if (res.ok) {
-        return data;
-      } else {
-        const errors: Record<string, string> = {};
+  return fetch(`${MANAGE_EVENTS_URL}${eventId}/`, options)
+    .then((res) => {
+      return res.json().then((data) => {
+        if (res.ok) {
+          return data;
+        } else {
+          const errors: Record<string, string> = {};
 
-        if (data.title) {
-          errors.title = "Título Incorrecto. No puede estar vacío.";
-        }
-
-        if (data.location) {
-          errors.location = "Lugar Incorrecto. No puede estar vacío.";
-        }
-
-        if(data.reservations_limit){
-          errors.reservations_limit = "Número máximo de reservaciones inválido.";
-        }
-
-        if (data.non_field_errors) {
-          if (
-            data.non_field_errors[0] === "End time must be after start time."
-          ) {
-            errors.end_time =
-              "Revisa el inicio y fin del evento. El fin debe ser después del inicio.";
+          if (data.title) {
+            errors.title = "Título Incorrecto. No puede estar vacío.";
           }
-        }
 
-        throw new Error(JSON.stringify(errors));
+          if (data.location) {
+            errors.location = "Lugar Incorrecto. No puede estar vacío.";
+          }
+
+          if (data.reservations_limit) {
+            errors.reservations_limit =
+              "Número máximo de reservaciones inválido.";
+          }
+
+          if (data.non_field_errors) {
+            if (
+              data.non_field_errors[0] === "End time must be after start time."
+            ) {
+              errors.end_time =
+                "Revisa el inicio y fin del evento. El fin debe ser después del inicio.";
+            }
+          }
+
+          throw new Error(JSON.stringify(errors));
+        }
+      });
+    })
+    .catch((error) => {
+      if (
+        error instanceof TypeError &&
+        error.message === "Network request failed"
+      ) {
+        throw new Error(
+          JSON.stringify({
+            general: "Error en la operación. Revisa tu conexión de internet.",
+          })
+        );
       }
+      throw new Error(
+        JSON.stringify({
+          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
+        })
+      );
     });
-  });
 }
