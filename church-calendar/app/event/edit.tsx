@@ -1,12 +1,10 @@
 import { EventForm } from "@/components/event/event-form";
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { useManageEvents } from "@/hooks/events/useManageEvents";
 import { Event } from "@/types/event";
 import { router, useFocusEffect, useNavigation } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
-import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -51,8 +49,6 @@ export default function EventEdit() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar style="dark" />
       <PageHeader
         title="Editar Evento"
         rightComponent={

@@ -1,6 +1,4 @@
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
 
 import { useManageEvents } from "@/hooks/events/useManageEvents";
 import { EventForm } from "@/components/event/event-form";
@@ -18,8 +16,6 @@ export default function CreateEvent() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar style="dark" />
       <PageHeader
         title="Crear Evento"
         rightComponent={

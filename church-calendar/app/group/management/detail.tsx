@@ -1,6 +1,5 @@
 import { GroupInfoComponent } from "@/components/administration/group/GroupInfoComponent";
 import { GroupThreeDotsMenuOptions } from "@/components/administration/group/GroupThreeDotsOptions";
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { useSession } from "@/hooks/auth/useSession";
@@ -8,7 +7,6 @@ import { Group } from "@/types/group";
 import { router } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GroupDetail() {
@@ -36,8 +34,6 @@ export default function GroupDetail() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar barStyle={"dark-content"} />
       <PageHeader
         title="Detalles del Grupo"
         rightComponent={

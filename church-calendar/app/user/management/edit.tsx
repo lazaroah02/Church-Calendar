@@ -1,11 +1,9 @@
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { PageHeader } from "@/components/PageHeader";
 import { UserManagementForm } from "@/components/user/user-management-form";
 import { UserInfo } from "@/types/auth";
 import { router, useFocusEffect, useNavigation } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useCallback, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EditUser() {
@@ -45,8 +43,6 @@ export default function EditUser() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar style="dark" />
       <PageHeader
         title="Editar Usuario"
         onBack={() =>

@@ -22,7 +22,6 @@ import { router } from "expo-router";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { BASE_URL } from "@/api-endpoints";
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import Hyperlink from "react-native-hyperlink";
 import { useSession } from "@/hooks/auth/useSession";
 import { getImageUri } from "@/lib/get-image-uri";
@@ -52,7 +51,6 @@ export default function EventDetails() {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
-      <MyNavigationBar buttonsStyle="dark" />
       <PageHeader
         title={parsedEvent?.title}
         rightComponent={

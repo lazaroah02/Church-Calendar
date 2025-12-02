@@ -1,6 +1,5 @@
 import { router } from "expo-router";
 import {
-  StatusBar,
   Text,
   View,
   Pressable,
@@ -140,7 +139,6 @@ export default function SignIn() {
         </Pressable>
       </View>
 
-      <StatusBar barStyle={"dark-content"} />
     </KeyboardAwareScrollView>
   );
 }

@@ -1,5 +1,4 @@
 import { Button } from "@/components/Button";
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { UserProfileForm } from "@/components/user/user-profile-form";
 import { UserInfoComponent } from "@/components/user/user-info";
 import { useSession } from "@/hooks/auth/useSession";
@@ -8,7 +7,6 @@ import { AppTheme } from "@/theme";
 import { router } from "expo-router";
 import { useState } from "react";
 import { TouchableOpacity, Text } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
@@ -22,8 +20,6 @@ export default function UserProfile() {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar style="dark" />
       <PageHeader
         title={"Perfil de Usuario"}
         rightComponent={

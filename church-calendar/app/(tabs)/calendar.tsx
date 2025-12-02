@@ -8,9 +8,7 @@ import { CalendarComponent } from "@/components/calendar/calendar";
 import { Day } from "@/components/calendar/day";
 import "@/lib/calendar/calendar-locale";
 import { EventsBottomSheet } from "@/components/calendar/events-bottom-sheet";
-import { StatusBar } from "expo-status-bar";
 import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 
 export default function Calendar() {
   const todaysDate = new Date();
@@ -36,8 +34,6 @@ export default function Calendar() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar style="dark" />
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={

@@ -1,4 +1,3 @@
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { UserInfoComponent } from "@/components/user/user-info";
@@ -10,7 +9,6 @@ import { UserInfo } from "@/types/auth";
 import { router } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UserDetail() {
@@ -38,8 +36,6 @@ export default function UserDetail() {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar barStyle={"dark-content"} />
       <PageHeader
         title="Detalles de Usuario"
         rightComponent={

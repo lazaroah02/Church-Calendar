@@ -3,8 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text } from "react-native";
 import { TabView, TabBar } from "react-native-tab-view";
 import { useAdministrationTabs } from "@/hooks/administration/useAdministrationTabs";
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
-import { StatusBar } from "expo-status-bar";
 
 export default function Administration() {
   const { index, routes, renderScene, setIndex, layout } =
@@ -12,8 +10,6 @@ export default function Administration() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }} edges={["top"]}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar style="dark" />
       <PageHeader
         title="Administración"
       />

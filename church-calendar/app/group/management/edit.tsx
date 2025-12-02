@@ -1,12 +1,10 @@
 import { GroupManagementForm } from "@/components/administration/group/GroupManagementForm";
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { PageHeader } from "@/components/PageHeader";
 import { useSession } from "@/hooks/auth/useSession";
 import { Group } from "@/types/group";
 import { router, useFocusEffect, useNavigation } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useCallback, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EditGroup() {
@@ -52,8 +50,6 @@ export default function EditGroup() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar barStyle={"dark-content"} />
       <PageHeader
         title="Editar Grupo"
         onBack={() =>

@@ -1,4 +1,3 @@
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { PageHeader } from "@/components/PageHeader";
 import { ChangePasswordForm } from "@/components/user/change-password-form";
 import { useSession } from "@/hooks/auth/useSession";
@@ -8,7 +7,6 @@ import { ChangePasswordFormData } from "@/types/auth";
 import { router } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ChangeUserPassword() {
@@ -46,8 +44,6 @@ export default function ChangeUserPassword() {
   }
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <MyNavigationBar buttonsStyle="dark" />
-      <StatusBar barStyle={"dark-content"} />
       <PageHeader title="Cambiar Contraseña" />
       <ChangePasswordForm
         onSubmit={({ password1, password2 }) =>

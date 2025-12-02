@@ -1,6 +1,5 @@
 import { router } from "expo-router";
 import {
-  StatusBar,
   Text,
   View,
   Pressable,
@@ -245,7 +244,6 @@ export default function Register() {
           {loading && <ActivityIndicator size="small" color="#fff" />}
         </Pressable>
       </View>
-      <StatusBar barStyle={"dark-content"} />
     </SafeAreaView>
   );
 }

@@ -1,11 +1,10 @@
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { PageHeader } from "@/components/PageHeader";
 import { ReservationCard } from "@/components/reservation/reservation-card";
 import { useManageReservations } from "@/hooks/reservations/useManageReservations";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { useSearchParams } from "expo-router/build/hooks";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EventReservations() {
@@ -21,7 +20,6 @@ export default function EventReservations() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <MyNavigationBar buttonsStyle="dark" />
       <PageHeader title={`Reservaciones para ${eventTitle}`} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {eventReservations.length === 0 ? (
