@@ -14,6 +14,7 @@ import { queryClient, persister } from "@/lib/query-client";
 import { CalendarContextProvider } from "@/contexts/calendar-context/calendarContext";
 import { ToastProvider } from "expo-toast";
 import {MD3LightTheme, PaperProvider} from "react-native-paper"
+import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 
 export default function Root() {
   const [hydrated, setHydrated] = useState(false);
@@ -60,6 +61,7 @@ function RootLayout() {
     <GestureHandlerRootView>
       <SafeAreaProvider>
         <StatusBar style="dark" />
+        <MyNavigationBar/>
         <Stack>
           <Stack.Protected guard={!session}>
             <Stack.Screen
