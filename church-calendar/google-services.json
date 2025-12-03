@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "570195571396",
+    "project_id": "church-calendar-e1987",
+    "storage_bucket": "church-calendar-e1987.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570195571396:android:0a06c142a1e85a33a9cf91",
+        "android_client_info": {
+          "package_name": "com.lazaroah02.churchcalendar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAd9Cy_lroUzitppnt4sHQSW-AQ0v9oXvw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
