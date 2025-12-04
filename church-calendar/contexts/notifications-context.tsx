@@ -57,8 +57,7 @@ async function registerForPushNotificationsAsync() {
     return;
   }
 
-  const { status: existingStatus } =
-    await Notifications.getPermissionsAsync();
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
 
   if (existingStatus !== "granted") {
@@ -77,9 +76,7 @@ async function registerForPushNotificationsAsync() {
 
   if (!projectId) throw new Error("Project ID not found");
 
-  return (
-    await Notifications.getExpoPushTokenAsync({ projectId })
-  ).data;
+  return (await Notifications.getExpoPushTokenAsync({ projectId })).data;
 }
 
 // --------------------
@@ -101,16 +98,23 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     );
 
     // When notification is received (APP OPEN)
-    const receivedSubscription =
-      Notifications.addNotificationReceivedListener((notification) => {
+    const receivedSubscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
         setNotification(notification);
-      });
+      }
+    );
 
     // When tapped (APP OPEN / BACKGROUND)
     const responseSubscription =
       Notifications.addNotificationResponseReceivedListener((response) => {
         const data: any = response.notification.request.content.data;
-        if (data?.route) router.push(data.route);
+        if (data?.pathname)
+          router.push({
+            pathname: data.pathname,
+            params: {
+              selectedDayParam: JSON.stringify(data.params.selectedDayParam),
+            },
+          });
       });
 
     return () => {
@@ -131,7 +135,13 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
         setNotification(lastResponse.notification);
 
         const data: any = lastResponse.notification.request.content.data;
-        if (data?.route) router.push(data.route);
+        if (data?.pathname)
+          router.push({
+            pathname: data.pathname,
+            params: {
+              selectedDayParam: JSON.stringify(data.params.selectedDayParam),
+            },
+          });
       }
     })();
   }, [router]);

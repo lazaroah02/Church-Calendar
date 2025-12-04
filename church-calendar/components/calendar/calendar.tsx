@@ -8,9 +8,11 @@ import { Ionicons } from "@expo/vector-icons";
 export function CalendarComponent({
   setInterval,
   renderDayComponent,
+  selectedDay,
 }: CalendarComponentProps) {
   return (
     <Calendar
+      initialDate={selectedDay.dateString}
       firstDay={1}
       onMonthChange={(month) => {
         setInterval(getMonthIntervalFromDate(new Date(month.dateString)));
@@ -19,8 +21,8 @@ export function CalendarComponent({
       theme={{
         textDayHeaderFontSize: 18,
         textDayHeaderFontWeight: "900",
-        textDayHeaderFontFamily:"InterVariable",
-        textSectionTitleColor:"#000",
+        textDayHeaderFontFamily: "InterVariable",
+        textSectionTitleColor: "#000",
         arrowColor: "#000",
         backgroundColor: "transparent",
         calendarBackground: "transparent",
@@ -64,6 +66,6 @@ const styles = StyleSheet.create({
     color: "#343434",
     marginTop: -2,
     fontFamily: "InterVariable",
-    fontWeight: 400
+    fontWeight: 400,
   },
 });

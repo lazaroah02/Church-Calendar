@@ -13,4 +13,5 @@ export type DayProps = {
 export interface CalendarComponentProps {
     setInterval: Dispatch<SetStateAction<Interval>>
     renderDayComponent: (date: any) => JSX.Element
+    selectedDay: DateData
 }

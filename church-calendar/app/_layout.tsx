@@ -73,6 +73,10 @@ function RootLayout() {
             />
           </Stack.Protected>
           <Stack.Screen
+            name="index"
+            options={{ headerShown: false, animation: "fade" }}
+          />
+          <Stack.Screen
             name="(tabs)"
             options={{ headerShown: false, animation: "fade" }}
           />
