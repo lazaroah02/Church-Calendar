@@ -146,6 +146,8 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     })();
   }, [router]);
 
+  console.log(expoPushToken)
+
   // --------------------
   // CONTEXT VALUE
   // --------------------

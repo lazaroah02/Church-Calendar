@@ -47,7 +47,7 @@ export default function Calendar() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, backgroundColor:"#eee" }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -55,7 +55,7 @@ export default function Calendar() {
         <UserTopBar />
         <CalendarComponent
           setInterval={setInterval}
-          selectedDay={selectedDay}
+          initialSelectedDay={selectedDayParam}
           renderDayComponent={(date) => (
             <Day
               date={date}
@@ -78,6 +78,6 @@ export default function Calendar() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#eee",
+    backgroundColor: "#fff",
   },
 });

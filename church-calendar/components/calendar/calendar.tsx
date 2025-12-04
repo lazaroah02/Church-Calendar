@@ -8,11 +8,11 @@ import { Ionicons } from "@expo/vector-icons";
 export function CalendarComponent({
   setInterval,
   renderDayComponent,
-  selectedDay,
+  initialSelectedDay,
 }: CalendarComponentProps) {
   return (
     <Calendar
-      initialDate={selectedDay.dateString}
+      initialDate={initialSelectedDay?.dateString}
       firstDay={1}
       onMonthChange={(month) => {
         setInterval(getMonthIntervalFromDate(new Date(month.dateString)));
