@@ -53,6 +53,7 @@ export default function TabLayout() {
         name="notifications"
         options={{
           title: "Notificaciones",
+          href: session ? "/notifications" : null,
           tabBarIcon: ({ color }) => (
             <Ionicons name="notifications-outline" size={28} color={color} />
           ),

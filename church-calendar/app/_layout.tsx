@@ -13,8 +13,9 @@ import { AppThemeProvider } from "@/contexts/theme-context";
 import { queryClient, persister } from "@/lib/query-client";
 import { CalendarContextProvider } from "@/contexts/calendar-context/calendarContext";
 import { ToastProvider } from "expo-toast";
-import {MD3LightTheme, PaperProvider} from "react-native-paper"
+import { MD3LightTheme, PaperProvider } from "react-native-paper";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
+import { NotificationsProvider } from "@/contexts/notifications-context";
 
 export default function Root() {
   const [hydrated, setHydrated] = useState(false);
@@ -31,14 +32,16 @@ export default function Root() {
     <ToastProvider>
       <QueryClientProvider client={queryClient}>
         <SessionProvider>
-          <CalendarContextProvider>
-            <AppThemeProvider>
-              <SplashScreenController />
-              <PaperProvider theme={MD3LightTheme}>
-                <RootLayout />
-              </PaperProvider>
-            </AppThemeProvider>
-          </CalendarContextProvider>
+          <NotificationsProvider>
+            <CalendarContextProvider>
+              <AppThemeProvider>
+                <SplashScreenController />
+                <PaperProvider theme={MD3LightTheme}>
+                  <RootLayout />
+                </PaperProvider>
+              </AppThemeProvider>
+            </CalendarContextProvider>
+          </NotificationsProvider>
         </SessionProvider>
       </QueryClientProvider>
     </ToastProvider>
@@ -61,7 +64,7 @@ function RootLayout() {
     <GestureHandlerRootView>
       <SafeAreaProvider>
         <StatusBar style="dark" />
-        <MyNavigationBar/>
+        <MyNavigationBar />
         <Stack>
           <Stack.Protected guard={!session}>
             <Stack.Screen
@@ -85,30 +88,15 @@ function RootLayout() {
             name="account-created"
             options={{ headerShown: false, animation: "fade" }}
           />
-          <Stack.Screen
-            name="event/details"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="event/create"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="event/edit"
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name="event/details" options={{ headerShown: false }} />
+          <Stack.Screen name="event/create" options={{ headerShown: false }} />
+          <Stack.Screen name="event/edit" options={{ headerShown: false }} />
           <Stack.Screen
             name="event/reservations"
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="user/profile"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="user/detail"
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name="user/profile" options={{ headerShown: false }} />
+          <Stack.Screen name="user/detail" options={{ headerShown: false }} />
           <Stack.Screen
             name="user/management/edit"
             options={{ headerShown: false }}
@@ -137,10 +125,7 @@ function RootLayout() {
             name="group/management/create"
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="+not-found"
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name="+not-found" options={{ headerShown: false }} />
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>
