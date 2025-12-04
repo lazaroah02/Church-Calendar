@@ -12,8 +12,8 @@ export interface StoredNotification {
 }
 
 export function useNotificationsHistory() {
-  const [notifications, setNotifications] = useState<StoredNotification[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [notificationHistory, setNotifications] = useState<StoredNotification[]>([]);
+  const [loadingNotificationHistory, setLoading] = useState(true);
 
   // ---- Load saved notifications on mount ----
   const loadNotifications = useCallback(async () => {
@@ -109,8 +109,8 @@ export function useNotificationsHistory() {
   }, [loadNotifications]);
 
   return {
-    notifications,
-    loading,
+    notificationHistory,
+    loadingNotificationHistory,
     saveNotification,
     removeNotification,
     clearNotifications,

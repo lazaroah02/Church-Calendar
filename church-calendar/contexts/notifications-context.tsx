@@ -14,15 +14,33 @@ import { useNotificationsHistory } from "@/hooks/notifications/useNotificationHi
 
 type NotificationsContextType = {
   expoPushToken: string;
-  notification: Notifications.Notification | null;
+  notificationHistory: ReturnType<
+    typeof useNotificationsHistory
+  >["notificationHistory"];
+  refetchNotifications: ReturnType<
+    typeof useNotificationsHistory
+  >["refetchNotifications"];
+  removeNotification: ReturnType<
+    typeof useNotificationsHistory
+  >["removeNotification"];
+  clearNotifications: ReturnType<
+    typeof useNotificationsHistory
+  >["clearNotifications"];
+  loadingNotificationHistory: ReturnType<
+    typeof useNotificationsHistory
+  >["loadingNotificationHistory"];
 };
 
-const NotificationsContext = createContext<NotificationsContextType | null>(null);
+const NotificationsContext = createContext<NotificationsContextType | null>(
+  null
+);
 
 export const useNotifications = () => {
   const context = useContext(NotificationsContext);
   if (!context) {
-    throw new Error("useNotifications must be used within a NotificationsProvider");
+    throw new Error(
+      "useNotifications must be used within a NotificationsProvider"
+    );
   }
   return context;
 };
@@ -81,10 +99,16 @@ async function registerForPushNotificationsAsync() {
 // --------------------
 export function NotificationsProvider({ children }: { children: ReactNode }) {
   const [expoPushToken, setExpoPushToken] = useState("");
-  const [notification, setNotification] =
-    useState<Notifications.Notification | null>(null);
 
-  const { saveNotification, saveNotificationForColdStarts } = useNotificationsHistory();
+  const {
+    notificationHistory,
+    refetchNotifications,
+    removeNotification,
+    saveNotification,
+    saveNotificationForColdStarts,
+    clearNotifications,
+    loadingNotificationHistory
+  } = useNotificationsHistory();
   const router = useRouter();
 
   // --------------------
@@ -98,7 +122,6 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     // When notification is received (APP OPEN)
     const receivedSubscription = Notifications.addNotificationReceivedListener(
       (notif) => {
-        setNotification(notif);
 
         // <<< ADDED: Save received notification
         saveNotification({
@@ -149,7 +172,6 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
 
       if (lastResponse) {
         const notif = lastResponse.notification;
-        setNotification(notif);
 
         // <<< ADDED: Save last notification (cold start)
         saveNotificationForColdStarts({
@@ -173,7 +195,11 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
 
   const value = {
     expoPushToken,
-    notification,
+    notificationHistory,
+    refetchNotifications,
+    removeNotification,
+    clearNotifications,
+    loadingNotificationHistory
   };
 
   return (

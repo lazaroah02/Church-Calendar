@@ -1,7 +1,7 @@
 import { Notification } from "@/components/notification/Notification";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
-import { useNotificationsHistory } from "@/hooks/notifications/useNotificationHistory";
+import { useNotifications } from "@/contexts/notifications-context";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,13 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Notifications() {
-  const {
-    notifications,
-    clearNotifications,
-    refetchNotifications,
-    loading,
-    removeNotification,
-  } = useNotificationsHistory();
+  const {notificationHistory, clearNotifications, refetchNotifications, removeNotification, loadingNotificationHistory } = useNotifications()
   const styles = useThemeStyles(NotificationsPageStyles);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -52,17 +46,17 @@ export default function Notifications() {
         contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={
           <RefreshControl
-            refreshing={loading}
+            refreshing={loadingNotificationHistory}
             onRefresh={refetchNotifications}
           />
         }
       >
-        {notifications.length === 0 && !loading ? (
+        {notificationHistory.length === 0 && !loadingNotificationHistory ? (
           <Text style={[{ textAlign: "center", marginTop: 20 }, styles.text]}>
             No tienes notificaciones.
           </Text>
         ) : (
-          notifications.map((notif) => (
+          notificationHistory.map((notif) => (
             <Notification
               key={notif.id}
               notif={notif}

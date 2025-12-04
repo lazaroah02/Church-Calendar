@@ -43,7 +43,10 @@ export function Notification({
         <Text style={styles.title}>{notif.title || "No Title"}</Text>
         <Text style={styles.content}>{notif.body || "No Body"}</Text>
         <Text style={styles.receivetAt}>
-          Received at: {new Date(notif.receivedAt).toLocaleString("es-ES")}
+          Received at:{" "}
+          {new Date(notif.receivedAt).toLocaleString("es-ES", {
+            hour12: true,
+          })}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => removeNotification(notif.id)}>
