@@ -10,22 +10,19 @@ import * as Device from "expo-device";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
 import { useRouter } from "expo-router";
+import { useNotificationsHistory } from "@/hooks/notifications/useNotificationHistory";
 
 type NotificationsContextType = {
   expoPushToken: string;
   notification: Notifications.Notification | null;
 };
 
-const NotificationsContext = createContext<NotificationsContextType | null>(
-  null
-);
+const NotificationsContext = createContext<NotificationsContextType | null>(null);
 
 export const useNotifications = () => {
   const context = useContext(NotificationsContext);
   if (!context) {
-    throw new Error(
-      "useNotifications must be used within a NotificationsProvider"
-    );
+    throw new Error("useNotifications must be used within a NotificationsProvider");
   }
   return context;
 };
@@ -87,6 +84,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null);
 
+  const { saveNotification, saveNotificationForColdStarts } = useNotificationsHistory();
   const router = useRouter();
 
   // --------------------
@@ -99,15 +97,33 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
 
     // When notification is received (APP OPEN)
     const receivedSubscription = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        setNotification(notification);
+      (notif) => {
+        setNotification(notif);
+
+        // <<< ADDED: Save received notification
+        saveNotification({
+          id: notif.request.identifier,
+          title: notif.request.content.title,
+          body: notif.request.content.body,
+          data: notif.request.content.data,
+        });
       }
     );
 
     // When tapped (APP OPEN / BACKGROUND)
     const responseSubscription =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        const data: any = response.notification.request.content.data;
+        const notif = response.notification;
+
+        // <<< ADDED: Save tapped notification
+        saveNotification({
+          id: notif.request.identifier,
+          title: notif.request.content.title,
+          body: notif.request.content.body,
+          data: notif.request.content.data,
+        });
+
+        const data: any = notif.request.content.data;
         if (data?.pathname)
           router.push({
             pathname: data.pathname,
@@ -121,7 +137,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
       receivedSubscription.remove();
       responseSubscription.remove();
     };
-  }, [router]);
+  }, [router, saveNotification]);
 
   // --------------------
   // EFFECT: NOTIFICATION TAPPED WHEN APP WAS CLOSED
@@ -132,9 +148,18 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
         await Notifications.getLastNotificationResponseAsync();
 
       if (lastResponse) {
-        setNotification(lastResponse.notification);
+        const notif = lastResponse.notification;
+        setNotification(notif);
 
-        const data: any = lastResponse.notification.request.content.data;
+        // <<< ADDED: Save last notification (cold start)
+        saveNotificationForColdStarts({
+          id: notif.request.identifier,
+          title: notif.request.content.title,
+          body: notif.request.content.body,
+          data: notif.request.content.data,
+        });
+
+        const data: any = notif.request.content.data;
         if (data?.pathname)
           router.push({
             pathname: data.pathname,
@@ -144,13 +169,8 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
           });
       }
     })();
-  }, [router]);
+  }, [router, saveNotificationForColdStarts]);
 
-  console.log(expoPushToken)
-
-  // --------------------
-  // CONTEXT VALUE
-  // --------------------
   const value = {
     expoPushToken,
     notification,
