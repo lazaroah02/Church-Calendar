@@ -62,7 +62,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
           new_fcm_token: "",
         });
       } catch (err:any) {
-        console.error("Error clearing user notification token:", err.message);
+        console.warn("Error clearing user notification token:", err.message);
       }
     }
     // then clear session and cached data
