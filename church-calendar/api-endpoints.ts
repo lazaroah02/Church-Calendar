@@ -15,3 +15,6 @@ export const MANAGE_EVENTS_URL = `${BASE_URL}/api/events/manage/`
 export const MANAGE_RESERVATIONS_URL = `${BASE_URL}/api/reservations/manage/`
 export const MANAGE_USERS_URL = `${BASE_URL}/api/users/manage/`
 export const MANAGE_GROUPS_URL = `${BASE_URL}/api/church-groups/manage/`
+
+//notifications endpoints
+export const USER_NOTIFICATION_TOKEN_URL = `${BASE_URL}/api/notification/user-notification-token/`

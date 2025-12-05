@@ -16,6 +16,7 @@ import { ToastProvider } from "expo-toast";
 import { MD3LightTheme, PaperProvider } from "react-native-paper";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { NotificationsProvider } from "@/contexts/notifications-context";
+import { useUserNotificationToken } from "@/hooks/notifications/useUserNotificationToken";
 
 export default function Root() {
   const [hydrated, setHydrated] = useState(false);
@@ -54,6 +55,8 @@ function RootLayout() {
     LexendBold: require("../assets/fonts/Lexend-Bold.ttf"),
   });
   const { session, isLoading } = useSession();
+
+  useUserNotificationToken()
 
   if (!loaded || isLoading) {
     // Async font loading only occurs in development.

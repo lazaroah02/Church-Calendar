@@ -1,4 +1,5 @@
 from datetime import timedelta
+import re
 from church_group.models import ChurchGroup
 from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
@@ -17,6 +18,7 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     is_active = serializers.BooleanField(read_only=True)
     is_superuser = serializers.BooleanField(read_only=True)
     username = serializers.CharField(read_only=True)
+    fcm_token = serializers.CharField(allow_blank=True, required=False, read_only=True)
     born_at = serializers.DateField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
