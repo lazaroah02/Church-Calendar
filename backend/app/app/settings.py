@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'church_group',
     'user',
     'reservation',
+    'notification',
 
     # Third-party Apps
     'rest_framework',
@@ -206,7 +207,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        #'rest_framework.authentication.SessionAuthentication'
+        'rest_framework.authentication.SessionAuthentication'
     ],
 
 }

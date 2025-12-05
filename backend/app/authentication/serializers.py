@@ -30,7 +30,7 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'full_name', 'member_groups',
-                  'description', 'phone_number',
+                  'description', 'phone_number', 'fcm_token',
                   'profile_img', 'is_active', 'is_staff',
                   'is_superuser', 'born_at', 'created_at', 'updated_at', "member_groups_full_info")
 

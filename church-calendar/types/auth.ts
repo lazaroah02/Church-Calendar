@@ -8,6 +8,7 @@ export type UserInfo = {
   full_name: string
   profile_img: string
   description: string
+  fcm_token: string
   is_staff: boolean
   is_active: boolean
   is_superuser: boolean

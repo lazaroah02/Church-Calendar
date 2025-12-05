@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/church-groups/', include('church_group.urls')),
     path('api/auth/', include('authentication.urls')),
     path('api/users/', include('user.urls')),
+    path('api/notification/', include('notification.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
