@@ -25,15 +25,25 @@ export async function updateUserNotificationToken({
       const data = await res.json();
       return data;
     } else {
+      const data = await res.json();
+      if(data.message){
+        throw new Error(data.message);
+      }
+      if(data.detail){
+        throw new Error(data.detail);
+      }
+      if(data.error){
+        throw new Error(data.error);
+      }
       throw new Error("Error updating notification token");
     }
-  } catch (error) {
+  } catch (error: any) {
     if (
       error instanceof TypeError &&
       error.message === "Network request failed"
     ) {
       throw new Error("Error en la operación. Revisa tu conexión de internet.");
     }
-    throw new Error("Error al conectar con el servidor. Inténtalo mas tarde.");
+    throw new Error(error.message);
   }
 }

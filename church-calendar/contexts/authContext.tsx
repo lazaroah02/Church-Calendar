@@ -10,6 +10,7 @@ import {
 import { persister, queryClient } from "@/lib/query-client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { register } from "@/services/auth/register";
+import { updateUserNotificationToken } from "@/services/notifications/update-user-notification-token";
 
 export const AuthContext = createContext<AuthContenxtProps>({
   signIn: () => null,
@@ -53,6 +54,18 @@ export function SessionProvider({ children }: PropsWithChildren) {
   };
 
   const handleSignOut = async () => {
+    // first unsubscribe user from notifications
+    if(session){
+      try {
+        await updateUserNotificationToken({
+          token: session ? JSON.parse(session).token : "",
+          new_fcm_token: "",
+        });
+      } catch (err:any) {
+        console.error("Error clearing user notification token:", err.message);
+      }
+    }
+    // then clear session and cached data
     setSession(null);
     queryClient.clear();
     queryClient.removeQueries();
