@@ -27,9 +27,12 @@ export default function EventReservations() {
             No hay reservaciones.
           </Text>
         ) : (
-          eventReservations.map((reservation) => (
+          <>
+          <Text style={styles.total}>Total: {eventReservations.length}</Text>
+          {eventReservations.map((reservation) => (
             <ReservationCard key={reservation.id} reservation={reservation} />
-          ))
+          ))}
+          </>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -42,6 +45,13 @@ const EventReservationsStyles = (theme: AppTheme) => ({
     paddingTop: 0,
     backgroundColor: "#fff",
     flexDirection: "column",
+  },
+  total: {
+    fontFamily: "LexendBold",
+    fontSize: theme.fontSizes.lg,
+    marginBottom: 10,
+    marginTop: 10,
+    marginLeft: 10,
   },
   noReservationsMessage: {
     marginTop: "80%",

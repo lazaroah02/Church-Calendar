@@ -18,3 +18,4 @@ export const MANAGE_GROUPS_URL = `${BASE_URL}/api/church-groups/manage/`
 
 //notifications endpoints
 export const USER_NOTIFICATION_TOKEN_URL = `${BASE_URL}/api/notification/user-notification-token/`
+export const NOTIFY_ABOUT_EVENT_URL = `${BASE_URL}/api/notification/send-notification-about-event/`
