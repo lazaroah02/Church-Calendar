@@ -9,8 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
 from user.serializers import UserManagmentSerializer
 from user.utils.utils import validate_password
-from rest_framework.permissions import IsAuthenticated
-from user.permissions import IsSuperUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from user.utils.bulk_operations import handle_bulk_delete
 
 User = get_user_model()
@@ -40,9 +39,9 @@ class UsersManagment(viewsets.ModelViewSet):
             "new_password": "your_new_password"
         }
 
-    Required permissions: [IsAuthenticated, IsAdminUser]
+    Required permissions: [IsAuthenticated, IsSuperUser]
     """
-    permission_classes = [IsAuthenticated, IsSuperUser]
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.all()
     serializer_class = UserManagmentSerializer
     pagination_class = UsersPagination

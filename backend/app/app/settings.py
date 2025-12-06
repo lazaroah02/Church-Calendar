@@ -245,6 +245,7 @@ apps = [
     'authentication',
     'church_group',
     'user',
+    'notification'
 ]
 
 # Create individual log folders per app

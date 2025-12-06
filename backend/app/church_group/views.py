@@ -4,8 +4,7 @@ from church_group.models import GENERAL_GROUP_NAME, ChurchGroup
 from church_group.serializers import (
     ChurchGroupsSerializer, ChurchGroupsManagementSerializer
     )
-from user.permissions import IsSuperUser
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -31,7 +30,7 @@ class ChurchGroupsManagement(viewsets.ModelViewSet):
     '''
     queryset = ChurchGroup.objects.all()
     serializer_class = ChurchGroupsManagementSerializer
-    permission_class = [IsAuthenticated, IsSuperUser]
+    permission_class = [IsAuthenticated, IsAdminUser]
 
     def perform_create(self, serializer):
         user = self.request.user
