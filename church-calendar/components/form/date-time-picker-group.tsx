@@ -1,4 +1,5 @@
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { fixAndroidPickerDate } from "@/lib/calendar/calendar-utils";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker, {
@@ -42,7 +43,7 @@ export function DateTimePickerGroup({
             <Text
               style={[styles.dateTimeInputPicker, error && styles.inputError]}
             >
-              {value?.toLocaleDateString("es-ES")}
+              {value.toLocaleDateString("es-ES")}
             </Text>
             {error && (
               <Ionicons
@@ -112,9 +113,13 @@ export function DateTimePickerGroup({
                   return;
                 }
                 if (date) {
-                  const updated = new Date(value);
-                  updated.setHours(date.getHours());
-                  updated.setMinutes(date.getMinutes());
+                  const updated = new Date(
+                    value.getFullYear(),
+                    value.getMonth(),
+                    value.getDate(),
+                    date.getHours(),
+                    date.getMinutes()
+                  );
                   handleChange(updated);
                 }
               }}

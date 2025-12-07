@@ -163,7 +163,7 @@ else:
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-TIME_ZONE = 'America/Havana'
+TIME_ZONE = 'UTC'
 
 USE_TZ = True
 

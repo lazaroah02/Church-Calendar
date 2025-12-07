@@ -3,6 +3,8 @@ from event.models import Event
 from django.db import models
 from church_group.serializers import ChurchGroupsReducedSerializer
 from authentication.serializers import CustomUserDetailsSerializer
+import pytz
+from django.utils.translation import gettext_lazy as _
 
 
 class EventsSerializer(serializers.ModelSerializer):
@@ -63,18 +65,15 @@ class GroupByChoices(models.TextChoices):
 
 class EventParamsSerializer(serializers.Serializer):
     """
-    ## Serializer for validating query parameters of Event view.
+    Serializer for validating query parameters of Event view.
 
-    **Fields:**
+    Fields:
     - `start_date` (date, optional, required if group_by is set): Start of the date range.
     - `end_date` (date, optional, required if group_by is set): End of the date range.
     - `group_by` (choice, optional): Strategy for grouping events.
       Currently supported: 'month_days'.
-
-    **Validations:**
-    - If `group_by` is provided → `start_date` and `end_date` are required.
-    - `start_date` must be strictly earlier than `end_date`.
-    - The range must not exceed 1 month (31 days).
+    - `timezone` (string, optional): IANA timezone name (e.g., "America/Havana").
+      Defaults to "UTC" if not provided or invalid.
     """
 
     group_by = serializers.ChoiceField(
@@ -82,6 +81,18 @@ class EventParamsSerializer(serializers.Serializer):
     )
     start_date = serializers.DateField(required=False)
     end_date = serializers.DateField(required=False)
+    timezone = serializers.CharField(required=False, default="UTC")
+
+    def validate_timezone(self, value):
+        """
+        Validate that the timezone is a valid IANA timezone.
+        Defaults to UTC if invalid.
+        """
+        try:
+            pytz.timezone(value)
+        except Exception:
+            raise serializers.ValidationError(_("Invalid timezone"))
+        return value
 
     def validate(self, data):
         group_by = data.get("group_by")
@@ -93,7 +104,7 @@ class EventParamsSerializer(serializers.Serializer):
             if not start_date or not end_date:
                 raise serializers.ValidationError({
                     "group_by": [
-                        "start_date and end_date are required when group_by is specified."
+                        _("start_date and end_date are required when group_by is specified.")
                     ]
                 })
 
@@ -103,12 +114,13 @@ class EventParamsSerializer(serializers.Serializer):
 
             if delta < 0:
                 raise serializers.ValidationError({
-                    "start_date": ["start_date must be earlier than end_date."]
+                    "start_date": [_("start_date must be earlier than end_date.")]
                 })
 
             if group_by == GroupByChoices.MONTH_DAYS and delta > 31:
                 raise serializers.ValidationError({
-                    "end_date": ["The date range cannot exceed 31 days."]
+                    "end_date": [_("The date range cannot exceed 31 days.")]
                 })
 
         return data
+

@@ -37,13 +37,13 @@ export function EventForm({
     start_time: false | "date" | "time";
     end_time: false | "date" | "time";
   }>({ start_time: false, end_time: false });
-
+  
   const [formValues, setFormValues] = useState({
     title: event?.title || "",
     location: event?.location || "",
     description: event?.description || "",
-    start_time: new Date(event?.start_time || Date.now()),
-    end_time: new Date(event?.end_time || Date.now()),
+    start_time: event && event.start_time ? new Date(event.start_time): new Date(),
+    end_time: event && event.end_time ? new Date(event.end_time): new Date(),
     groups: event?.groups || [],
     is_canceled: event?.is_canceled || false,
     visible: event?.visible || true,

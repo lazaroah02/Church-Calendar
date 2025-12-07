@@ -17,7 +17,7 @@ export async function getEvents({
   };
   try {
     const res = await fetch(
-      `${EVENTS_URL}?start_date=${start_date}&end_date=${end_date}&group_by=${group_by}`,
+      `${EVENTS_URL}?start_date=${start_date}&end_date=${end_date}&group_by=${group_by}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
       options
     );
     if (res.ok) {

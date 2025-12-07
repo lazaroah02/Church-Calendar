@@ -1,6 +1,6 @@
 import { Interval } from "@/types/event";
 
-const TIMEZONE = undefined
+const TIMEZONE = undefined;
 
 export function getMonthIntervalFromDate(date: Date): Interval {
   const year = date.getUTCFullYear();
@@ -76,7 +76,7 @@ export function formatTimeStamp(timestamp: string): string {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-    timeZone: TIMEZONE
+    timeZone: TIMEZONE,
   });
 
   // Ex: "9 de septiembre de 2025, 10:05"
@@ -84,4 +84,5 @@ export function formatTimeStamp(timestamp: string): string {
 
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
+
 
