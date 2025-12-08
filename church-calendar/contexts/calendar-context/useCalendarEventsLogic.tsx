@@ -25,7 +25,7 @@ export function useCalendarEventsLogic() {
   /**
    * Get the current user session (used to provide authentication token).
    */
-  const { session } = useSession();
+  const { session, isGuestUser } = useSession();
   const isAdmin = session?.userInfo?.is_staff || false;
 
   /**
@@ -88,6 +88,7 @@ export function useCalendarEventsLogic() {
             token: session?.token,
           }),
     staleTime: isAdmin ? 1000 * 60 * 1 : DEFAULT_STALE_TIME,
+    enabled: session != null || isGuestUser
   });
 
   /**

@@ -63,6 +63,8 @@ export interface AuthContenxtProps {
   signOut: () => void;
   session?: Session | null;
   isLoading: boolean;
+  isGuestUser: boolean
+  updateGuestStatus: (newStatus: boolean) => void
   updateSession: (newSession: Session) => void;
 }
 

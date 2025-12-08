@@ -1,4 +1,4 @@
-import { createContext, useCallback, type PropsWithChildren } from "react";
+import { createContext, useCallback, useState, type PropsWithChildren } from "react";
 import { useStorageState } from "@/hooks/useStorageState";
 import { login } from "@/services/auth/login";
 import {
@@ -11,6 +11,7 @@ import { persister, queryClient } from "@/lib/query-client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { register } from "@/services/auth/register";
 import { updateUserNotificationTokenAndTimezone } from "@/services/notifications/update-user-notification-token-and-timezone";
+import { router } from "expo-router";
 
 export const AuthContext = createContext<AuthContenxtProps>({
   signIn: () => null,
@@ -18,11 +19,14 @@ export const AuthContext = createContext<AuthContenxtProps>({
   register: () => null,
   session: null,
   isLoading: false,
+  isGuestUser: false,
+  updateGuestStatus: () => null,
   updateSession: () => null,
 });
 
 export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState("session");
+  const [isGuestUser, setIsGuestUser] = useState(false)
 
   const handleSignIn = ({
     email,
@@ -67,11 +71,13 @@ export function SessionProvider({ children }: PropsWithChildren) {
     }
     // then clear session and cached data
     setSession(null);
+    updateGuestStatus(false)
     queryClient.clear();
     queryClient.removeQueries();
     await persister.removeClient();
     await AsyncStorage.clear();
     queryClient.invalidateQueries({ queryKey: ["events"] });
+    router.replace("/welcome")
   };
 
   const updateSession = useCallback((newSession: Session) => {
@@ -83,6 +89,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
     );
   },[setSession]);
 
+  const updateGuestStatus = useCallback((newStatus: boolean) => {
+    setIsGuestUser(newStatus)
+  },[])
+
   return (
     <AuthContext
       value={{
@@ -90,6 +100,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
         signOut: handleSignOut,
         register: handleRegister,
         session: session ? JSON.parse(session) : null,
+        isGuestUser,
+        updateGuestStatus: updateGuestStatus,
         isLoading,
         updateSession: updateSession,
       }}

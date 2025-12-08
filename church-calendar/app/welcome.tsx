@@ -1,12 +1,14 @@
-import { Link } from "expo-router";
-import { Text, View, Pressable } from "react-native";
+import { Text, View, Pressable, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { navigate } from "expo-router/build/global-state/routing";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
+import { useSession } from "@/hooks/auth/useSession";
+import { router } from "expo-router";
 
 export default function Welcome() {
   const styles = useThemeStyles(welcomeStyles);
+  const { updateGuestStatus } = useSession();
   return (
     <View style={{ flex: 1 }}>
       <View
@@ -40,9 +42,15 @@ export default function Welcome() {
         >
           <Text style={styles.registerButtonText}>Crear Cuenta</Text>
         </Pressable>
-        <Link href="/(tabs)/calendar" style={styles.continueLikeGuest}>
-          Continuar como invitado
-        </Link>
+        <TouchableOpacity
+          onPress={() => {
+            updateGuestStatus(true);
+            router.replace("/(tabs)/calendar");
+          }}
+          style={styles.continueLikeGuest}
+        >
+          <Text>Continuar como invitado</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

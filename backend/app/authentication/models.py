@@ -84,6 +84,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+    class Meta:
+        ordering = ['created_at']
+
 
 @receiver(post_delete, sender=CustomUser)
 def delete_user_image(sender, instance, **kwargs):

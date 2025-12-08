@@ -52,6 +52,7 @@ export function useManageUsers({
       return undefined;
     },
     initialPageParam: 1,
+    enabled: session != null
   });
 
   const users: UserInfo[] = useMemo(
