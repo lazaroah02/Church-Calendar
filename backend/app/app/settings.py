@@ -85,7 +85,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [str(BASE_DIR.joinpath("static/templates"))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -179,6 +179,10 @@ LANGUAGES = [
 LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
+
+# Android and iOS apps links
+ANDROID_DOWNLOAD_URL = config("ANDROID_DOWNLOAD_URL", default="")
+IOS_DOWNLOAD_URL = config("IOS_DOWNLOAD_URL", default="")
 
 
 # Static files (CSS, JavaScript, Images)
