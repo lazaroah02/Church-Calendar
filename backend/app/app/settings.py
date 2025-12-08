@@ -180,10 +180,6 @@ LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
 
-# Android and iOS apps links
-ANDROID_DOWNLOAD_URL = config("ANDROID_DOWNLOAD_URL", default="")
-IOS_DOWNLOAD_URL = config("IOS_DOWNLOAD_URL", default="")
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
