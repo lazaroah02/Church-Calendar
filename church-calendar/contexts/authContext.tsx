@@ -1,4 +1,4 @@
-import { createContext, type PropsWithChildren } from "react";
+import { createContext, useCallback, type PropsWithChildren } from "react";
 import { useStorageState } from "@/hooks/useStorageState";
 import { login } from "@/services/auth/login";
 import {
@@ -10,7 +10,7 @@ import {
 import { persister, queryClient } from "@/lib/query-client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { register } from "@/services/auth/register";
-import { updateUserNotificationToken } from "@/services/notifications/update-user-notification-token-and-timezone";
+import { updateUserNotificationTokenAndTimezone } from "@/services/notifications/update-user-notification-token-and-timezone";
 
 export const AuthContext = createContext<AuthContenxtProps>({
   signIn: () => null,
@@ -57,7 +57,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
     // first unsubscribe user from notifications
     if(session){
       try {
-        await updateUserNotificationToken({
+        await updateUserNotificationTokenAndTimezone({
           token: session ? JSON.parse(session).token : "",
           new_fcm_token: "",
         });
@@ -74,14 +74,14 @@ export function SessionProvider({ children }: PropsWithChildren) {
     queryClient.invalidateQueries({ queryKey: ["events"] });
   };
 
-  const updateSession = (newSession: Session) => {
+  const updateSession = useCallback((newSession: Session) => {
     setSession(
       JSON.stringify({
         token: newSession?.token,
         userInfo: newSession.userInfo,
       })
     );
-  };
+  },[setSession]);
 
   return (
     <AuthContext
