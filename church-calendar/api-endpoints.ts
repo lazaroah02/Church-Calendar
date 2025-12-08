@@ -1,4 +1,4 @@
-export const BASE_URL = process.env.NODE_ENV === "development" ? 'http://192.168.1.199:8000' : 'https://churchcalendarbackend.pythonanywhere.com';
+export const BASE_URL = process.env.NODE_ENV === "development" ? 'http://192.168.1.199:8000' : 'https://laresurreccioncalendar.pythonanywhere.com';
 
 export const EVENTS_URL = `${BASE_URL}/api/events`
 export const CHURCH_GROUPS_URL = `${BASE_URL}/api/church-groups/`
