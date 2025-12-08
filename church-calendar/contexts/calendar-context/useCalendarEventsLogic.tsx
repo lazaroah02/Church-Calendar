@@ -7,6 +7,7 @@ import { CalendarUtils, DateData } from "react-native-calendars";
 import { useSession } from "@/hooks/auth/useSession";
 import { getEventsToManage } from "@/services/events/management/get-events-to-manage";
 import { DEFAULT_STALE_TIME } from "@/lib/query-client";
+import { debounce } from "@/lib/debounce";
 
 /**
  * Custom hook for handling calendar events with caching and refetching logic.
@@ -18,9 +19,13 @@ export function useCalendarEventsLogic() {
    * Interval for the currently visible month (start_date - end_date).
    * Defaults to the current month when initialized.
    */
-  const [interval, setInterval] = useState<Interval>(
+  const [interval, updateInterval] = useState<Interval>(
     getMonthIntervalFromDate(new Date())
   );
+
+  const setInterval = useMemo(() => debounce((newInterval: Interval) => {
+    updateInterval(newInterval)
+  }, 500),[])
 
   /**
    * Get the current user session (used to provide authentication token).
