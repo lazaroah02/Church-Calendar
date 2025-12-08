@@ -1,6 +1,6 @@
 import { USER_NOTIFICATION_TOKEN_URL } from "@/api-endpoints";
 
-export async function updateUserNotificationToken({
+export async function updateUserNotificationTokenAndTimezone({
   new_fcm_token,
   token,
 }: {
@@ -17,6 +17,7 @@ export async function updateUserNotificationToken({
     },
     body: JSON.stringify({
       fcm_token: new_fcm_token,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     }),
   };
   try {

@@ -10,7 +10,7 @@ import {
 import { persister, queryClient } from "@/lib/query-client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { register } from "@/services/auth/register";
-import { updateUserNotificationToken } from "@/services/notifications/update-user-notification-token";
+import { updateUserNotificationToken } from "@/services/notifications/update-user-notification-token-and-timezone";
 
 export const AuthContext = createContext<AuthContenxtProps>({
   signIn: () => null,

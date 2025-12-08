@@ -1,5 +1,9 @@
 from django.urls import path
-from .views import SendNotificationAboutEvent, UserNotificationTokenView
+from .views import (
+    CheckForUpcommingEventsAndNotify,
+    SendNotificationAboutEvent,
+    UserNotificationTokenView
+    )
 
 urlpatterns = [
     path(
@@ -10,4 +14,8 @@ urlpatterns = [
         'send-notification-about-event/',
         SendNotificationAboutEvent.as_view(),
         name='send-notification-about-event'),
+    path(
+        'check-for-upcomming-events-and-notify/',
+        CheckForUpcommingEventsAndNotify.as_view(),
+        name='check-for-upcomming-events-and-notify'),
 ]
