@@ -19,6 +19,9 @@ export default function EventReservations() {
     refetchEventReservations,
     isLoadingEventReservations,
     eventReservationsCount,
+    fetchNextPage,
+    hasMoreReservations,
+    isFetchingNextPage
   } = useManageReservations({
     eventId: eventId || "",
   });
@@ -43,6 +46,19 @@ export default function EventReservations() {
         }
         onRefresh={refetchEventReservations}
         refreshing={isLoadingEventReservations}
+        onEndReached={() =>
+          hasMoreReservations && !isFetchingNextPage && !isLoadingEventReservations && fetchNextPage()
+        }
+        ListFooterComponent={<View style={{ padding: 20, justifyContent: "center" }}>
+            {isFetchingNextPage && (
+              <Text style={{ textAlign: "center" }}>
+                Cargando mas reservaciones...
+              </Text>
+            )}
+            {!isFetchingNextPage && !isLoadingEventReservations && !hasMoreReservations && (
+              <Text style={{ textAlign: "center" }}>No hay mas reservaciones</Text>
+            )}
+          </View>}
       />
     </SafeAreaView>
   );

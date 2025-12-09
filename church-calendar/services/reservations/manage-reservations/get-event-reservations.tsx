@@ -11,7 +11,6 @@ export async function getEventReservations({
   pageParam?: number
   pageSize?:number
 }) {
-  console.log("bbb")
   const options: RequestInit = {
     method: "GET",
     headers: {

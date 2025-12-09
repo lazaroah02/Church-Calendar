@@ -8,7 +8,6 @@ import {
   RegisterProps,
 } from "@/types/auth";
 import { persister, queryClient } from "@/lib/query-client";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { register } from "@/services/auth/register";
 import { updateUserNotificationTokenAndTimezone } from "@/services/notifications/update-user-notification-token-and-timezone";
 import { router } from "expo-router";
@@ -75,7 +74,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
     queryClient.clear();
     queryClient.removeQueries();
     await persister.removeClient();
-    await AsyncStorage.clear();
     queryClient.invalidateQueries({ queryKey: ["events"] });
     router.replace("/welcome")
   };

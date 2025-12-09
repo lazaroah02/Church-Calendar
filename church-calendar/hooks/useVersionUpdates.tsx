@@ -5,6 +5,7 @@ import * as Linking from "expo-linking";
 import { useConfirm } from "./useConfirm";
 import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { InteractionManager } from "react-native";
 
 const STORAGE_KEY = "last-check-for-updates";
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -73,7 +74,6 @@ export function useVersionsUpdates() {
       const latestVersion = data.android.version;
       if (installedVersion !== latestVersion) {
         setUpdateInfo({ url: data.android.url, version: data.android.version });
-        storeLastCheck();
         showConfirm();
       } else {
         showSuccessToast({ message: "Tienes la última versión." });
@@ -81,6 +81,7 @@ export function useVersionsUpdates() {
     } catch (err: any) {
       showErrorToast({ message: err.message });
     } finally {
+      await storeLastCheck();
       setLoading(false);
     }
   }, [showConfirm, showErrorToast, showSuccessToast, storeLastCheck]);
@@ -90,17 +91,17 @@ export function useVersionsUpdates() {
   }, [loadLastCheck]);
 
   useEffect(() => {
-    if (!lastCheck && !loadingLastCheck) {
+    if (lastCheck == null && !loadingLastCheck) {
       setTimeout(checkForUpdate, 5000);
       return;
     }
-
     if (lastCheck) {
       const now = Date.now();
       const last = lastCheck?.getTime();
 
       if (now - last > ONE_WEEK_MS) {
         setTimeout(checkForUpdate, 5000);
+        return;
       }
     }
   }, [lastCheck, checkForUpdate, loadingLastCheck]);

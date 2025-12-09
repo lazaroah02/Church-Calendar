@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSession } from "../auth/useSession";
 import { getEventReservations } from "@/services/reservations/manage-reservations/get-event-reservations";
 import { Reservation } from "@/types/reservation";
@@ -11,21 +11,43 @@ export function useManageReservations({ eventId }: { eventId: string }) {
     error: errorGettingEventReservations,
     isLoading: isLoadingEventReservations,
     refetch: refetchEventReservations,
-  } = useQuery({
-    queryKey: ["event-reservations", eventId, session?.userInfo.id],
-    queryFn: () =>
-      getEventReservations({ eventId: eventId, token: session?.token || "" }),
-    enabled: session != null,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage: hasMoreReservations,
+  } = useInfiniteQuery({
+    queryKey: ["event-reservations", eventId],
+    queryFn: ({ pageParam = 1 }) =>
+      getEventReservations({
+        eventId: eventId,
+        token: session?.token || "",
+        pageParam: pageParam,
+      }),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.next) {
+        return parseInt(new URL(lastPage.next).searchParams.get("page") || "1");
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
   });
 
-  const eventReservations: Reservation[] = data.results || [];
-  const eventReservationsCount: number = useMemo(() => data.count || 0, [data]);
+  const eventReservations: Reservation[] = useMemo(
+    () => data?.pages.flatMap((page) => page.results) || [],
+    [data]
+  );
+  const eventReservationsCount: number = useMemo(
+    () => data?.pages[0]?.count || 0,
+    [data]
+  );
 
   return {
     eventReservations,
     errorGettingEventReservations,
     isLoadingEventReservations,
     refetchEventReservations,
-    eventReservationsCount
+    eventReservationsCount,
+    hasMoreReservations,
+    fetchNextPage,
+    isFetchingNextPage
   };
 }
