@@ -3,10 +3,15 @@ import { MANAGE_RESERVATIONS_URL } from "@/api-endpoints";
 export async function getEventReservations({
   token = "",
   eventId,
+  pageParam = 1,
+  pageSize = 20,
 }: {
   token: string;
   eventId?: number | string | undefined;
+  pageParam?: number
+  pageSize?:number
 }) {
+  console.log("bbb")
   const options: RequestInit = {
     method: "GET",
     headers: {
@@ -18,7 +23,7 @@ export async function getEventReservations({
   };
   try {
     const res = await fetch(
-      `${MANAGE_RESERVATIONS_URL}?event=${eventId}`,
+      `${MANAGE_RESERVATIONS_URL}?event=${eventId}&page=${pageParam}&page_size=${pageSize}`,
       options
     );
     const data = await res.json();

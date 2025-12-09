@@ -4,7 +4,7 @@ import { useManageReservations } from "@/hooks/reservations/useManageReservation
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { useSearchParams } from "expo-router/build/hooks";
-import { ScrollView, Text } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EventReservations() {
@@ -14,27 +14,36 @@ export default function EventReservations() {
 
   const styles = useThemeStyles(EventReservationsStyles);
 
-  const { eventReservations } = useManageReservations({
+  const {
+    eventReservations,
+    refetchEventReservations,
+    isLoadingEventReservations,
+    eventReservationsCount,
+  } = useManageReservations({
     eventId: eventId || "",
   });
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <PageHeader title={`Reservaciones para ${eventTitle}`} />
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {eventReservations.length === 0 ? (
+      <FlatList
+        data={eventReservations}
+        renderItem={({ item }) => (
+          <View style={{ marginLeft: 15 }}>
+            <ReservationCard key={item.id} reservation={item} />
+          </View>
+        )}
+        ListEmptyComponent={
           <Text style={styles.noReservationsMessage}>
             No hay reservaciones.
           </Text>
-        ) : (
-          <>
-          <Text style={styles.total}>Total: {eventReservations.length}</Text>
-          {eventReservations.map((reservation) => (
-            <ReservationCard key={reservation.id} reservation={reservation} />
-          ))}
-          </>
-        )}
-      </ScrollView>
+        }
+        ListHeaderComponent={
+          <Text style={styles.total}>Total: {eventReservationsCount}</Text>
+        }
+        onRefresh={refetchEventReservations}
+        refreshing={isLoadingEventReservations}
+      />
     </SafeAreaView>
   );
 }
@@ -51,10 +60,10 @@ const EventReservationsStyles = (theme: AppTheme) => ({
     fontSize: theme.fontSizes.lg,
     marginBottom: 10,
     marginTop: 10,
-    marginLeft: 10,
+    marginLeft: 25,
   },
   noReservationsMessage: {
-    marginTop: "80%",
+    marginTop: "60%",
     fontFamily: "LexendBold",
     fontSize: theme.fontSizes.lg,
     textAlign: "center",
