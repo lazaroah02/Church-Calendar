@@ -96,16 +96,16 @@ def send_push_notification_for_today_events():
         title="Eventos de Hoy",
         data={
             "pathname": "/(tabs)/calendar",
-            "params": {
-                "selectedDayParam": {
-                    "year": today_havana.year,
-                    "month": today_havana.month,
-                    "day": today_havana.day,
-                    # Convert to milliseconds for frontend
-                    "timestamp": int(today_havana.timestamp() * 1000),
-                    "dateString": today_havana.strftime("%Y-%m-%d")
-                }
-            }
+            # "params": {
+            #     "selectedDayParam": {
+            #         "year": today_havana.year,
+            #         "month": today_havana.month,
+            #         "day": today_havana.day,
+            #         # Convert to milliseconds for frontend
+            #         "timestamp": int(today_havana.timestamp() * 1000),
+            #         "dateString": today_havana.strftime("%Y-%m-%d")
+            #     }
+            # }
         },
         # Convert end-of-day Havana time back to UTC for database filtering
         datetime_lapse=end_of_day_havana.astimezone(dt_timezone.utc)
@@ -139,15 +139,15 @@ def send_push_notification_for_event(event, title="Evento en Camino!"):
             "priority": "high",
             "data": {
                 "pathname": "/(tabs)/calendar",
-                "params": {
-                    "selectedDayParam": {
-                        "year": event_time_user.year,
-                        "month": event_time_user.month,
-                        "day": event_time_user.day,
-                        "timestamp": int(event_time_user.timestamp() * 1000),
-                        "dateString": event_time_user.strftime("%Y-%m-%d")
-                    }
-                }
+                # "params": {
+                #     "selectedDayParam": {
+                #         "year": event_time_user.year,
+                #         "month": event_time_user.month,
+                #         "day": event_time_user.day,
+                #         "timestamp": int(event_time_user.timestamp() * 1000),
+                #         "dateString": event_time_user.strftime("%Y-%m-%d")
+                #     }
+                # }
             }
         }
 
