@@ -34,7 +34,7 @@ export function Notification({
               pathname: notif.data.pathname,
               params: {
                 selectedDayParam: JSON.stringify(
-                  notif.data.params.selectedDayParam
+                  notif.data.params?.selectedDayParam
                 ),
               },
             });

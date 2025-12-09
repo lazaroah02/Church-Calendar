@@ -1,6 +1,7 @@
 from time import time
 from django.contrib.auth import get_user_model
 from notification.utils.send_notifications import (
+    send_notification_to_everyone,
     send_push_notification_for_event,
     send_push_notification_for_upcomming_events,
     )
@@ -105,6 +106,7 @@ class SendNotificationAboutEvent(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
 
+
 class CheckForUpcommingEventsAndNotify(APIView):
     """
     View to check for upcoming events and notify users.
@@ -161,5 +163,46 @@ class CheckForUpcommingEventsAndNotify(APIView):
             logger.error(f"Error checking for upcoming events: {e}")
             return Response(
                 {"error": _("Failed to check for upcoming events. Try again later.")},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class NotifyEveryone(APIView):
+    """
+    View to notify about something to all the users.
+    """
+
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST request to notify everyone.
+        """
+
+        # Extract params
+        title = request.data.get("title", "")
+        body = request.data.get("body", "")
+        data = request.data.get("data", "{}")
+
+        try:
+            send_notification_to_everyone(
+                title=title,
+                body=body,
+                data=data
+            )
+
+            logger.info(
+                f"Notification sent to every user by user {request.user}"
+            )
+
+            return Response(
+                {"message": _("Notification sent to everyone.")},
+                status=status.HTTP_200_OK
+            )
+
+        except Exception as e:
+            logger.error(f"Error sending notification: {e}")
+            return Response(
+                {"error": _("Failed sending notification. Try again later.")},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

@@ -168,3 +168,22 @@ def build_events_notification_body_for_user(events, user_timezone):
         body += f"{event_time_user.strftime('%I:%M %p').lower()} {event.title}\n"
 
     return body
+
+
+def send_notification_to_everyone(title, body, data):
+    users = User.objects.filter().exclude(
+        fcm_token__isnull=True
+        ).exclude(fcm_token="").distinct()
+
+    print(f"Sending notification to {users.count()} users ...")
+
+    for user in users:
+        payload = {
+            "to": user.fcm_token,
+            "title": title,
+            "body": body,
+            "sound": "default",
+            "priority": "high",
+            "data": data
+        }
+        requests.post(EXPO_URL, json=payload)

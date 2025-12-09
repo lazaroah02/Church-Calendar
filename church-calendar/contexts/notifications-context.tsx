@@ -151,7 +151,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
           router.push({
             pathname: data.pathname,
             params: {
-              selectedDayParam: JSON.stringify(data.params.selectedDayParam),
+              selectedDayParam: JSON.stringify(data.params?.selectedDayParam),
             },
           });
       });
@@ -186,7 +186,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
           router.push({
             pathname: data.pathname,
             params: {
-              selectedDayParam: JSON.stringify(data.params.selectedDayParam),
+              selectedDayParam: JSON.stringify(data.params?.selectedDayParam),
             },
           });
       }
