@@ -61,8 +61,8 @@ export function EventTrheeDotsmenuOptions({
   
   return (
     <>
-      {confirm()}
-      {confirmEventNotification()}
+      {confirm({})}
+      {confirmEventNotification({})}
       <TouchableOpacity style={styles.touchable} onPress={showConfirm}>
         <Ionicons name="trash-outline" size={20} />
         <Text style={styles.text}>Eliminar</Text>

@@ -62,7 +62,7 @@ export function UserOptions({
 
   return (
     <>
-      {confirm()}
+      {confirm({})}
       <GroupSelector
         visible={showGroupSelectorModal}
         onCancel={() => {

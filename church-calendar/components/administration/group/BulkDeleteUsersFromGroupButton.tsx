@@ -55,7 +55,7 @@ export function BulkDeleteUsersFromGroupButton({
 
   return (
     <>
-      {confirm()}
+      {confirm({})}
       {selected.length > 0 && (
         <Pressable onPress={showConfirm} style={styles.deleteSelectedButton}>
           <Ionicons name="trash-outline" size={27} color="white" />

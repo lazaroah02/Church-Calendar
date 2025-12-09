@@ -32,7 +32,7 @@ export function GroupThreeDotsMenuOptions({
   const styles = useThemeStyles(OptionsStyles);
   return (
     <>
-      {confirm()}
+      {confirm({})}
       <TouchableOpacity style={styles.touchable} onPress={showConfirm}>
         <Ionicons name="trash-outline" size={20} />
         <Text style={styles.text}>Eliminar Grupo</Text>
