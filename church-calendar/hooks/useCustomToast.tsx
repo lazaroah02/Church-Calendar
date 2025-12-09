@@ -21,7 +21,7 @@ export function useCustomToast() {
     () => ({
       success: "#4BB543", // verde
       error: "#E74C3C", // rojo
-      warning: "#F1C40F", // amarillo
+      warning: "#db9b3aff", // amarillo
     }),
     []
   );
