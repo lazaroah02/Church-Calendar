@@ -180,15 +180,6 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
           body: notif.request.content.body,
           data: notif.request.content.data,
         });
-
-        const data: any = notif.request.content.data;
-        if (data?.pathname)
-          router.push({
-            pathname: data.pathname,
-            params: {
-              selectedDayParam: JSON.stringify(data.params?.selectedDayParam),
-            },
-          });
       }
     })();
   }, [router, saveNotificationForColdStarts]);
