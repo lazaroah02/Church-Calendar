@@ -42,7 +42,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         onLoginSuccess();
       })
       .catch((err: Error) => {
-        onLoginError(err);
+        onLoginError(JSON.parse(err.message));
       });
   };
 

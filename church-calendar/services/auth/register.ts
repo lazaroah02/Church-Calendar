@@ -35,7 +35,7 @@ export function register(data: RegisterData): Promise<null> {
         if (data.email) {
           errors.email = data.email[0];
         }
-        if (data.password1) {
+        else if (data.password1) {
           if (data.password1[0].includes("short")) {
             errors.password1 =
               "La contraseña es muy corta. Debe contener al menos 8 caracteres";
@@ -43,7 +43,7 @@ export function register(data: RegisterData): Promise<null> {
             errors.password1 = data.password1[0];
           }
         }
-        if (data.password2) {
+        else if (data.password2) {
           if (data.password2[0].includes("short")) {
             errors.password2 =
               "La contraseña es muy corta. Debe contener al menos 8 caracteres";
@@ -51,16 +51,16 @@ export function register(data: RegisterData): Promise<null> {
             errors.password2 = data.password2[0];
           }
         }
-        if (data.full_name) {
+        else if (data.full_name) {
           errors.full_name = data.full_name[0];
         }
-        if (data.phone_number) {
+        else if (data.phone_number) {
           errors.phone_number = data.phone_number[0];
         }
-        if (data.born_at) {
+        else if (data.born_at) {
           errors.born_at = data.born_at[0];
         }
-        if (data.non_field_errors) {
+        else if (data.non_field_errors) {
           if (
             data.non_field_errors[0].includes("contraseña") ||
             data.non_field_errors[0].includes("password")
@@ -69,6 +69,8 @@ export function register(data: RegisterData): Promise<null> {
           } else {
             errors.general = data.non_field_errors[0];
           }
+        }else{
+          errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
         }
 
         throw errors;
@@ -86,9 +88,7 @@ export function register(data: RegisterData): Promise<null> {
         );
       }
       throw new Error(
-        JSON.stringify({
-          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
-        })
+        JSON.stringify(error)
       );
     });
 }

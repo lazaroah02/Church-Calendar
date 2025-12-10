@@ -12,6 +12,7 @@ export function login({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Accept-Language":"es"
     },
     body: JSON.stringify({ email: email, password: pass }),
   })
@@ -27,11 +28,13 @@ export function login({
         if (data.email) {
           errors.email = "Correo inválido";
         }
-        if (data.password) {
+        else if (data.password) {
           errors.pass = "Ingresa una contraseña válida";
         }
-        if (data.non_field_errors) {
+        else if (data.non_field_errors) {
           errors.general = "Credenciales incorrectas";
+        }else{
+          errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
         }
 
         throw errors;
@@ -49,9 +52,7 @@ export function login({
         );
       }
       throw new Error(
-        JSON.stringify({
-          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
-        })
+        JSON.stringify(error)
       );
     });
 }

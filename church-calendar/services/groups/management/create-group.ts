@@ -47,14 +47,17 @@ export function createGroup({
           if (data.name) {
             errors.name = data.name[0];
           }
-          if (data.description) {
+          else if (data.description) {
             errors.description = data.description[0];
           }
-          if (data.color) {
+          else if (data.color) {
             errors.color = data.color[0];
           }
-          if (data.non_field_errors) {
+          else if (data.non_field_errors) {
             errors.general = data.non_field_errors[0];
+          }
+          else{
+            errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
           }
 
           throw errors;
@@ -66,16 +69,8 @@ export function createGroup({
         error instanceof TypeError &&
         error.message === "Network request failed"
       ) {
-        throw new Error(
-          JSON.stringify({
-            general: "Error en la operación. Revisa tu conexión de internet.",
-          })
-        );
+        error.general = "Error en la operación. Revisa tu conexión de internet."
       }
-      throw new Error(
-        JSON.stringify({
-          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
-        })
-      );
+      throw error
     });
 }

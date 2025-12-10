@@ -57,7 +57,7 @@ export function createUser({
           if (data.email) {
             errors.email = data.email[0];
           }
-          if (data.password) {
+          else if (data.password) {
             if (data.password[0].includes("short")) {
               errors.password =
                 "La contraseña es muy corta. Debe contener al menos 8 caracteres";
@@ -65,35 +65,29 @@ export function createUser({
               errors.password = data.password[0];
             }
           }
-          if (data.full_name) {
+          else if (data.full_name) {
             errors.full_name = data.full_name[0];
           }
-          if (data.phone_number) {
+          else if (data.phone_number) {
             errors.phone_number = data.phone_number[0];
           }
-          if (data.non_field_errors) {
+          else if (data.non_field_errors) {
             errors.general = data.non_field_errors[0];
+          }else{
+            errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
           }
 
           throw errors;
         }
       });
     })
-    .catch((error) => {
+    .catch((errors) => {
       if (
-        error instanceof TypeError &&
-        error.message === "Network request failed"
+        errors instanceof TypeError &&
+        errors.message === "Network request failed"
       ) {
-        throw new Error(
-          JSON.stringify({
-            general: "Error en la operación. Revisa tu conexión de internet.",
-          })
-        );
+        throw {general: "Error en la operación. Revisa tu conexión de internet."}
       }
-      throw new Error(
-        JSON.stringify({
-          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
-        })
-      );
+      throw errors
     });
 }

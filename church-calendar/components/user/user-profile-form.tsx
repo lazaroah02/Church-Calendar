@@ -54,7 +54,7 @@ export function UserProfileForm({
         updateSession({ token: session?.token, userInfo: data });
         onSuccess();
       })
-      .catch((err) => setErrors(err as UserProfileFormErrors))
+      .catch((err) => setErrors(JSON.parse(err.message) as UserProfileFormErrors))
       .finally(() => setLoading(false));
   };
 

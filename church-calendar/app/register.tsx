@@ -69,7 +69,7 @@ export default function Register() {
         router.replace("/account-created");
       },
       onError: (err) => {
-        setErrors(err as RegisterErrors);
+        setErrors(JSON.parse(err.message) as RegisterErrors);
         setLoading(false);
         scrollRef.current?.scrollToPosition(0, 0, true);
       },

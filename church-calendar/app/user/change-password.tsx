@@ -25,7 +25,7 @@ export default function ChangePassword() {
         showSuccessToast({ message: "Contraseña cambiada exitosamente" });
       })
       .catch((err) => {
-        setError(err)
+        setError(JSON.parse(err.message))
       })
       .finally(() => setLoading(false));
   }

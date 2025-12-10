@@ -33,7 +33,7 @@ export async function changePassword({
       if (data.new_password1) {
         errors.password1 = data.new_password1[0];
       }
-      if (data.new_password2) {
+      else if (data.new_password2) {
         if (data.new_password2[0].includes("short")) {
           errors.password2 =
             "La contraseña es muy corta. Debe contener al menos 8 caracteres";
@@ -42,6 +42,8 @@ export async function changePassword({
         } else {
           errors.password2 = data.new_password2[0];
         }
+      }else{
+        errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
       }
 
       throw errors;
@@ -58,9 +60,7 @@ export async function changePassword({
       );
     }
     throw new Error(
-      JSON.stringify({
-        general: "Error al conectar con el servidor. Inténtalo mas tarde.",
-      })
+      JSON.stringify(error)
     );
   }
 }

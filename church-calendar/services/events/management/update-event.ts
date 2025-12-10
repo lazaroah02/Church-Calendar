@@ -62,16 +62,16 @@ export function updateEvent({
             errors.title = "Título Incorrecto. No puede estar vacío.";
           }
 
-          if (data.location) {
+          else if (data.location) {
             errors.location = "Lugar Incorrecto. No puede estar vacío.";
           }
 
-          if (data.reservations_limit) {
+          else if (data.reservations_limit) {
             errors.reservations_limit =
               "Número máximo de reservaciones inválido.";
           }
 
-          if (data.non_field_errors) {
+          else if (data.non_field_errors) {
             if (
               data.non_field_errors[0] === "End time must be after start time."
             ) {
@@ -80,7 +80,11 @@ export function updateEvent({
             }
           }
 
-          throw new Error(JSON.stringify(errors));
+          else{
+            errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
+          }
+
+          throw errors
         }
       });
     })
@@ -96,9 +100,7 @@ export function updateEvent({
         );
       }
       throw new Error(
-        JSON.stringify({
-          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
-        })
+        JSON.stringify(error)
       );
     });
 }

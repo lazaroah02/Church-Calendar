@@ -56,14 +56,16 @@ export function updateUser({
           if (data.email) {
             errors.email = data.email[0];
           }
-          if (data.full_name) {
+          else if (data.full_name) {
             errors.full_name = data.full_name[0];
           }
-          if (data.phone_number) {
+          else if (data.phone_number) {
             errors.phone_number = data.phone_number[0];
           }
-          if (data.non_field_errors) {
+          else if (data.non_field_errors) {
             errors.general = data.non_field_errors[0];
+          }else{
+            errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
           }
 
           throw errors;
@@ -75,16 +77,8 @@ export function updateUser({
         error instanceof TypeError &&
         error.message === "Network request failed"
       ) {
-        throw new Error(
-          JSON.stringify({
-            general: "Error en la operación. Revisa tu conexión de internet.",
-          })
-        );
+        error.general = "Error en la operación. Revisa tu conexión de internet."
       }
-      throw new Error(
-        JSON.stringify({
-          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
-        })
-      );
+      throw error
     });
 }

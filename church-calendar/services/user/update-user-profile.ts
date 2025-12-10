@@ -39,6 +39,7 @@ export function updateUserProfile({
     headers: {
       ...(token ? { Authorization: `Token ${token}` } : {}),
       credentials: "omit",
+      "Accept-Language":"es"
     },
     body: formData,
   };
@@ -54,11 +55,13 @@ export function updateUserProfile({
           if (data.full_name) {
             errors.full_name = "Nombre Incorrecto";
           }
-          if (data.phone_number) {
+          else if (data.phone_number) {
             errors.phone_number = "Teléfono inválido";
           }
-          if (data.email) {
+          else if (data.email) {
             errors.email = "Correo inválido";
+          }else{
+            errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
           }
 
           throw errors;
@@ -77,9 +80,7 @@ export function updateUserProfile({
         );
       }
       throw new Error(
-        JSON.stringify({
-          general: "Error al conectar con el servidor. Inténtalo mas tarde.",
-        })
+        JSON.stringify(error)
       );
     });
 }

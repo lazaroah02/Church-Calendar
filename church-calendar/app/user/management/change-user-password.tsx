@@ -16,6 +16,7 @@ export default function ChangeUserPassword() {
   const [error, setError] = useState(null);
   const { session } = useSession();
   const { showSuccessToast } = useCustomToast();
+  
   function handleSubmit({ password1, password2 }: ChangePasswordFormData) {
     setLoading(true);
     try {
@@ -35,7 +36,7 @@ export default function ChangeUserPassword() {
         showSuccessToast({ message: "Contraseña cambiada exitosamente" });
       })
       .catch((err) => {
-        setError(err);
+        setError(JSON.parse(err.message));
       })
       .finally(() => setLoading(false));
   }
