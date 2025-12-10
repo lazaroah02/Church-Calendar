@@ -5,7 +5,7 @@ import * as Linking from "expo-linking";
 import { useConfirm } from "./useConfirm";
 import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { InteractionManager } from "react-native";
+import { usePathname } from "expo-router";
 
 const STORAGE_KEY = "last-check-for-updates";
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -19,6 +19,7 @@ export function useVersionsUpdates() {
   const [checkingForUpdates, setLoading] = useState(false);
   const [lastCheck, setLastCheck] = useState<Date | null>(null);
   const [loadingLastCheck, setLoadingLastCheck] = useState(true);
+  const pathname = usePathname();
 
   const {
     showConfirm,
@@ -76,15 +77,19 @@ export function useVersionsUpdates() {
         setUpdateInfo({ url: data.android.url, version: data.android.version });
         showConfirm();
       } else {
-        showSuccessToast({ message: "Tienes la última versión." });
+        if(pathname === "/settings"){
+          showSuccessToast({ message: "Tienes la última versión." });
+        }
       }
     } catch (err: any) {
-      showErrorToast({ message: err.message });
+      if(pathname === "/settings"){
+        showErrorToast({ message: err.message });
+      }
     } finally {
       await storeLastCheck();
       setLoading(false);
     }
-  }, [showConfirm, showErrorToast, showSuccessToast, storeLastCheck]);
+  }, [showConfirm, showErrorToast, showSuccessToast, storeLastCheck, pathname]);
 
   useEffect(() => {
     loadLastCheck();
