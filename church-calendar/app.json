@@ -18,10 +18,7 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.lazaroah02.churchcalendar",
-      "googleServicesFile": "./google-services.json",
-      "apkSplits": {
-        "abi": true
-      }
+      "googleServicesFile": "./google-services.json"
     },
     "splash": {
       "image": "./assets/images/splash.png",
