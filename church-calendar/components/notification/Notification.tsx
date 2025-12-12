@@ -43,7 +43,7 @@ export function Notification({
         <Text style={styles.title}>{notif.title || "No Title"}</Text>
         <Text style={styles.content}>{notif.body || "No Body"}</Text>
         <Text style={styles.receivetAt}>
-          Received at:{" "}
+          Recibido el:{" "}
           {new Date(notif.receivedAt).toLocaleString("es-ES", {
             hour12: true,
           })}
