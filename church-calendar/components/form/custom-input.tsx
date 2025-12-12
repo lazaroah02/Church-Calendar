@@ -64,7 +64,7 @@ const customInputStyles = (theme: AppTheme) => ({
     position: "relative",
     marginVertical: 10,
     minWidth: 330,
-    width:"100%",
+    width: "100%",
     height: 50,
     justifyContent: "center",
   },

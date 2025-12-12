@@ -68,6 +68,7 @@ export function EventForm({
       scrollViewRef.current?.scrollToPosition(0, 0, true);
     }
   }, [errors]);
+
   return (
     <>
       <KeyboardAwareScrollView
@@ -104,38 +105,6 @@ export function EventForm({
             style={{ marginTop: 10, marginBottom: 0 }}
           />
         )}
-
-        {/*Title*/}
-        <Text style={styles.label}>Título:</Text>
-        <CustomInput
-          error={errors?.title}
-          value={formValues.title}
-          onChangeText={(value) => handleFieldChange("title", value)}
-          inputStyle={{ backgroundColor: inputColor }}
-          containerStyle={{ width: "100%" }}
-        />
-
-        {/*Location*/}
-        <Text style={styles.label}>Lugar:</Text>
-        <CustomInput
-          error={errors?.location}
-          value={formValues.location}
-          onChangeText={(value) => handleFieldChange("location", value)}
-          inputStyle={{ backgroundColor: inputColor }}
-          containerStyle={{ width: "100%" }}
-        />
-
-        {/*Description*/}
-        <Text style={styles.label}>Descripción:</Text>
-        <CustomInput
-          error={null}
-          value={formValues.description}
-          onChangeText={(value) => handleFieldChange("description", value)}
-          inputStyle={{ backgroundColor: inputColor, height: "auto" }}
-          containerStyle={{ height: "auto", width: "100%" }}
-          scrollEnabled
-          multiline
-        />
 
         {/* START DATE */}
         <Text style={styles.label}>Inicio:</Text>
@@ -190,6 +159,38 @@ export function EventForm({
               end_time: false,
             })
           }
+        />
+
+        {/*Title*/}
+        <Text style={styles.label}>Título:</Text>
+        <CustomInput
+          error={errors?.title}
+          value={formValues.title}
+          onChangeText={(value) => handleFieldChange("title", value)}
+          inputStyle={{ backgroundColor: inputColor }}
+          containerStyle={{ width: "100%" }}
+        />
+
+        {/*Location*/}
+        <Text style={styles.label}>Lugar:</Text>
+        <CustomInput
+          error={errors?.location}
+          value={formValues.location}
+          onChangeText={(value) => handleFieldChange("location", value)}
+          inputStyle={{ backgroundColor: inputColor }}
+          containerStyle={{ width: "100%" }}
+        />
+
+        {/*Description*/}
+        <Text style={styles.label}>Descripción:</Text>
+        <CustomInput
+          error={null}
+          value={formValues.description}
+          onChangeText={(value) => handleFieldChange("description", value)}
+          inputStyle={{ backgroundColor: inputColor, height: "auto" }}
+          containerStyle={{ height: "auto", width: "100%" }}
+          scrollEnabled
+          multiline
         />
 
         {/*Groups*/}
