@@ -1,6 +1,6 @@
-import { View, FlatList, Text, Pressable } from "react-native";
+import { View, FlatList, Pressable } from "react-native";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
-import { UserAvatar } from "@/components/event/user-avatar";
+import { UserAvatar } from "@/components/user/user-avatar";
 import { Search } from "../Search";
 import { UserFiltersBottomSheet } from "../UserFilters";
 import { router } from "expo-router";
@@ -9,6 +9,9 @@ import { useUserAdministrationFilters } from "@/hooks/administration/useUserAdmi
 import { useSelectedItems } from "@/hooks/administration/useSelectedItems";
 import { CustomMenu } from "@/components/CustomMenu";
 import { UserOptions } from "../user/UserOptions";
+import { MyCustomText } from "@/components/MyCustomText";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export const UsersTab = () => {
   const { search, setFilters, filters, debouncedSearch } =
@@ -32,6 +35,8 @@ export const UsersTab = () => {
   const { selected, toggleSelect, clearSelected } = useSelectedItems<
     number | undefined
   >();
+
+  const styles = useThemeStyles(UsersTabStyles)
 
   return (
     <View style={{ flex: 1, padding: 20, paddingBottom: 0 }}>
@@ -83,12 +88,12 @@ export const UsersTab = () => {
         ListFooterComponent={
           <View style={{ padding: 20, justifyContent: "center" }}>
             {isGettingMoreUsers && (
-              <Text style={{ textAlign: "center" }}>
+              <MyCustomText style={styles.usersListStatusMessage}>
                 Cargando mas usuarios...
-              </Text>
+              </MyCustomText>
             )}
             {!isGettingMoreUsers && !isGettingUsers && !hasMoreUsers && (
-              <Text style={{ textAlign: "center" }}>No hay mas usuarios</Text>
+              <MyCustomText style={styles.usersListStatusMessage}>No hay mas usuarios</MyCustomText>
             )}
           </View>
         }
@@ -108,7 +113,7 @@ export const UsersTab = () => {
   );
 };
 
-const styles = {
+const UsersTabStyles = (theme: AppTheme) => ({
   searchContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -127,4 +132,8 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
   },
-};
+  usersListStatusMessage:{
+    textAlign: "center",
+    fontSize: theme.fontSizes.md
+  }
+})

@@ -1,8 +1,9 @@
-import { View, Text, Falsy, ViewStyle, RegisteredStyle, RecursiveArray } from "react-native";
+import { View, Falsy, ViewStyle, RegisteredStyle, RecursiveArray } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { Ref } from "react";
+import { MyCustomText } from "../MyCustomText";
 
 export default function FormErrorBanner({
   message,
@@ -15,7 +16,7 @@ export default function FormErrorBanner({
   return (
     <View style={[styles.container, style]} ref = {ref}>
       <Ionicons name="alert-circle" size={18} color="#b91c1c" />
-      <Text style={styles.text}>{message}</Text>
+      <MyCustomText style={styles.text}>{message}</MyCustomText>
     </View>
   );
 }

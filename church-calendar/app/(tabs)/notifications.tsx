@@ -1,3 +1,4 @@
+import { MyCustomText } from "@/components/MyCustomText";
 import { Notification } from "@/components/notification/Notification";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
@@ -8,7 +9,6 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   RefreshControl,
   ScrollView,
-  Text,
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -36,7 +36,7 @@ export default function Notifications() {
                 }}
               >
                 <Ionicons name="trash-outline" color={"black"} size={22} />
-                <Text style={styles.text}>Eliminar Todas</Text>
+                <MyCustomText style={styles.text}>Eliminar Todas</MyCustomText>
               </TouchableOpacity>
             )}
           />
@@ -52,9 +52,9 @@ export default function Notifications() {
         }
       >
         {notificationHistory.length === 0 && !loadingNotificationHistory ? (
-          <Text style={[{ textAlign: "center", marginTop: 20 }, styles.text]}>
+          <MyCustomText style={[{ textAlign: "center", marginTop: 20 }, styles.text]}>
             No tienes notificaciones.
-          </Text>
+          </MyCustomText>
         ) : (
           notificationHistory.map((notif) => (
             <Notification

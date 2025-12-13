@@ -7,10 +7,10 @@ import {
   Pressable,
   RecursiveArray,
   RegisteredStyle,
-  Text,
   View,
   ViewStyle,
 } from "react-native";
+import { MyCustomText } from "./MyCustomText";
 
 export function Button({
   children,
@@ -29,9 +29,9 @@ export function Button({
         children
       ) : (
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <Text style={styles[variant].text}>
+          <MyCustomText style={styles[variant].text}>
             {loadingText && loading ? loadingText : text}
-          </Text>
+          </MyCustomText>
           {loading && <ActivityIndicator size="small" color="#000" />}
         </View>
       )}

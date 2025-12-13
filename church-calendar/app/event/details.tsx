@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   View,
-  Text,
   ScrollView,
   Image,
   TouchableOpacity,
@@ -30,7 +29,8 @@ import { EventTrheeDotsmenuOptions } from "@/components/event/event-three-dots-m
 import { PageHeader } from "@/components/PageHeader";
 import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
 import { ReserveEvent } from "@/components/event/reserv-event";
-import { UserAvatar } from "@/components/event/user-avatar";
+import { UserAvatar } from "@/components/user/user-avatar";
+import { MyCustomText } from "@/components/MyCustomText";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
@@ -69,26 +69,26 @@ export default function EventDetails() {
       />
       <ScrollView contentContainerStyle={styles.container}>
         {parsedEvent?.is_canceled && (
-          <Text
+          <MyCustomText
             style={[
               styles.groupName,
               { color: "red", marginTop: 10, marginBottom: 10 },
             ]}
           >
             Este Evento ha sido cancelado
-          </Text>
+          </MyCustomText>
         )}
 
         {/* Date, time, and location */}
-        <Text style={styles.date}>{currentDateReadable}</Text>
-        <Text style={styles.time}>
+        <MyCustomText style={styles.date}>{currentDateReadable}</MyCustomText>
+        <MyCustomText style={styles.time}>
           Horario:{" "}
           {formatTimeRange(
             parsedEvent?.start_time || "",
             parsedEvent?.end_time || ""
           )}
-        </Text>
-        <Text style={styles.location}>Lugar: {parsedEvent?.location}</Text>
+        </MyCustomText>
+        <MyCustomText style={styles.location}>Lugar: {parsedEvent?.location}</MyCustomText>
 
         {/* Image */}
         {parsedEvent?.img && (
@@ -130,7 +130,7 @@ export default function EventDetails() {
 
         {/* Description */}
         <Hyperlink linkDefault={true} linkStyle={{ color: "#2980b9" }}>
-          <Text style={styles.description}>{parsedEvent?.description}</Text>
+          <MyCustomText style={styles.description}>{parsedEvent?.description}</MyCustomText>
         </Hyperlink>
 
         {/*Created by*/}
@@ -156,7 +156,7 @@ export default function EventDetails() {
         )}
 
         {/* Groups */}
-        <Text style={styles.groupLabel}>Evento para:</Text>
+        <MyCustomText style={styles.groupLabel}>Evento para:</MyCustomText>
         <View style={styles.groupsContainer}>
           {parsedEvent?.groups_full_info?.map((group) => (
             <View key={group.name} style={styles.group}>
@@ -166,7 +166,7 @@ export default function EventDetails() {
                   { backgroundColor: group.color || "#ccc" },
                 ]}
               />
-              <Text style={styles.groupName}>{group.name}</Text>
+              <MyCustomText style={styles.groupName}>{group.name}</MyCustomText>
             </View>
           ))}
         </View>
@@ -174,19 +174,19 @@ export default function EventDetails() {
         {isAdmin && (
           <>
             {/* Estado */}
-            <Text style={styles.groupLabel}>Estado del Evento:</Text>
-            <Text style={styles.groupName}>
+            <MyCustomText style={styles.groupLabel}>Estado del Evento:</MyCustomText>
+            <MyCustomText style={styles.groupName}>
               • {parsedEvent?.is_canceled ? "Cancelado" : "No Cancelado"}
-            </Text>
-            <Text style={styles.groupName}>
+            </MyCustomText>
+            <MyCustomText style={styles.groupName}>
               • {parsedEvent?.visible ? "Visible" : "Oculto"}
-            </Text>
-            <Text style={styles.groupName}>
+            </MyCustomText>
+            <MyCustomText style={styles.groupName}>
               •{" "}
               {parsedEvent?.open_to_reservations
                 ? "Abierto a reservaciones"
                 : "Cerrado a reservaciones"}
-            </Text>
+            </MyCustomText>
           </>
         )}
       </ScrollView>

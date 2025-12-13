@@ -1,8 +1,9 @@
 import { Button } from "@/components/Button";
+import { MyCustomText } from "@/components/MyCustomText";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { router } from "expo-router";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AccountCreated() {
@@ -10,7 +11,7 @@ export default function AccountCreated() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>Su cuenta ha sido creada exitosamente!</Text>
+        <MyCustomText style={styles.title}>Su cuenta ha sido creada exitosamente!</MyCustomText>
         <Button
           text="Iniciar Sesión"
           disabled={false}

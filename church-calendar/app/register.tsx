@@ -1,6 +1,5 @@
 import { router } from "expo-router";
 import {
-  Text,
   View,
   Pressable,
   ActivityIndicator,
@@ -20,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ChurchGroupsPicker } from "@/components/form/church-groups-picker";
 import { Ionicons } from "@expo/vector-icons";
 import FormErrorBanner from "@/components/form/form-banner-error";
+import { MyCustomText } from "@/components/MyCustomText";
 
 type RegisterErrors = {
   email: string;
@@ -88,7 +88,7 @@ export default function Register() {
       >
         <MyNavigationBar buttonsStyle="dark" />
         <View style={styles.form}>
-          <Text style={styles.formTitle}>Crear Cuenta</Text>
+          <MyCustomText style={styles.formTitle}>Crear Cuenta</MyCustomText>
 
           {errors && (
             <FormErrorBanner
@@ -102,12 +102,12 @@ export default function Register() {
 
           {/*Register Info*/}
           <View style={styles.formSection}>
-            <Label style={[styles.label, styles.formSectionTitle]}>
+            <Label allowFontScaling={false} style={[styles.label, styles.formSectionTitle]}>
               Información de Registro
             </Label>
 
             <View>
-              <Label style={styles.label}>Correo</Label>
+              <Label allowFontScaling={false} style={styles.label}>Correo</Label>
               <CustomInput
                 inputStyle={styles.input}
                 value={formValues.email}
@@ -118,7 +118,7 @@ export default function Register() {
             </View>
 
             <View>
-              <Label style={styles.label}>Contraseña</Label>
+              <Label allowFontScaling={false} style={styles.label}>Contraseña</Label>
               <CustomInput
                 isPassword={true}
                 inputStyle={styles.input}
@@ -129,7 +129,7 @@ export default function Register() {
             </View>
 
             <View>
-              <Label style={styles.label}>Repetir Contraseña</Label>
+              <Label allowFontScaling={false} style={styles.label}>Repetir Contraseña</Label>
               <CustomInput
                 isPassword={true}
                 inputStyle={styles.input}
@@ -142,12 +142,12 @@ export default function Register() {
 
           {/*Contact Info*/}
           <View style={styles.formSection}>
-            <Label style={[styles.label, styles.formSectionTitle]}>
+            <Label allowFontScaling={false} style={[styles.label, styles.formSectionTitle]}>
               Información de Contacto
             </Label>
 
             <View>
-              <Label style={styles.label}>Nombre Completo</Label>
+              <Label allowFontScaling={false} style={styles.label}>Nombre Completo</Label>
               <CustomInput
                 error={errors?.full_name}
                 inputStyle={styles.input}
@@ -158,7 +158,7 @@ export default function Register() {
             </View>
 
             <View>
-              <Label style={styles.label}>Número de Teléfono</Label>
+              <Label allowFontScaling={false} style={styles.label}>Número de Teléfono</Label>
               <CustomInput
                 inputStyle={styles.input}
                 error={errors?.phone_number}
@@ -169,14 +169,14 @@ export default function Register() {
             </View>
 
             <View>
-              <Label
+              <Label allowFontScaling={false}
                 style={styles.label}
                 onPress={() => setShowDatePicker(true)}
               >
                 Fecha de Nacimiento
               </Label>
               <Pressable onPress={() => setShowDatePicker(true)}>
-                <Text
+                <MyCustomText
                   style={[
                     styles.input,
                     {
@@ -192,7 +192,7 @@ export default function Register() {
                   ]}
                 >
                   {formValues.born_at.toLocaleDateString()}
-                </Text>
+                </MyCustomText>
                 {errors?.born_at && (
                   <Ionicons
                     name="alert-circle"
@@ -219,7 +219,7 @@ export default function Register() {
           </View>
 
           <View style={styles.formSection}>
-            <Label style={[styles.label, styles.formSectionTitle]}>
+            <Label allowFontScaling={false} style={[styles.label, styles.formSectionTitle]}>
               Grupos a los que perteneces
             </Label>
             <ChurchGroupsPicker
@@ -238,9 +238,9 @@ export default function Register() {
       </KeyboardAwareScrollView>
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center" }}>
         <Pressable style={styles.registerButton} onPress={handleSubmit}>
-          <Text style={styles.registerButtonText}>
+          <MyCustomText style={styles.registerButtonText}>
             {!loading ? "Crear Cuenta" : "Creando cuenta"}
-          </Text>
+          </MyCustomText>
           {loading && <ActivityIndicator size="small" color="#fff" />}
         </Pressable>
       </View>

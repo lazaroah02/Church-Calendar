@@ -1,10 +1,11 @@
-import { Text, View, Pressable, TouchableOpacity } from "react-native";
+import { View, Pressable, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { navigate } from "expo-router/build/global-state/routing";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { useSession } from "@/hooks/auth/useSession";
 import { router } from "expo-router";
+import { MyCustomText } from "@/components/MyCustomText";
 
 export default function Welcome() {
   const styles = useThemeStyles(welcomeStyles);
@@ -18,21 +19,21 @@ export default function Welcome() {
           source={require("@/assets/images/Logo.png")}
           style={styles.logo}
         />
-        <Text style={styles.title}>Calendario La Resurrección</Text>
+        <MyCustomText style={styles.title}>Calendario La Resurrección</MyCustomText>
       </View>
       <View style={styles.container}>
-        <Text style={styles.containerTitle}>Bienvenido</Text>
-        <Text style={styles.containerwelcomeMessage}>
+        <MyCustomText style={styles.containerTitle}>Bienvenido</MyCustomText>
+        <MyCustomText style={styles.containerwelcomeMessage}>
           Aquí encontrarás todos los eventos disponibles de forma fácil y
           rápida.
-        </Text>
+        </MyCustomText>
         <Pressable
           style={styles.loginButton}
           onPress={() => {
             navigate("/sign-in");
           }}
         >
-          <Text style={styles.logginButtonText}>Iniciar Sesión</Text>
+          <MyCustomText style={styles.logginButtonText}>Iniciar Sesión</MyCustomText>
         </Pressable>
         <Pressable
           style={styles.registerButton}
@@ -40,7 +41,7 @@ export default function Welcome() {
             navigate("/register");
           }}
         >
-          <Text style={styles.registerButtonText}>Crear Cuenta</Text>
+          <MyCustomText style={styles.registerButtonText}>Crear Cuenta</MyCustomText>
         </Pressable>
         <TouchableOpacity
           onPress={() => {
@@ -49,7 +50,7 @@ export default function Welcome() {
           }}
           style={styles.continueLikeGuest}
         >
-          <Text>Continuar como invitado</Text>
+          <MyCustomText style={styles.continueLikeGuestText}>Continuar como invitado</MyCustomText>
         </TouchableOpacity>
       </View>
     </View>
@@ -144,15 +145,18 @@ const welcomeStyles = (theme: AppTheme) => ({
     fontFamily: "InterVariable",
   },
   continueLikeGuest: {
+    marginTop: 10,
+  },
+  continueLikeGuestText:{
     fontSize: theme.fontSizes.sm,
     fontWeight: 500,
-    opacity: 0.7,
-    color: "#fff",
+    fontFamily: "LexendBold",
+    lineHeight: 15,
     textShadowColor: "rgba(0, 0, 0, 0.25)",
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
-    fontFamily: "LexendBold",
-    lineHeight: 15,
-    marginTop: 10,
-  },
+    color: "#fff",
+    opacity: 0.7,
+    padding:1
+  }
 });

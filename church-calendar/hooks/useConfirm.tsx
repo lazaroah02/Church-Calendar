@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
 import {
   View,
-  Text,
   Modal,
   TouchableOpacity,
   ActivityIndicator,
@@ -9,6 +8,7 @@ import {
 } from "react-native";
 import { useThemeStyles } from "./useThemedStyles";
 import { AppTheme } from "@/theme";
+import { MyCustomText } from "@/components/MyCustomText";
 
 export function useConfirm({
   onCancel = () => null,
@@ -71,12 +71,12 @@ export function useConfirm({
                 elevation: 4,
               }}
             >
-              <Text style={[styles.text, { fontFamily: "LexendBold" }]}>
+              <MyCustomText style={[styles.text, { fontFamily: "LexendBold" }]}>
                 {title}
-              </Text>
-              <Text style={[styles.text, { marginVertical: 10 }]}>
+              </MyCustomText>
+              <MyCustomText style={[styles.text, { marginVertical: 10 }]}>
                 {message}
-              </Text>
+              </MyCustomText>
 
               <View
                 style={{
@@ -90,7 +90,7 @@ export function useConfirm({
                   onPress={handleCancel}
                   style={styles.cancelButton}
                 >
-                  <Text style={[styles.text]}>Cancelar</Text>
+                  <MyCustomText style={[styles.text]}>Cancelar</MyCustomText>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -98,7 +98,7 @@ export function useConfirm({
                   onPress={handleConfirm}
                   disabled={loading}
                 >
-                  <Text style={[styles.text]}>Continuar</Text>
+                  <MyCustomText style={[styles.text]}>Continuar</MyCustomText>
                   {loading && <ActivityIndicator size="small" />}
                 </TouchableOpacity>
               </View>

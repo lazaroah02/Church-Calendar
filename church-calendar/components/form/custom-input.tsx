@@ -29,6 +29,7 @@ export function CustomInput({
         style={[styles.input, inputStyle, error && styles.inputError]}
         secureTextEntry={isPassword && !showPassword}
         placeholderTextColor={"#000"}
+        allowFontScaling={false}
         {...props}
       />
 

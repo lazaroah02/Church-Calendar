@@ -1,9 +1,10 @@
+import { MyCustomText } from "@/components/MyCustomText";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { getImageUri } from "@/lib/get-image-uri";
 import { AppTheme } from "@/theme";
 import { Group } from "@/types/group";
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, View, Text, Image } from "react-native";
+import { Pressable, View, Image } from "react-native";
 
 export const GroupAvatar = ({
   group,
@@ -39,7 +40,7 @@ export const GroupAvatar = ({
             <Ionicons name="image-outline" size={22} color="#fff" />
           )}
         </View>
-        <Text style={styles.groupName}>{group?.name}</Text>
+        <MyCustomText style={styles.groupName}>{group?.name}</MyCustomText>
       </Pressable>
     </>
   );
@@ -57,7 +58,7 @@ const GroupAvatarStyles = (theme: AppTheme) => ({
     marginBottom: 5,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
   },
   profilePictureContainer: {
     backgroundColor: "#37C6FF",
@@ -76,7 +77,7 @@ const GroupAvatarStyles = (theme: AppTheme) => ({
   groupName: {
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: 500,
   },
 });

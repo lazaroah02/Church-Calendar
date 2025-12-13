@@ -1,8 +1,9 @@
+import { MyCustomText } from "@/components/MyCustomText";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { router } from "expo-router";
-import { Pressable, Text} from "react-native";
+import { Pressable} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function NotFoundScreen() {
@@ -10,9 +11,9 @@ export default function NotFoundScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <MyNavigationBar buttonsStyle="dark" />
-      <Text style={styles.notFoundMessage}>No Encontrado</Text>
+      <MyCustomText style={styles.notFoundMessage}>No Encontrado</MyCustomText>
       <Pressable onPress={() => router.back()} style={styles.backButton}>
-        <Text style={styles.backButtonText}>Volver</Text>
+        <MyCustomText style={styles.backButtonText}>Volver</MyCustomText>
       </Pressable>
     </SafeAreaView>
   );

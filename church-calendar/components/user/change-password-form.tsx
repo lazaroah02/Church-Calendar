@@ -1,13 +1,14 @@
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { CustomInput } from "../form/custom-input";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Button } from "../Button";
 import FormErrorBanner from "../form/form-banner-error";
 import { ChangePasswordFormData } from "@/types/auth";
+import { MyCustomText } from "../MyCustomText";
 
 export function ChangePasswordForm({
   onSubmit,
@@ -60,7 +61,7 @@ export function ChangePasswordForm({
             style={{marginBottom:0, maxWidth:"100%"}}
           />
         )}
-        <Text style={styles.label}>Nueva Contraseña</Text>
+        <MyCustomText style={styles.label}>Nueva Contraseña</MyCustomText>
         <CustomInput
           isPassword={true}
           inputStyle={{ backgroundColor: inputColor }}
@@ -69,7 +70,7 @@ export function ChangePasswordForm({
           error={error?.password1}
         />
 
-        <Text style={styles.label}>Repetir Contraseña</Text>
+        <MyCustomText style={styles.label}>Repetir Contraseña</MyCustomText>
         <CustomInput
           isPassword={true}
           inputStyle={{ backgroundColor: inputColor }}

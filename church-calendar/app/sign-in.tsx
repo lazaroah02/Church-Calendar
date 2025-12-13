@@ -1,6 +1,5 @@
 import { router } from "expo-router";
 import {
-  Text,
   View,
   Pressable,
   ActivityIndicator,
@@ -16,6 +15,7 @@ import { CustomInput } from "@/components/form/custom-input";
 import { openBrowserAsync } from "expo-web-browser";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { MyCustomText } from "@/components/MyCustomText";
 
 export default function SignIn() {
   const { signIn } = useSession();
@@ -43,11 +43,11 @@ export default function SignIn() {
           source={require("@/assets/images/Logo.png")}
           style={styles.logo}
         />
-        <Text style={styles.title}>Calendario La Resurrección</Text>
+        <MyCustomText style={styles.title}>Calendario La Resurrección</MyCustomText>
       </View>
 
       <View style={styles.form}>
-        <Text style={styles.formTitle}>Iniciar Sesión</Text>
+        <MyCustomText style={styles.formTitle}>Iniciar Sesión</MyCustomText>
         {errors && (
           <FormErrorBanner
             message={
@@ -85,7 +85,7 @@ export default function SignIn() {
           }
         />
 
-        <Text
+        <MyCustomText
           style={styles.forgotPassword}
           onPress={() =>
             Alert.alert(
@@ -111,7 +111,7 @@ export default function SignIn() {
           }
         >
           ¿Olvidaste tu contraseña?
-        </Text>
+        </MyCustomText>
 
         <Pressable
           style={styles.loginButton}
@@ -132,9 +132,9 @@ export default function SignIn() {
             });
           }}
         >
-          <Text style={styles.logginButtonText}>
+          <MyCustomText style={styles.logginButtonText}>
             {loading ? "Enviando" : "Iniciar Sesión"}
-          </Text>
+          </MyCustomText>
           {loading && <ActivityIndicator size="small" color="#000" />}
         </Pressable>
       </View>

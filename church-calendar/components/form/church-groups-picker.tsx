@@ -6,7 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useMemo, useState } from "react";
 import {
   View,
-  Text,
   TouchableOpacity,
   Modal,
   FlatList,
@@ -15,6 +14,7 @@ import {
   RegisteredStyle,
   RecursiveArray,
 } from "react-native";
+import { MyCustomText } from "../MyCustomText";
 
 interface ChurchGroupsPickerProps {
   placeholder?: string;
@@ -96,7 +96,7 @@ const ChurchGroupsPicker = ({
         style={[styles.dropdown, selectStyle]}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={styles.placeholderStyle}>{placeholder}</Text>
+        <MyCustomText style={styles.placeholderStyle}>{placeholder}</MyCustomText>
         <Ionicons
           name="caret-down-outline"
           size={18}
@@ -108,7 +108,7 @@ const ChurchGroupsPicker = ({
         <View style={styles.chipsContainer}>
           {selectedGroups.map((id) => (
             <View key={id} style={styles.chip}>
-              <Text style={styles.chipText}>{getLabelByValue(id)}</Text>
+              <MyCustomText style={styles.chipText}>{getLabelByValue(id)}</MyCustomText>
               <TouchableOpacity
                 onPress={() => {
                   const updated = selectedGroups.filter((v) => v !== id);
@@ -116,7 +116,7 @@ const ChurchGroupsPicker = ({
                   onChange(updated);
                 }}
               >
-                <Text style={styles.chipClose}>×</Text>
+                <MyCustomText style={styles.chipClose}>×</MyCustomText>
               </TouchableOpacity>
             </View>
           ))}
@@ -126,7 +126,7 @@ const ChurchGroupsPicker = ({
       {/* Modal para seleccionar grupos */}
       <Modal visible={modalVisible} animationType="slide">
         <View style={styles.modalStyle}>
-          <Text style={styles.modalTitle}>Selecciona grupos</Text>
+          <MyCustomText style={styles.modalTitle}>Selecciona grupos</MyCustomText>
 
           <FlatList
             data={data}
@@ -138,14 +138,14 @@ const ChurchGroupsPicker = ({
                   style={[styles.item, isSelected && styles.itemSelected]}
                   onPress={() => toggleGroup(item.value)}
                 >
-                  <Text
+                  <MyCustomText
                     style={[
                       styles.itemText,
                       isSelected && styles.itemTextSelected,
                     ]}
                   >
                     {item.label}
-                  </Text>
+                  </MyCustomText>
                 </TouchableOpacity>
               );
             }}
@@ -156,7 +156,7 @@ const ChurchGroupsPicker = ({
             onPress={confirmSelection}
             style={styles.confirmButton}
           >
-            <Text style={styles.confirmButtonText}>Confirmar selección</Text>
+            <MyCustomText style={styles.confirmButtonText}>Confirmar selección</MyCustomText>
           </TouchableOpacity>
 
           {/* Cancel Button */}
@@ -167,7 +167,7 @@ const ChurchGroupsPicker = ({
             }}
             style={styles.cancelButton}
           >
-            <Text style={styles.cancelButtonText}>Cancelar</Text>
+            <MyCustomText style={styles.cancelButtonText}>Cancelar</MyCustomText>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -188,7 +188,7 @@ const ChurchGroupsPickerStyles = (theme: AppTheme) => ({
     justifyContent: "space-between",
   },
   placeholderStyle: {
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     color: "#000",
   },
   chipsContainer: {

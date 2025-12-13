@@ -1,4 +1,4 @@
-import  { useEffect, useCallback, useReducer } from 'react';
+import { useEffect, useCallback, useReducer } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
@@ -33,28 +33,46 @@ export async function setStorageItemAsync(key: string, value: string | null) {
   }
 }
 
-export function useStorageState(key: string): UseStateHook<string> {
-  // Public
-  const [state, setState] = useAsyncState<string>();
+/**
+ * Hook para manejar estado persistente en storage, con valor por defecto opcional
+ */
+export function useStorageState(
+  key: string,
+  defaultValue: string | null = null
+): UseStateHook<string> {
+  const [state, setState] = useAsyncState<string>([true, defaultValue]);
 
-  // Get
+  // Obtener valor guardado
   useEffect(() => {
-    if (Platform.OS === 'web') {
+    let isMounted = true;
+
+    const loadValue = async () => {
       try {
-        if (typeof localStorage !== 'undefined') {
-          setState(localStorage.getItem(key));
+        let storedValue: string | null = null;
+
+        if (Platform.OS === 'web') {
+          storedValue = localStorage.getItem(key);
+        } else {
+          storedValue = await SecureStore.getItemAsync(key);
+        }
+
+        if (isMounted) {
+          setState(storedValue ?? defaultValue); // usar default si no hay valor guardado
         }
       } catch (e) {
-        console.error('Local storage is unavailable:', e);
+        console.error('Error reading storage:', e);
+        if (isMounted) setState(defaultValue);
       }
-    } else {
-      SecureStore.getItemAsync(key).then(value => {
-        setState(value);
-      });
-    }
-  }, [key]);
+    };
 
-  // Set
+    loadValue();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [key, defaultValue]);
+
+  // Guardar valor
   const setValue = useCallback(
     (value: string | null) => {
       setState(value);

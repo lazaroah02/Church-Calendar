@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { useSession } from "@/hooks/auth/useSession";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
@@ -6,10 +6,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { getImageUri } from "@/lib/get-image-uri";
 import { getFirstWord, truncText } from "@/lib/text-manipulation";
+import { MyCustomText } from "./MyCustomText";
+import { useAppTheme } from "@/contexts/theme-context";
+import { useMemo } from "react";
 
 export function UserTopBar() {
   const { session } = useSession();
   const styles = useThemeStyles(userTopBarStyles);
+  const theme = useAppTheme();
+  const normalThemeSize = useMemo(() => theme.themeName === "normal", [theme]);
   return (
     <View style={styles.container}>
       <Pressable
@@ -32,7 +37,7 @@ export function UserTopBar() {
           )}
         </View>
         <View>
-          <Text
+          <MyCustomText
             style={styles.userName}
             numberOfLines={2}
             ellipsizeMode={"tail"}
@@ -41,8 +46,10 @@ export function UserTopBar() {
             {session == null
               ? ", Invitado"
               : `, ${truncText(getFirstWord(session.userInfo?.full_name), 10)}`}
-          </Text>
-          <Text style={styles.welcomeMessage}>Dios te Bendiga!</Text>
+          </MyCustomText>
+          <MyCustomText style={styles.welcomeMessage}>
+            Dios te Bendiga!
+          </MyCustomText>
         </View>
       </Pressable>
       {session?.userInfo.is_staff && (
@@ -51,8 +58,10 @@ export function UserTopBar() {
             style={styles.createEventButton}
             onPress={() => router.push("/event/create")}
           >
-            <Text style={styles.createEventButtonText}>Crear Evento</Text>
-            <Text style={[styles.createEventButtonPlusIcon]}>+</Text>
+            <Ionicons name="add" size={normalThemeSize ? 23 : 30}/>
+            <MyCustomText style={styles.createEventButtonText}>
+              Evento
+            </MyCustomText>
           </Pressable>
         </View>
       )}
@@ -101,7 +110,7 @@ const userTopBarStyles = (theme: AppTheme) => ({
   welcomeMessage: {
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.md,
+    fontSize: theme.fontSizes.sm,
     fontWeight: 400,
     opacity: 0.5,
   },
@@ -122,12 +131,6 @@ const userTopBarStyles = (theme: AppTheme) => ({
     color: "#000",
     fontFamily: "InterVariable",
     fontSize: theme.fontSizes.md,
-    fontWeight: 900,
-  },
-  createEventButtonPlusIcon: {
-    color: "#000",
-    fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.xl,
     fontWeight: 900,
   },
 });

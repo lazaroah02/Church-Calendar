@@ -1,9 +1,10 @@
-import { Text, View, Pressable } from "react-native";
+import { View, Pressable } from "react-native";
 import { Event } from "@/types/event";
 import { formatTimeRange } from "@/lib/calendar/calendar-utils";
 import { router } from "expo-router";
 import type { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { MyCustomText } from "../MyCustomText";
 
 export function EventComponent({
   item,
@@ -24,17 +25,17 @@ export function EventComponent({
       style={styles.eventCard}
     >
       <View>
-        <Text
+        <MyCustomText
           style={[
             styles.eventTitle,
             item.is_canceled ? { textDecorationLine: "line-through" } : {},
           ]}
         >
           {item.title}
-        </Text>
+        </MyCustomText>
         {item.is_canceled && (
           <View style={{ flexDirection: "row" }}>
-            <Text
+            <MyCustomText
               style={[
                 styles.eventTime,
                 {
@@ -46,12 +47,12 @@ export function EventComponent({
               ]}
             >
               Cancelado
-            </Text>
+            </MyCustomText>
           </View>
         )}
-        <Text style={styles.eventTime}>
+        <MyCustomText style={styles.eventTime}>
           {formatTimeRange(item.start_time, item.end_time)}
-        </Text>
+        </MyCustomText>
         <View style={styles.groups}>
           {item.groups_full_info?.map((group, i) => (
             <View key={i} style={styles.group}>
@@ -63,7 +64,7 @@ export function EventComponent({
                   },
                 ]}
               ></View>
-              <Text style={styles.groupName}>{group.name}</Text>
+              <MyCustomText style={styles.groupName}>{group.name}</MyCustomText>
             </View>
           ))}
         </View>
@@ -84,7 +85,7 @@ const eventComponentStyles = (theme: AppTheme) => ({
     opacity: 0.5,
   },
   eventTitle: {
-    color: "#000",
+    color: "#000000c6",
     fontFamily: "LexendBold",
     fontSize: theme.fontSizes.lg,
     fontWeight: 500,

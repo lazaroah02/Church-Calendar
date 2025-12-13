@@ -4,12 +4,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import {
   View,
-  Text,
   Falsy,
   ViewStyle,
   RegisteredStyle,
   RecursiveArray,
 } from "react-native";
+import { MyCustomText } from "./MyCustomText";
 
 export function PageHeader({
   title = "",
@@ -37,14 +37,14 @@ export function PageHeader({
           style={{ marginLeft: -8, marginTop: 3 }}
           onPress={onBack}
         />
-        <Text
+        <MyCustomText
           style={styles.title}
           numberOfLines={2}
           ellipsizeMode="tail"
           lineBreakMode="tail"
         >
           {title}
-        </Text>
+        </MyCustomText>
       </View>
       {rightComponent}
     </View>

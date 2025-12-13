@@ -1,7 +1,8 @@
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, Text } from "react-native";
+import { Pressable } from "react-native";
+import { MyCustomText } from "../MyCustomText";
 
 interface CheckBoxProps {
   label: string;
@@ -23,7 +24,7 @@ export function CheckBox({ label, checked, onCheck, disabled = false, variant = 
       ) : (
         <Ionicons name="square-outline" size={25} color="#000" />
       )}
-      <Text style={[styles.label, variant === "light"? {fontWeight:"500"}:{}]}>{label}</Text>
+      <MyCustomText style={[styles.label, variant === "light"? {fontWeight:"500"}:{}]}>{label}</MyCustomText>
     </Pressable>
   );
 }
@@ -35,7 +36,7 @@ const CheckBoxStyles = (theme: AppTheme) => {
       marginBottom: 5,
       color: "#000",
       fontFamily: "InterVariable",
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
     },
     checkboxContainer: {
       flexDirection: "row",

@@ -2,14 +2,18 @@ import "@/lib/calendar/calendar-locale";
 import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
 import { Calendar } from "react-native-calendars";
 import { CalendarComponentProps } from "@/types/calendar";
-import { View, Text, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { MyCustomText } from "../MyCustomText";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export function CalendarComponent({
   setInterval,
   renderDayComponent,
   initialSelectedDay,
 }: CalendarComponentProps) {
+  const styles = useThemeStyles(CalendarComponentStyles)
   return (
     <Calendar
       initialDate={initialSelectedDay?.dateString}
@@ -33,8 +37,8 @@ export function CalendarComponent({
         const year = date.toString("yyyy");
         return (
           <View style={styles.header}>
-            <Text style={styles.month}>{month}</Text>
-            <Text style={styles.year}>{year}</Text>
+            <MyCustomText style={styles.month}>{month}</MyCustomText>
+            <MyCustomText style={styles.year}>{year}</MyCustomText>
           </View>
         );
       }}
@@ -49,7 +53,7 @@ export function CalendarComponent({
   );
 }
 
-const styles = StyleSheet.create({
+const CalendarComponentStyles = (theme:AppTheme) =>({
   header: {
     alignItems: "center",
     marginVertical: 10,
@@ -58,11 +62,11 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     color: "#343434",
     fontFamily: "InterVariable",
-    fontSize: 23,
+    fontSize: theme.fontSizes.xl,
     fontWeight: 900,
   },
   year: {
-    fontSize: 15,
+    fontSize: theme.fontSizes.lg,
     color: "#343434",
     marginTop: -2,
     fontFamily: "InterVariable",

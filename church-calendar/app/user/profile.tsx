@@ -6,11 +6,12 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { router } from "expo-router";
 import { useState } from "react";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PageHeader } from "@/components/PageHeader";
 import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
 import { Ionicons } from "@expo/vector-icons";
+import { MyCustomText } from "@/components/MyCustomText";
 
 export default function UserProfile() {
   const styles = useThemeStyles(userProfileStyles);
@@ -35,7 +36,7 @@ export default function UserProfile() {
                     }}
                   >
                     <Ionicons name="key-outline" size={20} />
-                    <Text style={styles.text}>Cambiar Contraseña</Text>
+                    <MyCustomText style={styles.text}>Cambiar Contraseña</MyCustomText>
                   </TouchableOpacity>
                 </>
               )}

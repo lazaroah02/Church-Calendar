@@ -1,4 +1,4 @@
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSession } from "@/hooks/auth/useSession";
 import { navigate } from "expo-router/build/global-state/routing";
@@ -12,6 +12,7 @@ import Constants from "expo-constants";
 import { Ionicons } from "@expo/vector-icons";
 import { useVersionsUpdates } from "@/hooks/useVersionUpdates";
 import { openBrowserAsync } from "expo-web-browser";
+import { MyCustomText } from "@/components/MyCustomText";
 
 export default function Settings() {
   const { signOut } = useSession();
@@ -27,11 +28,11 @@ export default function Settings() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
-        <Text style={styles.title}>Opciones</Text>
+        <MyCustomText style={styles.title}>Opciones</MyCustomText>
         <Collapsible title="Tamaño de Letra" style={styles.optionCollapsible}>
           <CheckBox
             label="Normal"
-            checked={themeName === "normal" || themeName == null}
+            checked={themeName === "normal"}
             onCheck={() => setThemeName("normal")}
           />
           <CheckBox
@@ -41,25 +42,25 @@ export default function Settings() {
           />
         </Collapsible>
         <View>
-          <Text
+          <MyCustomText
             style={[styles.title, { width: 300, marginTop: 50, fontSize: 24 }]}
           >
             Acerca de la Aplicación
-          </Text>
-          <Text style={styles.text}>
+          </MyCustomText>
+          <MyCustomText style={styles.text}>
             Versión Actual: {Constants.expoConfig?.version}
-          </Text>
+          </MyCustomText>
           {lastCheck && (
             <View style={{ marginTop: 10 }}>
-              <Text style={styles.text}>Ultima comprobación:</Text>
-              <Text style={styles.text}>
+              <MyCustomText style={styles.text}>Ultima comprobación:</MyCustomText>
+              <MyCustomText style={styles.text}>
                 {lastCheck.toLocaleDateString()}{" "}
                 {lastCheck.toLocaleTimeString("es-ES", {
                   hour: "2-digit",
                   minute: "2-digit",
                   hour12: true,
                 })}
-              </Text>
+              </MyCustomText>
             </View>
           )}
           <TouchableOpacity
@@ -67,11 +68,11 @@ export default function Settings() {
             onPress={checkForUpdate}
           >
             <Ionicons name="download-outline" size={22} />
-            <Text style={styles.text}>
+            <MyCustomText style={styles.text}>
               {checkingForUpdates
                 ? "Buscando Actualizaciones ..."
                 : "Buscar Actualizaciones"}
-            </Text>
+            </MyCustomText>
           </TouchableOpacity>
           {confirmUpdate({
             title: "Nueva versión encontrada!",
@@ -79,14 +80,14 @@ export default function Settings() {
           })}
         </View>
         <View>
-          <Text
+          <MyCustomText
             style={[styles.title, { width: 300, marginTop: 50, fontSize: 24 }]}
           >
             Soporte y Contacto
-          </Text>
-          <Text style={styles.text}>
+          </MyCustomText>
+          <MyCustomText style={styles.text}>
             Tienes alguna duda o has detectado algún error en la aplicación?
-          </Text>
+          </MyCustomText>
           <TouchableOpacity
             style={styles.checkUpdatesButton}
             onPress={async () => {
@@ -96,7 +97,7 @@ export default function Settings() {
             }}
           >
             <Ionicons name="logo-whatsapp" size={22} />
-            <Text style={styles.text}>Contactar con Soporte</Text>
+            <MyCustomText style={styles.text}>Contactar con Soporte</MyCustomText>
           </TouchableOpacity>
         </View>
         <View style={{ height: 100 }}></View>
@@ -129,7 +130,7 @@ export default function Settings() {
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <Ionicons name="log-out-outline" size={24} />
-          <Text style={styles.closeSessionButtonText}>Cerrar Sesión</Text>
+          <MyCustomText style={styles.closeSessionButtonText}>Cerrar Sesión</MyCustomText>
         </View>
       </Button>
     </SafeAreaView>
@@ -147,7 +148,7 @@ const settingsStyles = (theme: AppTheme) => ({
     textAlign: "start",
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 25,
+    fontSize: 26,
     fontWeight: "700",
   },
   optionCollapsible: {

@@ -3,13 +3,14 @@ import BottomSheet, {
   BottomSheetBackgroundProps,
 } from "@gorhom/bottom-sheet";
 import { useMemo, useRef } from "react";
-import { Text, Animated } from "react-native";
+import { Animated } from "react-native";
 import { DateData } from "react-native-calendars";
 import { Event } from "@/types/event";
 import { formatSelectedDay } from "@/lib/calendar/calendar-utils";
 import { EventComponent } from "./event";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { MyCustomText } from "../MyCustomText";
 
 export function EventsBottomSheet({
   selectedDay,
@@ -35,12 +36,12 @@ export function EventsBottomSheet({
             item={item.item}
           />
         )}
-        ListEmptyComponent={<Text style={styles.noEvents}>No hay eventos</Text>}
+        ListEmptyComponent={<MyCustomText style={styles.noEvents}>No hay eventos</MyCustomText>}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContent}
         style={styles.content}
         ListHeaderComponent={
-          <Text style={styles.title}>{currentDateReadable}</Text>
+          <MyCustomText style={styles.title}>{currentDateReadable}</MyCustomText>
         }
       />
     </BottomSheet>

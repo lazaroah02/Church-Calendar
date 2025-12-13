@@ -1,18 +1,18 @@
 export const normalTheme = {
   fontSizes: {
-    sm: 12,
-    md: 14,
-    lg: 16,
-    xl:18
+    sm: 16,
+    md: 18,
+    lg: 20,
+    xl:22
   },
 };
 
 export const largeTheme = {
   fontSizes: {
-    sm: 16,
-    md: 18,
-    lg: 20,
-    xl:22
+    sm: 18,
+    md: 20,
+    lg: 22,
+    xl:24
   },
 };
 

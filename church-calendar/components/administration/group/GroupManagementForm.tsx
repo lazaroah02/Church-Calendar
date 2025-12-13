@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Image, Text, Pressable } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { Button } from "@/components/Button";
 import { CustomInput } from "@/components/form/custom-input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -12,6 +12,7 @@ import { pickImage } from "@/lib/pick-image";
 import { Group } from "@/types/group";
 import { useManageGroups } from "@/hooks/groups/useManageGroups";
 import ColorPicker from "react-native-wheel-color-picker";
+import { MyCustomText } from "@/components/MyCustomText";
 
 export function GroupManagementForm({
   group,
@@ -89,10 +90,10 @@ export function GroupManagementForm({
           }}
         >
           <Ionicons name="warning-outline" size={30} />
-          <Text style={[styles.groupLabel, { marginTop: 0 }]}>
+          <MyCustomText style={[styles.groupLabel, { marginTop: 0 }]}>
             Los cambios realizados pueden tardar unos minutos en reflejarse en
             los datos de los eventos.
-          </Text>
+          </MyCustomText>
         </View>
         {/* Profile Picture */}
         <Pressable
@@ -131,7 +132,7 @@ export function GroupManagementForm({
         )}
 
         {/* Name */}
-        <Text style={styles.groupLabel}>Nombre</Text>
+        <MyCustomText style={styles.groupLabel}>Nombre</MyCustomText>
         <CustomInput
           error={errors?.name}
           textContentType="name"
@@ -142,7 +143,7 @@ export function GroupManagementForm({
         />
 
         {/* Description */}
-        <Text style={styles.groupLabel}>Descripción:</Text>
+        <MyCustomText style={styles.groupLabel}>Descripción:</MyCustomText>
         <CustomInput
           error={null}
           value={formValues.description}
@@ -154,7 +155,7 @@ export function GroupManagementForm({
         />
 
         {/* Color */}
-        <Text style={styles.groupLabel}>Color</Text>
+        <MyCustomText style={styles.groupLabel}>Color</MyCustomText>
         <View style={{ flex: 1, paddingBottom: 30 }}>
           <ColorPicker
             color={groupColor}

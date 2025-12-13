@@ -2,7 +2,7 @@ import { CustomInput } from "@/components/form/custom-input";
 import { getImageUri } from "@/lib/get-image-uri";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
-import { Pressable, Text, Image, View } from "react-native";
+import { Pressable, Image, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { CheckBox } from "@/components/form/checkbox";
 import { Button } from "@/components/Button";
@@ -13,6 +13,7 @@ import { ChurchGroupsPicker } from "@/components/form/church-groups-picker";
 import FormErrorBanner from "@/components/form/form-banner-error";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { MyCustomText } from "../MyCustomText";
 
 const inputColor = "#EBEBEB";
 
@@ -107,7 +108,7 @@ export function EventForm({
         )}
 
         {/* START DATE */}
-        <Text style={styles.label}>Inicio:</Text>
+        <MyCustomText style={styles.label}>Inicio:</MyCustomText>
         <DateTimePickerGroup
           value={formValues.start_time}
           handleChange={(date) => handleFieldChange("start_time", date)}
@@ -134,7 +135,7 @@ export function EventForm({
         />
 
         {/* END DATE */}
-        <Text style={styles.label}>Fin:</Text>
+        <MyCustomText style={styles.label}>Fin:</MyCustomText>
         <DateTimePickerGroup
           error={errors?.end_time}
           value={formValues.end_time}
@@ -162,7 +163,7 @@ export function EventForm({
         />
 
         {/*Title*/}
-        <Text style={styles.label}>Título:</Text>
+        <MyCustomText style={styles.label}>Título:</MyCustomText>
         <CustomInput
           error={errors?.title}
           value={formValues.title}
@@ -172,7 +173,7 @@ export function EventForm({
         />
 
         {/*Location*/}
-        <Text style={styles.label}>Lugar:</Text>
+        <MyCustomText style={styles.label}>Lugar:</MyCustomText>
         <CustomInput
           error={errors?.location}
           value={formValues.location}
@@ -182,7 +183,7 @@ export function EventForm({
         />
 
         {/*Description*/}
-        <Text style={styles.label}>Descripción:</Text>
+        <MyCustomText style={styles.label}>Descripción:</MyCustomText>
         <CustomInput
           error={null}
           value={formValues.description}
@@ -194,7 +195,7 @@ export function EventForm({
         />
 
         {/*Groups*/}
-        <Text style={styles.label}>Dirigido a:</Text>
+        <MyCustomText style={styles.label}>Dirigido a:</MyCustomText>
         <ChurchGroupsPicker
           onChange={(selectedGroups) =>
             handleFieldChange("groups", selectedGroups)
@@ -204,7 +205,7 @@ export function EventForm({
         />
 
         {/*State*/}
-        <Text style={styles.label}>Estado:</Text>
+        <MyCustomText style={styles.label}>Estado:</MyCustomText>
         <CheckBox
           label="Cancelado"
           checked={formValues.is_canceled}
@@ -230,7 +231,7 @@ export function EventForm({
             <View
               style={{ flexDirection: "row", alignItems: "flex-end", gap: 20 }}
             >
-              <Text style={styles.label}>Límite de Reservas:</Text>
+              <MyCustomText style={styles.label}>Límite de Reservas:</MyCustomText>
               <CheckBox
                 label="Sin límite"
                 checked={formValues.reservations_limit === null}

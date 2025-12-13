@@ -3,11 +3,12 @@ import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useMemo, useRef, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { CustomBottomSheetBackground } from "../calendar/events-bottom-sheet";
 import { CheckBox } from "../form/checkbox";
 import { ChurchGroupsPicker } from "../form/church-groups-picker";
 import { Button } from "../Button";
+import { MyCustomText } from "../MyCustomText";
 
 export type UserFilters = {
   is_staff: boolean | "";
@@ -91,7 +92,7 @@ export function UserFiltersBottomSheet({
       enablePanDownToClose
     >
       <BottomSheetScrollView>
-        <Text style={styles.title}>Filtros</Text>
+        <MyCustomText style={styles.title}>Filtros</MyCustomText>
 
         <View style={styles.content}>
           <CheckBox

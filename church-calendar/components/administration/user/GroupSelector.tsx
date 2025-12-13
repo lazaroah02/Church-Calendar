@@ -1,9 +1,10 @@
+import { MyCustomText } from "@/components/MyCustomText";
 import { useManageGroups } from "@/hooks/groups/useManageGroups";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Group } from "@/types/group";
 import { useState } from "react";
-import { FlatList, Modal, TouchableOpacity, View, Text, ActivityIndicator } from "react-native";
+import { FlatList, Modal, TouchableOpacity, View, ActivityIndicator } from "react-native";
 
 export function GroupSelector({
   visible,
@@ -23,7 +24,7 @@ export function GroupSelector({
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.modalStyle}>
-        <Text style={styles.modalTitle}>Selecciona un grupo</Text>
+        <MyCustomText style={styles.modalTitle}>Selecciona un grupo</MyCustomText>
 
         <FlatList
           data={groups}
@@ -35,14 +36,14 @@ export function GroupSelector({
                 style={[styles.item, isSelected && styles.itemSelected]}
                 onPress={() => setSelectedGroup(item)}
               >
-                <Text
+                <MyCustomText
                   style={[
                     styles.itemText,
                     isSelected && styles.itemTextSelected,
                   ]}
                 >
                   {item.name}
-                </Text>
+                </MyCustomText>
               </TouchableOpacity>
             );
           }}
@@ -57,13 +58,13 @@ export function GroupSelector({
           }}
           style={styles.confirmButton}
         >
-          <Text style={styles.confirmButtonText} disabled = {loading}>{loading?'Enviando':'Confirmar selección'}</Text>
+          <MyCustomText style={styles.confirmButtonText} disabled = {loading}>{loading?'Enviando':'Confirmar selección'}</MyCustomText>
           {loading && <ActivityIndicator size="small" color={"#fff"}/>}
         </TouchableOpacity>
 
         {/* Cancel Button */}
         <TouchableOpacity onPress={onCancel} style={styles.cancelButton} disabled={loading}>
-          <Text style={styles.cancelButtonText}>Cancelar</Text>
+          <MyCustomText style={styles.cancelButtonText}>Cancelar</MyCustomText>
         </TouchableOpacity>
       </View>
     </Modal>

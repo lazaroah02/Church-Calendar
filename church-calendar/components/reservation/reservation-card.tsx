@@ -2,7 +2,7 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Reservation } from "@/types/reservation";
 import { View } from "react-native";
-import { UserAvatar } from "../event/user-avatar";
+import { UserAvatar } from "../user/user-avatar";
 import { formatTimeStamp } from "@/lib/calendar/calendar-utils";
 
 export function ReservationCard({ reservation }: { reservation: Reservation }) {

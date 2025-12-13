@@ -4,7 +4,8 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Event } from "@/types/event";
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity, Text, ActivityIndicator, View } from "react-native";
+import { TouchableOpacity, ActivityIndicator, View } from "react-native";
+import { MyCustomText } from "../MyCustomText";
 
 export function ReserveEvent({ event }: { event?: Event | null }) {
   const { session } = useSession();
@@ -48,9 +49,9 @@ export function ReserveEvent({ event }: { event?: Event | null }) {
         </View>
       ) : (
         <>
-          <Text style={styles.buttonText}>
+          <MyCustomText style={styles.buttonText}>
             {isReserved ? "Anotado" : "Anotarse"}
-          </Text>
+          </MyCustomText>
           {isReserved ? (
             <Ionicons name="checkbox-outline" size={20} color="#fff" />
           ) : (

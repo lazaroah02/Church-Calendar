@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity, Text, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { useConfirm } from "../../hooks/useConfirm";
 import { useEffect } from "react";
 import { AppTheme } from "@/theme";
@@ -7,6 +7,7 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { router } from "expo-router";
 import { UserInfo } from "@/types/auth";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
+import { MyCustomText } from "../MyCustomText";
 
 export function UserThreeDotsmenuOptions({
   user,
@@ -35,7 +36,7 @@ export function UserThreeDotsmenuOptions({
       {confirm({})}
       <TouchableOpacity style={styles.touchable} onPress={showConfirm}>
         <Ionicons name="trash-outline" size={20} />
-        <Text style={styles.text}>Eliminar</Text>
+        <MyCustomText style={styles.text}>Eliminar</MyCustomText>
       </TouchableOpacity>
       <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
       <TouchableOpacity
@@ -51,7 +52,7 @@ export function UserThreeDotsmenuOptions({
         }}
       >
         <Ionicons name="pencil-outline" size={20} />
-        <Text style={styles.text}>Editar</Text>
+        <MyCustomText style={styles.text}>Editar</MyCustomText>
       </TouchableOpacity>
       <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
       <TouchableOpacity
@@ -67,7 +68,7 @@ export function UserThreeDotsmenuOptions({
         }}
       >
         <Ionicons name="key-outline" size={20} />
-        <Text style={styles.text}>Cambiar Contraseña</Text>
+        <MyCustomText style={styles.text}>Cambiar Contraseña</MyCustomText>
       </TouchableOpacity>
     </>
   );

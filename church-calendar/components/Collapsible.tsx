@@ -1,9 +1,10 @@
 import { PropsWithChildren, useState } from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { AppTheme } from '@/theme';
 import { useThemeStyles } from '@/hooks/useThemedStyles';
+import { MyCustomText } from './MyCustomText';
 
 export function Collapsible({ children, title, style }: PropsWithChildren & { title: string, style: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +24,7 @@ export function Collapsible({ children, title, style }: PropsWithChildren & { ti
           style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
         />
 
-        <Text type="defaultSemiBold" style={styles.title}>{title}</Text>
+        <MyCustomText type="defaultSemiBold" style={styles.title}>{title}</MyCustomText>
       </TouchableOpacity>
       {isOpen && <View style={styles.content}>{children}</View>}
     </View>

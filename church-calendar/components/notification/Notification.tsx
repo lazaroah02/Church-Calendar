@@ -3,7 +3,8 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import { MyCustomText } from "../MyCustomText";
 
 export function Notification({
   removeNotification,
@@ -40,14 +41,14 @@ export function Notification({
             });
         }}
       >
-        <Text style={styles.title}>{notif.title || "No Title"}</Text>
-        <Text style={styles.content}>{notif.body || "No Body"}</Text>
-        <Text style={styles.receivetAt}>
+        <MyCustomText style={styles.title}>{notif.title || "No Title"}</MyCustomText>
+        <MyCustomText style={styles.content}>{notif.body || "No Body"}</MyCustomText>
+        <MyCustomText style={styles.receivetAt}>
           Recibido el:{" "}
           {new Date(notif.receivedAt).toLocaleString("es-ES", {
             hour12: true,
           })}
-        </Text>
+        </MyCustomText>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => removeNotification(notif.id)}>
         <Ionicons name="trash-outline" color={"rgba(0, 0, 0, 1)"} size={22} />

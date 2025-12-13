@@ -1,11 +1,14 @@
 import { useManageGroups } from "@/hooks/groups/useManageGroups";
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList } from "react-native";
 import { GroupAvatar } from "../group/GroupAvatar";
 import { router } from "expo-router";
 import { Search } from "../Search";
 import { CustomMenu } from "@/components/CustomMenu";
-import { Menu } from "react-native-paper";
 import { useGroupAdministrationFilters } from "@/hooks/administration/useGroupAdministrationFilters";
+import { MyCustomText } from "@/components/MyCustomText";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { MenuItemNoScale } from "@/components/MenuItemNoScale";
 
 export const GroupsTab = () => {
   const { groups, loadingGroups, errorGettingGroups, refetchGroups } =
@@ -14,6 +17,8 @@ export const GroupsTab = () => {
   const { filteredGroups, handleSearch } = useGroupAdministrationFilters({
     groups: groups,
   });
+
+  const styles = useThemeStyles(GroupsTabStyles)
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
@@ -33,7 +38,7 @@ export const GroupsTab = () => {
         />
         <CustomMenu
           renderItems={(closeParent) => (
-            <Menu.Item
+            <MenuItemNoScale
               title="Crear Grupo"
               leadingIcon="plus"
               onPress={() => {
@@ -67,9 +72,9 @@ export const GroupsTab = () => {
         ListFooterComponent={
           <View style={{ padding: 20, justifyContent: "center" }}>
             {!loadingGroups && errorGettingGroups && (
-              <Text style={{ textAlign: "center" }}>
+              <MyCustomText style={[styles.text, { textAlign: "center" }]}>
                 Error al obtener los grupos. Revisa tu conexión a internet.
-              </Text>
+              </MyCustomText>
             )}
           </View>
         }
@@ -77,3 +82,9 @@ export const GroupsTab = () => {
     </View>
   );
 };
+
+const GroupsTabStyles = (theme: AppTheme) => ({
+  text: {
+    fontSize: theme.fontSizes.md,
+  },
+});

@@ -24,6 +24,7 @@ export function Search({
         placeholder="Buscar:"
         style={styles.input}
         value={searchValue}
+        allowFontScaling={false}
         placeholderTextColor={"black"}
         onChangeText={(text) => {
           onSearch(text)

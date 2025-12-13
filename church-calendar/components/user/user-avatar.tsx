@@ -4,7 +4,8 @@ import { AppTheme } from "@/theme";
 import { UserInfo } from "@/types/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { Pressable, View, Text, Image } from "react-native";
+import { Pressable, View, Image } from "react-native";
+import { MyCustomText } from "../MyCustomText";
 
 export const UserAvatar = ({
   title,
@@ -28,7 +29,7 @@ export const UserAvatar = ({
   const styles = useThemeStyles(UserAvatarStyles);
   return (
     <>
-      {title != null? <Text style={styles.label}>{title}</Text> : null}
+      {title != null? <MyCustomText style={styles.label}>{title}</MyCustomText> : null}
 
       <Pressable
         onPress={() => onPress(user)}
@@ -47,9 +48,9 @@ export const UserAvatar = ({
             <Ionicons name="person-outline" size={22} color="#fff" />
           )}
         </View>
-        <Text style={styles.userName}>
+        <MyCustomText style={styles.userName}>
           {user?.full_name || user?.username || user?.email.split("@")[0]}
-        </Text>
+        </MyCustomText>
       </Pressable>
     </>
   );
@@ -67,7 +68,7 @@ const UserAvatarStyles = (theme: AppTheme) => ({
     marginBottom: 5,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
   },
   profilePictureContainer: {
     backgroundColor: "#37C6FF",
@@ -85,7 +86,7 @@ const UserAvatarStyles = (theme: AppTheme) => ({
   userName: {
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: 500,
   },
 });

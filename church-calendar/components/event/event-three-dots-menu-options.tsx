@@ -1,7 +1,7 @@
 import { useManageEvents } from "@/hooks/events/useManageEvents";
 import { Event } from "@/types/event";
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity, Text, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { useConfirm } from "../../hooks/useConfirm";
 import { useEffect } from "react";
 import { AppTheme } from "@/theme";
@@ -10,6 +10,7 @@ import { router } from "expo-router";
 import { notifyAboutEvent } from "@/services/notifications/notify-about-event";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { useSession } from "@/hooks/auth/useSession";
+import { MyCustomText } from "../MyCustomText";
 
 export function EventTrheeDotsmenuOptions({
   event,
@@ -65,7 +66,7 @@ export function EventTrheeDotsmenuOptions({
       {confirmEventNotification({})}
       <TouchableOpacity style={styles.touchable} onPress={showConfirm}>
         <Ionicons name="trash-outline" size={20} />
-        <Text style={styles.text}>Eliminar</Text>
+        <MyCustomText style={styles.text}>Eliminar</MyCustomText>
       </TouchableOpacity>
       <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
       <TouchableOpacity
@@ -81,7 +82,7 @@ export function EventTrheeDotsmenuOptions({
         }}
       >
         <Ionicons name="pencil-outline" size={20} />
-        <Text style={styles.text}>Editar</Text>
+        <MyCustomText style={styles.text}>Editar</MyCustomText>
       </TouchableOpacity>
       <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
       <TouchableOpacity
@@ -95,7 +96,7 @@ export function EventTrheeDotsmenuOptions({
         }}
       >
         <Ionicons name="book-outline" size={20} />
-        <Text style={styles.text}>Reservaciones</Text>
+        <MyCustomText style={styles.text}>Reservaciones</MyCustomText>
       </TouchableOpacity>
       <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
       <TouchableOpacity
@@ -103,7 +104,7 @@ export function EventTrheeDotsmenuOptions({
         onPress={showEventNotificationConfirm}
       >
         <Ionicons name="notifications-outline" size={20} />
-        <Text style={styles.text}>Notificar a los usuarios</Text>
+        <MyCustomText style={styles.text}>Notificar a los usuarios</MyCustomText>
       </TouchableOpacity>
     </>
   );

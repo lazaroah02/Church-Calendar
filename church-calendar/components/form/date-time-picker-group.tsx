@@ -1,12 +1,12 @@
 import { useThemeStyles } from "@/hooks/useThemedStyles";
-import { fixAndroidPickerDate } from "@/lib/calendar/calendar-utils";
 import { AppTheme } from "@/theme";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import React from "react";
-import { Pressable, View, Text } from "react-native";
+import { Pressable, View } from "react-native";
+import { MyCustomText } from "../MyCustomText";
 
 interface DateTimePickerGroupProps {
   showDatePicker: boolean;
@@ -38,13 +38,13 @@ export function DateTimePickerGroup({
     <>
       <View style={{ flexDirection: "row", gap: 10 }}>
         <View style={{ flexGrow: 1 }}>
-          <Text style={styles.label}>Fecha</Text>
+          <MyCustomText style={styles.label}>Fecha</MyCustomText>
           <Pressable onPress={handleShowDatePicker}>
-            <Text
+            <MyCustomText
               style={[styles.dateTimeInputPicker, error && styles.inputError]}
             >
               {value.toLocaleDateString("es-ES")}
-            </Text>
+            </MyCustomText>
             {error && (
               <Ionicons
                 name="alert-circle"
@@ -78,9 +78,9 @@ export function DateTimePickerGroup({
           )}
         </View>
         <View style={{ width: "50%" }}>
-          <Text style={styles.label}>Hora</Text>
+          <MyCustomText style={styles.label}>Hora</MyCustomText>
           <Pressable onPress={handleShowTimePicker}>
-            <Text
+            <MyCustomText
               style={[styles.dateTimeInputPicker, error && styles.inputError]}
             >
               {value.toLocaleTimeString([], {
@@ -88,7 +88,7 @@ export function DateTimePickerGroup({
                 minute: "2-digit",
                 hour12: true,
               })}
-            </Text>
+            </MyCustomText>
             {error && (
               <Ionicons
                 name="alert-circle"

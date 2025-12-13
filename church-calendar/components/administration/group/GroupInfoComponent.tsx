@@ -1,5 +1,5 @@
 import { Button } from "@/components/Button";
-import { UserAvatar } from "@/components/event/user-avatar";
+import { UserAvatar } from "@/components/user/user-avatar";
 import { useSelectedItems } from "@/hooks/administration/useSelectedItems";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
@@ -8,8 +8,9 @@ import { AppTheme } from "@/theme";
 import { Group } from "@/types/group";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { ScrollView, View, Image, Text, Pressable } from "react-native";
+import { ScrollView, View, Image, Pressable } from "react-native";
 import { BulkDeleteUsersFromGroupButton } from "./BulkDeleteUsersFromGroupButton";
+import { MyCustomText } from "@/components/MyCustomText";
 
 export function GroupInfoComponent({ group }: { group: Group | null }) {
   const styles = useThemeStyles(groupInfoStyles);
@@ -51,14 +52,14 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
 
         {/*Group Name*/}
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>{group?.name}</Text>
+          <MyCustomText style={styles.name}>{group?.name}</MyCustomText>
         </View>
 
         {/*Description*/}
         {group?.description && (
           <>
-            <Text style={styles.groupLabel}>Descripción:</Text>
-            <Text style={styles.description}>{group?.description}</Text>
+            <MyCustomText style={styles.groupLabel}>Descripción:</MyCustomText>
+            <MyCustomText style={styles.description}>{group?.description}</MyCustomText>
           </>
         )}
 
@@ -71,9 +72,9 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
             marginTop: 20,
           }}
         >
-          <Text style={[styles.groupLabel, { marginTop: 0, marginBottom: 0 }]}>
+          <MyCustomText style={[styles.groupLabel, { marginTop: 0, marginBottom: 0 }]}>
             Color:
-          </Text>
+          </MyCustomText>
           <View
             style={{
               backgroundColor: group?.color,
@@ -85,7 +86,7 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
         </View>
 
         {/*Members*/}
-        <Text style={styles.groupLabel}>Integrantes ({totalUsers}):</Text>
+        <MyCustomText style={styles.groupLabel}>Integrantes ({totalUsers}):</MyCustomText>
         {users.map((user) => {
           const isSelected = selected.includes(user.id);
           return (
@@ -115,14 +116,14 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
         })}
         {isGettingUsers ||
           (isGettingMoreUsers && (
-            <Text style={{ textAlign: "center", marginTop: 15 }}>
+            <MyCustomText style={styles.membersListStatusMessage}>
               Cargando integrantes...
-            </Text>
+            </MyCustomText>
           ))}
         {users.length === 0 && (
-          <Text style={{ textAlign: "center", marginTop: 15 }}>
+          <MyCustomText style={styles.membersListStatusMessage}>
             Sin integrantes
-          </Text>
+          </MyCustomText>
         )}
         {hasMoreUsers && !isGettingMoreUsers && !isGettingUsers && (
           <Button
@@ -210,5 +211,10 @@ const groupInfoStyles = (theme: AppTheme) => {
       alignItems: "center",
       justifyContent: "center",
     },
+    membersListStatusMessage:{
+      textAlign: "center",
+      marginTop: 15,
+      fontSize:theme.fontSizes.md
+    }
   };
 };

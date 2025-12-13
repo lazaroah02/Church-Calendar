@@ -13,6 +13,7 @@ import { pickImage } from "@/lib/pick-image";
 import { CheckBox } from "../form/checkbox";
 import { ChurchGroupsPicker } from "../form/church-groups-picker";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
+import { MyCustomText } from "../MyCustomText";
 
 export function UserManagementForm({
   user,
@@ -97,10 +98,10 @@ export function UserManagementForm({
           }}
         >
           <Ionicons name="warning-outline" size={30} />
-          <Text style={[styles.groupLabel, { marginTop: 0 }]}>
+          <MyCustomText style={[styles.groupLabel, { marginTop: 0 }]}>
             Los cambios realizados pueden tardar unos minutos en reflejarse en
             los datos de los eventos.
-          </Text>
+          </MyCustomText>
         </View>
         {/* Profile Picture */}
         <Pressable
@@ -140,7 +141,7 @@ export function UserManagementForm({
         )}
 
         {/* Full Name */}
-        <Text style={styles.groupLabel}>Nombre Completo</Text>
+        <MyCustomText style={styles.groupLabel}>Nombre Completo</MyCustomText>
         <CustomInput
           error={errors?.full_name}
           textContentType="name"
@@ -153,7 +154,7 @@ export function UserManagementForm({
         {/* Password */}
         {action === "create" && (
           <>
-            <Text style={styles.groupLabel}>Contraseña</Text>
+            <MyCustomText style={styles.groupLabel}>Contraseña</MyCustomText>
             <CustomInput
               error={errors?.password}
               textContentType="password"
@@ -167,7 +168,7 @@ export function UserManagementForm({
         )}
 
         {/* Phone */}
-        <Text style={styles.groupLabel}>Teléfono:</Text>
+        <MyCustomText style={styles.groupLabel}>Teléfono:</MyCustomText>
         <CustomInput
           error={errors?.phone_number}
           keyboardType="phone-pad"
@@ -179,7 +180,7 @@ export function UserManagementForm({
         />
 
         {/* Email */}
-        <Text style={styles.groupLabel}>Correo:</Text>
+        <MyCustomText style={styles.groupLabel}>Correo:</MyCustomText>
         <CustomInput
           error={errors?.email}
           keyboardType="email-address"
@@ -191,7 +192,7 @@ export function UserManagementForm({
         />
 
         {/* Description */}
-        <Text style={styles.groupLabel}>Descripción:</Text>
+        <MyCustomText style={styles.groupLabel}>Descripción:</MyCustomText>
         <CustomInput
           error={null}
           value={formValues.description}
@@ -203,7 +204,7 @@ export function UserManagementForm({
         />
 
         {/*Groups*/}
-        <Text style={styles.groupLabel}>Grupos a los que pertenece:</Text>
+        <MyCustomText style={styles.groupLabel}>Grupos a los que pertenece:</MyCustomText>
         <ChurchGroupsPicker
           placeholder="Seleccionar"
           defaultSelectedGroups={formValues.member_groups}
@@ -214,7 +215,7 @@ export function UserManagementForm({
         />
 
         {/*Access and Permissions*/}
-        <Text style={styles.groupLabel}>Acceso y Permisos:</Text>
+        <MyCustomText style={styles.groupLabel}>Acceso y Permisos:</MyCustomText>
         <CheckBox
           label="Tiene acceso a la aplicación"
           checked={formValues.is_active}

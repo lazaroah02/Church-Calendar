@@ -2,9 +2,9 @@ import { useConfirm } from "@/hooks/useConfirm";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Menu } from "react-native-paper";
 import { GroupSelector } from "./GroupSelector";
 import { useCustomToast } from "@/hooks/useCustomToast";
+import { MenuItemNoScale } from "@/components/MenuItemNoScale";
 
 export function UserOptions({
   closeParent,
@@ -76,16 +76,16 @@ export function UserOptions({
           });
         }}
       />
-      <Menu.Item
-        title="Crear"
+      <MenuItemNoScale
+        title={"Crear"}
         leadingIcon="plus"
         onPress={() => {
           router.push("/user/management/create");
           closeParent();
         }}
       />
-      <Menu.Item
-        title="Eliminar"
+      <MenuItemNoScale
+        title={"Eliminar"}
         leadingIcon="delete"
         onPress={() => {
           if (selected.length === 0) {
@@ -95,9 +95,9 @@ export function UserOptions({
           showConfirm();
         }}
       />
-      <Menu.Item
-        title="Agregar a Grupo"
-        leadingIcon="link"
+      <MenuItemNoScale
+        title={"Agregar a Grupo"}
+        leadingIcon={"link"}
         onPress={() => {
           if (selected.length === 0) {
             showErrorToast({ message: "Debes seleccionar algun usuario" });

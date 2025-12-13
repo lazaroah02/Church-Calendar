@@ -1,10 +1,11 @@
+import { MyCustomText } from "@/components/MyCustomText";
 import { PageHeader } from "@/components/PageHeader";
 import { ReservationCard } from "@/components/reservation/reservation-card";
 import { useManageReservations } from "@/hooks/reservations/useManageReservations";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { useSearchParams } from "expo-router/build/hooks";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EventReservations() {
@@ -37,12 +38,12 @@ export default function EventReservations() {
           </View>
         )}
         ListEmptyComponent={
-          <Text style={styles.noReservationsMessage}>
+          <MyCustomText style={styles.noReservationsMessage}>
             No hay reservaciones.
-          </Text>
+          </MyCustomText>
         }
         ListHeaderComponent={
-          <Text style={styles.total}>Total: {eventReservationsCount}</Text>
+          <MyCustomText style={styles.total}>Total: {eventReservationsCount}</MyCustomText>
         }
         onRefresh={refetchEventReservations}
         refreshing={isLoadingEventReservations}
@@ -51,12 +52,12 @@ export default function EventReservations() {
         }
         ListFooterComponent={<View style={{ padding: 20, justifyContent: "center" }}>
             {isFetchingNextPage && (
-              <Text style={{ textAlign: "center" }}>
+              <MyCustomText style={{ textAlign: "center" }}>
                 Cargando mas reservaciones...
-              </Text>
+              </MyCustomText>
             )}
-            {!isFetchingNextPage && !isLoadingEventReservations && !hasMoreReservations && (
-              <Text style={{ textAlign: "center" }}>No hay mas reservaciones</Text>
+            {!isFetchingNextPage && !isLoadingEventReservations && !hasMoreReservations && eventReservations.length > 0 && (
+              <MyCustomText style={{ textAlign: "center" }}>No hay mas reservaciones</MyCustomText>
             )}
           </View>}
       />

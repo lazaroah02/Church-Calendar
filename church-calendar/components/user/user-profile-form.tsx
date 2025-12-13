@@ -5,7 +5,7 @@ import { AppTheme } from "@/theme";
 import { UserInfo } from "@/types/auth";
 import { UserProfileFormErrors } from "@/types/user";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Image, Text, Pressable } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { Button } from "../Button";
 import { CustomInput } from "../form/custom-input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -13,6 +13,7 @@ import { updateUserProfile } from "@/services/user/update-user-profile";
 import { getImageUri } from "@/lib/get-image-uri";
 import FormErrorBanner from "../form/form-banner-error";
 import { pickImage } from "@/lib/pick-image";
+import { MyCustomText } from "../MyCustomText";
 
 export function UserProfileForm({
   user,
@@ -104,7 +105,7 @@ export function UserProfileForm({
         )}
 
         {/* Full Name */}
-        <Text style={styles.label}>Nombre Completo</Text>
+        <MyCustomText style={styles.label}>Nombre Completo</MyCustomText>
         <CustomInput
           error={errors?.full_name}
           textContentType="name"
@@ -115,7 +116,7 @@ export function UserProfileForm({
         />
 
         {/* Phone */}
-        <Text style={styles.label}>Teléfono:</Text>
+        <MyCustomText style={styles.label}>Teléfono:</MyCustomText>
         <CustomInput
           error={errors?.phone_number}
           keyboardType="phone-pad"
@@ -127,7 +128,7 @@ export function UserProfileForm({
         />
 
         {/* Email */}
-        <Text style={styles.label}>Correo:</Text>
+        <MyCustomText style={styles.label}>Correo:</MyCustomText>
         <CustomInput
           error={errors?.email}
           keyboardType="email-address"
@@ -139,7 +140,7 @@ export function UserProfileForm({
         />
 
         {/* Description */}
-        <Text style={styles.label}>Descripción:</Text>
+        <MyCustomText style={styles.label}>Descripción:</MyCustomText>
         <CustomInput
           error={null}
           value={formValues.description}

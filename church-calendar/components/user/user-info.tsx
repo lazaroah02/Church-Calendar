@@ -4,8 +4,9 @@ import { getImageUri } from "@/lib/get-image-uri";
 import { AppTheme } from "@/theme";
 import { UserInfo } from "@/types/auth";
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView, View, Image, Text } from "react-native";
+import { ScrollView, View, Image } from "react-native";
 import { CheckBox } from "../form/checkbox";
+import { MyCustomText } from "../MyCustomText";
 
 export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
   const styles = useThemeStyles(userInfoStyles);
@@ -27,7 +28,7 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
 
       {/*Full Name*/}
       <View style={styles.nameContainer}>
-        <Text style={styles.name}>{user?.full_name}</Text>
+        <MyCustomText style={styles.name}>{user?.full_name}</MyCustomText>
         {user?.is_staff && (
           <Ionicons name="checkmark-circle" size={20} color="fff" />
         )}
@@ -37,21 +38,21 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
         (session?.userInfo.is_staff && (
           <>
             {/*Phone*/}
-            <Text style={styles.groupLabel}>Teléfono:</Text>
-            <Text style={styles.description}>{user?.phone_number}</Text>
+            <MyCustomText style={styles.groupLabel}>Teléfono:</MyCustomText>
+            <MyCustomText style={styles.description}>{user?.phone_number}</MyCustomText>
 
             {/*Email*/}
-            <Text style={styles.groupLabel}>Correo:</Text>
-            <Text style={styles.description}>{user?.email}</Text>
+            <MyCustomText style={styles.groupLabel}>Correo:</MyCustomText>
+            <MyCustomText style={styles.description}>{user?.email}</MyCustomText>
           </>
         ))}
 
       {/*Description*/}
-      <Text style={styles.groupLabel}>Descripción:</Text>
-      <Text style={styles.description}>{user?.description}</Text>
+      <MyCustomText style={styles.groupLabel}>Descripción:</MyCustomText>
+      <MyCustomText style={styles.description}>{user?.description}</MyCustomText>
 
       {/* Groups */}
-      <Text style={styles.groupLabel}>Grupos:</Text>
+      <MyCustomText style={styles.groupLabel}>Grupos:</MyCustomText>
       <View style={styles.groupsContainer}>
         {user.member_groups_full_info?.map((group) => (
           <View key={group.name} style={styles.group}>
@@ -61,7 +62,7 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
                 { backgroundColor: group.color || "#ccc" },
               ]}
             />
-            <Text style={styles.groupName}>{group.name}</Text>
+            <MyCustomText style={styles.groupName}>{group.name}</MyCustomText>
           </View>
         ))}
       </View>
@@ -69,7 +70,7 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
       {/*Access and Permissions*/}
       {session?.userInfo.is_staff && (
         <>
-          <Text style={styles.groupLabel}>Acceso y Permisos:</Text>
+          <MyCustomText style={styles.groupLabel}>Acceso y Permisos:</MyCustomText>
           <CheckBox
             label="Tiene acceso a la aplicación"
             checked={user?.is_active}

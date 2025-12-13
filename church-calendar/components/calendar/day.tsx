@@ -1,5 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import type { DayProps } from "@/types/calendar";
+import { MyCustomText } from "../MyCustomText";
+import { AppTheme } from "@/theme";
+import { useThemeStyles } from "@/hooks/useThemedStyles";
 
 export function Day({
   today,
@@ -9,7 +12,7 @@ export function Day({
   getSpecificDayEvents,
 }: DayProps) {
   const dayEvents = getSpecificDayEvents(date.date?.dateString);
-
+  const styles = useThemeStyles(DayComponentStyles)
   return (
     <Pressable
       onPress={() => {
@@ -31,7 +34,7 @@ export function Day({
         date.state === "disabled" && { opacity: 0.2 },
       ]}
     >
-      <Text style={styles.dayNumber}>{date.date?.day}</Text>
+      <MyCustomText style={styles.dayNumber}>{date.date?.day}</MyCustomText>
       <View style={styles.dayEventGroupsContainer}>
         <View style={styles.dayEventGroups}>
           {dayEvents?.slice(0, 3).map((event) => (
@@ -70,14 +73,14 @@ export function Day({
           ))}
         </View>
         {dayEvents && dayEvents.length > 6 && (
-          <Text style={{ textAlign: "center", marginTop: -8 }}>...</Text>
+          <MyCustomText style={{ textAlign: "center", marginTop: -8 }}>...</MyCustomText>
         )}
       </View>
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
+const DayComponentStyles = (theme:AppTheme) =>({
   dayContainer: {
     width: 50,
     height: 50,
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
   dayNumber: {
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: 16,
+    fontSize: theme.fontSizes.md,
     fontWeight: 400,
   },
   dayEventGroupsContainer: {
