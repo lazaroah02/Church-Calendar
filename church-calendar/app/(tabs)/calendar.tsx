@@ -11,12 +11,15 @@ import { EventsBottomSheet } from "@/components/calendar/events-bottom-sheet";
 import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
 import { useSelectedDayFromParams } from "@/hooks/calendar/useSelectedDayFromParams";
 import { router } from "expo-router";
+import { useVersionsUpdates } from "@/hooks/useVersionUpdates";
 
 export default function Calendar() {
   const todaysDate = new Date();
   const today = CalendarUtils.getCalendarDateString(todaysDate);
 
   const selectedDayParam = useSelectedDayFromParams();
+
+  const { confirmUpdate, updateInfo } = useVersionsUpdates();
 
   const {
     setInterval,
@@ -46,8 +49,12 @@ export default function Calendar() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {confirmUpdate({
+        title: "Nueva versión encontrada!",
+        message: `Una nueva versión de la aplicación (v${updateInfo.version}) está disponible. ¿Deseas descargarla?`,
+      })}
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, backgroundColor:"#eee" }}
+        contentContainerStyle={{ flexGrow: 1, backgroundColor: "#eee" }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

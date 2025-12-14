@@ -17,7 +17,6 @@ import { MD3LightTheme, PaperProvider } from "react-native-paper";
 import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { NotificationsProvider } from "@/contexts/notifications-context";
 import { useUserNotificationToken } from "@/hooks/notifications/useUserNotificationToken";
-import { useVersionsUpdates } from "@/hooks/useVersionUpdates";
 
 export default function Root() {
   const [hydrated, setHydrated] = useState(false);
@@ -59,11 +58,6 @@ function RootLayout() {
 
   useUserNotificationToken();
 
-  const {
-    confirmUpdate,
-    updateInfo,
-  } = useVersionsUpdates();
-
   if (!loaded || isLoading) {
     // Async font loading only occurs in development.
     return <SplashScreenController />;
@@ -73,10 +67,6 @@ function RootLayout() {
     <GestureHandlerRootView>
       <SafeAreaProvider>
         <StatusBar style="dark" />
-        {confirmUpdate({
-          title: "Nueva versión encontrada!",
-          message: `Una nueva versión de la aplicación (v${updateInfo.version}) está disponible. ¿Deseas descargarla?`,
-        })}
         <MyNavigationBar />
         <Stack>
           <Stack.Protected guard={!session}>
