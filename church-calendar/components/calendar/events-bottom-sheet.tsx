@@ -89,7 +89,7 @@ const bottomSheetStyles = (theme: AppTheme) => ({
     marginBottom: 15,
     color: "#444",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: 700,
   },
   noEvents: {
