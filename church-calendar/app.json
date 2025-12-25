@@ -17,7 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.lazaroah02.churchcalendar",
+      "package": "com.lazaroaltedill.churchcalendar",
       "googleServicesFile": "./google-services.json"
     },
     "splash": {
@@ -52,6 +52,6 @@
         "projectId": "3915cf59-532f-49fa-9ce9-a4f44596fd0f"
       }
     },
-    "owner": "lazaroah02"
+    "owner": "lazaroaltedill"
   }
 }

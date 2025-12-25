@@ -75,7 +75,7 @@ const customInputStyles = (theme: AppTheme) => ({
     paddingHorizontal: 20,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: "400",
     height: "100%",
   },

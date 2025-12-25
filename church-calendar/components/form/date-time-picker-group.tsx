@@ -150,7 +150,7 @@ const DateTimePickerGroupStyles = (theme: AppTheme) => {
       marginVertical: 10,
       color: "#000",
       fontFamily: "InterVariable",
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
       fontWeight: "400",
       verticalAlign: "middle",
     },

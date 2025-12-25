@@ -106,7 +106,7 @@ export const UsersTab = () => {
       {/*Clear selected items button*/}
       {selected.length > 0 && (
         <Pressable onPress={clearSelected} style={styles.clearSelectedButton}>
-          <Ionicons name="close-outline" size={27} color="black" />
+          <Ionicons name="close-outline" size={27} color="white" />
         </Pressable>
       )}
     </View>

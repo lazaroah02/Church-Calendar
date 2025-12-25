@@ -209,7 +209,7 @@ const ChurchGroupsPickerStyles = (theme: AppTheme) => ({
   },
   chipText: {
     color: "#fff",
-    fontSize: theme.fontSizes.md,
+    fontSize: theme.fontSizes.sm,
   },
   chipClose: {
     color: "#fff",

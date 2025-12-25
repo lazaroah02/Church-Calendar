@@ -286,7 +286,7 @@ const registerStyles = (theme: AppTheme) => ({
     backgroundColor: "#fff",
     borderRadius: 10,
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: "400",
     paddingLeft: 10,
   },

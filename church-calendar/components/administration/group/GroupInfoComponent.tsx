@@ -186,7 +186,7 @@ const groupInfoStyles = (theme: AppTheme) => {
       fontFamily: "LexendBold",
     },
     description: {
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
       color: "#000",
       fontFamily: "InterVariable",
       fontWeight: 400,

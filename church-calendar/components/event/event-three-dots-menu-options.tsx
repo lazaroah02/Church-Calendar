@@ -112,7 +112,7 @@ export function EventTrheeDotsmenuOptions({
 
 const OptionsStyles = (theme: AppTheme) => ({
   text: {
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
   },
   touchable: {
     flexDirection: "row",

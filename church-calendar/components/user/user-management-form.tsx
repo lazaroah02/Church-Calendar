@@ -98,7 +98,7 @@ export function UserManagementForm({
           }}
         >
           <Ionicons name="warning-outline" size={30} />
-          <MyCustomText style={[styles.groupLabel, { marginTop: 0 }]}>
+          <MyCustomText style={[styles.groupLabel, { marginTop: 0, width:"90%" }]}>
             Los cambios realizados pueden tardar unos minutos en reflejarse en
             los datos de los eventos.
           </MyCustomText>

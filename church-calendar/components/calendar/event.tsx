@@ -78,7 +78,7 @@ const eventComponentStyles = (theme: AppTheme) => ({
     marginBottom: 25,
   },
   eventTime: {
-    fontSize: theme.fontSizes.md,
+    fontSize: theme.fontSizes.sm,
     color: "#000",
     fontFamily: "InterVariable",
     fontWeight: 900,
@@ -87,7 +87,7 @@ const eventComponentStyles = (theme: AppTheme) => ({
   eventTitle: {
     color: "#000000c6",
     fontFamily: "LexendBold",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: 500,
   },
   groups: {

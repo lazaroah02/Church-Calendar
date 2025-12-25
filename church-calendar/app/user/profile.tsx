@@ -76,7 +76,7 @@ const userProfileStyles = (theme: AppTheme) => {
       padding: 10,
     },
     text: {
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
     },
   };
 };
