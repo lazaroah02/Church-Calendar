@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { useConfirm } from "../../hooks/useConfirm";
 import { useEffect } from "react";
 import { AppTheme } from "@/theme";
@@ -8,6 +8,7 @@ import { router } from "expo-router";
 import { UserInfo } from "@/types/auth";
 import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { MyCustomText } from "../MyCustomText";
+import { OptionsSeparator } from "../event/event-three-dots-menu-options";
 
 export function UserThreeDotsmenuOptions({
   user,
@@ -38,7 +39,7 @@ export function UserThreeDotsmenuOptions({
         <Ionicons name="trash-outline" size={20} />
         <MyCustomText style={styles.text}>Eliminar</MyCustomText>
       </TouchableOpacity>
-      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
+      <OptionsSeparator/>
       <TouchableOpacity
         style={styles.touchable}
         onPress={() => {
@@ -54,7 +55,7 @@ export function UserThreeDotsmenuOptions({
         <Ionicons name="pencil-outline" size={20} />
         <MyCustomText style={styles.text}>Editar</MyCustomText>
       </TouchableOpacity>
-      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
+      <OptionsSeparator/>
       <TouchableOpacity
         style={styles.touchable}
         onPress={() => {

@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useEffect } from "react";
 import { AppTheme } from "@/theme";
@@ -8,6 +8,7 @@ import { router } from "expo-router";
 import { Group } from "@/types/group";
 import { useManageGroups } from "@/hooks/groups/useManageGroups";
 import { MyCustomText } from "@/components/MyCustomText";
+import { OptionsSeparator } from "@/components/event/event-three-dots-menu-options";
 
 export function GroupThreeDotsMenuOptions({
   group,
@@ -38,7 +39,7 @@ export function GroupThreeDotsMenuOptions({
         <Ionicons name="trash-outline" size={20} />
         <MyCustomText style={styles.text}>Eliminar Grupo</MyCustomText>
       </TouchableOpacity>
-      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
+      <OptionsSeparator/>
       <TouchableOpacity
         style={styles.touchable}
         onPress={() => {

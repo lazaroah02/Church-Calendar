@@ -68,7 +68,7 @@ export function EventTrheeDotsmenuOptions({
         <Ionicons name="trash-outline" size={20} />
         <MyCustomText style={styles.text}>Eliminar</MyCustomText>
       </TouchableOpacity>
-      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
+      <OptionsSeparator/>
       <TouchableOpacity
         style={styles.touchable}
         onPress={() => {
@@ -84,7 +84,7 @@ export function EventTrheeDotsmenuOptions({
         <Ionicons name="pencil-outline" size={20} />
         <MyCustomText style={styles.text}>Editar</MyCustomText>
       </TouchableOpacity>
-      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
+      <OptionsSeparator/>
       <TouchableOpacity
         style={styles.touchable}
         onPress={() => {
@@ -98,7 +98,7 @@ export function EventTrheeDotsmenuOptions({
         <Ionicons name="book-outline" size={20} />
         <MyCustomText style={styles.text}>Reservaciones</MyCustomText>
       </TouchableOpacity>
-      <View style={{ height: 1, width: "100%", backgroundColor: "black" }} />
+      <OptionsSeparator/>
       <TouchableOpacity
         style={styles.touchable}
         onPress={showEventNotificationConfirm}
@@ -108,6 +108,10 @@ export function EventTrheeDotsmenuOptions({
       </TouchableOpacity>
     </>
   );
+}
+
+export const OptionsSeparator = () => {
+  return <View style={{ height: 1, width: "100%", backgroundColor: "black", opacity:0.1 }} />
 }
 
 const OptionsStyles = (theme: AppTheme) => ({
