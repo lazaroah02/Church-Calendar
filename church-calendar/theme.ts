@@ -1,5 +1,6 @@
 export const normalTheme = {
   fontSizes: {
+    xsm: 12,
     sm: 14,
     md: 16,
     lg: 20,
@@ -9,6 +10,7 @@ export const normalTheme = {
 
 export const largeTheme = {
   fontSizes: {
+    xsm: 14,
     sm: 18,
     md: 20,
     lg: 22,

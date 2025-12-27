@@ -81,7 +81,7 @@ const eventComponentStyles = (theme: AppTheme) => ({
     fontSize: theme.fontSizes.sm,
     color: "#000",
     fontFamily: "InterVariable",
-    fontWeight: 900,
+    fontWeight: 700,
     opacity: 0.5,
   },
   eventTitle: {

@@ -27,6 +27,9 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
       </View>
 
       {/*Full Name*/}
+      <MyCustomText style={[styles.groupLabel, { marginTop: 20 }]}>
+        Nombre:
+      </MyCustomText>
       <View style={styles.nameContainer}>
         <MyCustomText style={styles.name}>{user?.full_name}</MyCustomText>
         {user?.is_staff && (
@@ -39,17 +42,23 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
           <>
             {/*Phone*/}
             <MyCustomText style={styles.groupLabel}>Teléfono:</MyCustomText>
-            <MyCustomText style={styles.description}>{user?.phone_number}</MyCustomText>
+            <MyCustomText style={styles.description}>
+              {user?.phone_number}
+            </MyCustomText>
 
             {/*Email*/}
             <MyCustomText style={styles.groupLabel}>Correo:</MyCustomText>
-            <MyCustomText style={styles.description}>{user?.email}</MyCustomText>
+            <MyCustomText style={styles.description}>
+              {user?.email}
+            </MyCustomText>
           </>
         ))}
 
       {/*Description*/}
       <MyCustomText style={styles.groupLabel}>Descripción:</MyCustomText>
-      <MyCustomText style={styles.description}>{user?.description}</MyCustomText>
+      <MyCustomText style={styles.description}>
+        {user?.description}
+      </MyCustomText>
 
       {/* Groups */}
       <MyCustomText style={styles.groupLabel}>Grupos:</MyCustomText>
@@ -70,19 +79,17 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
       {/*Access and Permissions*/}
       {session?.userInfo.is_staff && (
         <>
-          <MyCustomText style={styles.groupLabel}>Acceso y Permisos:</MyCustomText>
-          <CheckBox
-            label="Tiene acceso a la aplicación"
-            checked={user?.is_active}
-            disabled={true}
-            onCheck={() => null}
-          />
-          <CheckBox
-            label="Es Administrador"
-            checked={user?.is_staff}
-            disabled={true}
-            onCheck={() => null}
-          />
+          <MyCustomText style={styles.groupLabel}>
+            Acceso y Permisos:
+          </MyCustomText>
+          <MyCustomText style={styles.groupName}>
+            {user?.is_active
+              ? "Tiene acceso a la aplicación"
+              : "No tiene acceso a la aplicación"}
+          </MyCustomText>
+          <MyCustomText style={styles.groupName}>
+            {user?.is_staff ? "Es administrador" : "No es administrador"}
+          </MyCustomText>
         </>
       )}
     </ScrollView>
@@ -97,7 +104,7 @@ const userInfoStyles = (theme: AppTheme) => {
       flexDirection: "column",
     },
     profilePictureContainer: {
-      backgroundColor: "#37C6FF",
+      backgroundColor: "#6a7073ff",
       width: 200,
       height: 200,
       borderRadius: 100,
@@ -113,15 +120,14 @@ const userInfoStyles = (theme: AppTheme) => {
     nameContainer: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "center",
-      marginTop: 20,
+      justifyContent: "flex-start",
       gap: 5,
     },
     name: {
-      fontWeight: 500,
-      fontSize: theme.fontSizes.xl,
+      fontWeight: 600,
+      fontSize: theme.fontSizes.md,
       color: "#000",
-      fontFamily: "LexendBold",
+      fontFamily: "InterVariable",
     },
     description: {
       fontSize: theme.fontSizes.md,
@@ -135,7 +141,7 @@ const userInfoStyles = (theme: AppTheme) => {
       marginTop: 20,
       color: "#000",
       fontFamily: "LexendBold",
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
       opacity: 0.8,
     },
     groupsContainer: {

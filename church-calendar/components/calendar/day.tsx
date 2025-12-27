@@ -23,13 +23,11 @@ export function Day({
       style={[
         styles.dayContainer,
         date.date?.dateString === today && {
-          borderWidth: 2,
-          borderColor: "#ccc",
+          backgroundColor: "#fff",
         },
         date.date?.dateString === selectedDay?.dateString && {
-          borderWidth: 2,
-          borderColor: "#007bff",
-          backgroundColor: "#fff",
+          borderWidth: 3,
+          borderColor: "rgba(236, 161, 0, 1)",
         },
         date.state === "disabled" && { opacity: 0.2 },
       ]}

@@ -71,7 +71,7 @@ const UserAvatarStyles = (theme: AppTheme) => ({
     fontSize: theme.fontSizes.md,
   },
   profilePictureContainer: {
-    backgroundColor: "#37C6FF",
+    backgroundColor: "#6a7073ff",
     width: 35,
     height: 35,
     borderRadius: 100,

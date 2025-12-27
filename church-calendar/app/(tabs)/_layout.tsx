@@ -12,12 +12,13 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#4B2700",
-        tabBarInactiveTintColor: "#fff",
+        tabBarActiveTintColor: "rgba(236, 161, 0, 1)",
+        tabBarInactiveTintColor: "rgba(255, 255, 255, 0.7)",
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarAllowFontScaling: false,
+        tabBarShowLabel: false,
         tabBarLabelStyle: {
           fontSize: 12,
           fontFamily: "InterVariable",
@@ -29,7 +30,8 @@ export default function TabLayout() {
             position: "absolute",
           },
           default: {
-            backgroundColor: "rgba(236, 161, 0, 1)",
+            backgroundColor: "#6a7073ff",
+            paddingTop:5
           },
         }),
       }}

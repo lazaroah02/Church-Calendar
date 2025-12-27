@@ -17,14 +17,14 @@ export function EventsBottomSheet({
   selectedDayEvents,
 }: EventsBottomSheetProps) {
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["18%", "95%"], []);
+  const snapPoints = useMemo(() => ["18%", "25%", "95%"], []);
   const currentDateReadable = formatSelectedDay(selectedDay.dateString);
   const styles = useThemeStyles(bottomSheetStyles);
 
   return (
     <BottomSheet
       ref={sheetRef}
-      index={0}
+      index={1}
       snapPoints={snapPoints}
       enableContentPanningGesture={true}
       backgroundComponent={CustomBottomSheetBackground}
@@ -67,8 +67,8 @@ export const CustomBottomSheetBackground: React.FC<BottomSheetBackgroundProps> =
 const bottomSheetStyles = (theme: AppTheme) => ({
   sheetBackground: {
     backgroundColor: "white",
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     overflow: "hidden", // important to cut corners content
     // Shadow
     shadowColor: "#000",
@@ -83,14 +83,15 @@ const bottomSheetStyles = (theme: AppTheme) => ({
   },
   listContent: {
     paddingBottom: 40,
-    minHeight: "25%", // Ensure minimum height is the same as first snap point
+    minHeight: "18%", // Ensure minimum height is the same as first snap point
   },
   title: {
     marginBottom: 15,
-    color: "#444",
+    color: "rgba(236, 161, 0, 1)",
     fontFamily: "InterVariable",
     fontSize: theme.fontSizes.md,
     fontWeight: 700,
+    opacity:0.8
   },
   noEvents: {
     color: "#aaa",

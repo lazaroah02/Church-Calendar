@@ -133,8 +133,7 @@ def send_push_notification_for_event(event, title="Evento en Camino!"):
         payload = {
             "to": user.fcm_token,
             "title": title,
-            "body": f"{event_time_user.strftime('%I:%M %p').lower()} {event.title}\n"
-                    f"{event_time_user.strftime('%d-%m-%Y')}",
+            "body": f"{event_time_user.strftime('%d-%m-%Y')} | {event_time_user.strftime('%I:%M %p').lower()}\n{event.title}",
             "sound": "default",
             "priority": "high",
             "data": {

@@ -57,7 +57,7 @@ export default function UserProfile() {
       )}
 
       {session?.userInfo.id === session?.userInfo.id && !isEditting && (
-        <Button text="Editar Perfil" onPress={() => setIsEdditing(true)} />
+        <Button text="Editar Perfil" onPress={() => setIsEdditing(true)} textStyle={{fontWeight: 900}}/>
       )}
     </SafeAreaView>
   );

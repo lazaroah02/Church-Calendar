@@ -61,11 +61,11 @@ const NotificationStyles = (theme: AppTheme) => ({
   title: {
     color: "#000",
     fontFamily: "LexendBold",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: 500,
   },
   content: {
-    fontSize: theme.fontSizes.md,
+    fontSize: theme.fontSizes.sm,
     color: "#000",
     fontFamily: "InterVariable",
     fontWeight: 900,
@@ -74,10 +74,10 @@ const NotificationStyles = (theme: AppTheme) => ({
   },
   receivetAt: {
     color: "#000",
-    fontFamily: "LexendBold",
-    fontSize: theme.fontSizes.sm,
+    fontFamily: "InterVariable",
+    fontSize: theme.fontSizes.xsm,
     fontWeight: 400,
-    opacity: 0.6,
+    opacity: 0.7,
     marginTop: 5,
   },
 });

@@ -67,9 +67,9 @@ const CalendarComponentStyles = (theme:AppTheme) =>({
   },
   year: {
     fontSize: theme.fontSizes.lg,
-    color: "#343434",
+    color: "rgba(236, 161, 0, 1)",
     marginTop: -2,
     fontFamily: "InterVariable",
-    fontWeight: 400,
+    fontWeight: 900,
   },
 });
