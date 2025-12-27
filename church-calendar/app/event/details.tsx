@@ -31,6 +31,7 @@ import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarCo
 import { ReserveEvent } from "@/components/event/reserv-event";
 import { UserAvatar } from "@/components/user/user-avatar";
 import { MyCustomText } from "@/components/MyCustomText";
+import { Collapsible } from "@/components/Collapsible";
 
 export default function EventDetails() {
   const searchParams = useSearchParams();
@@ -69,14 +70,22 @@ export default function EventDetails() {
       />
       <ScrollView contentContainerStyle={styles.container}>
         {parsedEvent?.is_canceled && (
-          <MyCustomText
-            style={[
-              styles.groupName,
-              { color: "red", marginTop: 10, marginBottom: 10 },
-            ]}
-          >
-            Este Evento ha sido cancelado
-          </MyCustomText>
+          <View style={{ flexDirection: "row", marginBottom:10 }}>
+            <MyCustomText
+              style={[
+                styles.groupLabel,
+                {
+                  alignSelf: "flex-start",
+                  backgroundColor: "orange",
+                  padding: 4,
+                  paddingHorizontal: 10,
+                  borderRadius: 10,
+                },
+              ]}
+            >
+              Cancelado
+            </MyCustomText>
+          </View>
         )}
 
         {/* Date, time, and location */}
@@ -88,7 +97,9 @@ export default function EventDetails() {
             parsedEvent?.end_time || ""
           )}
         </MyCustomText>
-        <MyCustomText style={styles.location}>Lugar: {parsedEvent?.location}</MyCustomText>
+        <MyCustomText style={styles.location}>
+          Lugar: {parsedEvent?.location}
+        </MyCustomText>
 
         {/* Image */}
         {parsedEvent?.img && (
@@ -130,30 +141,10 @@ export default function EventDetails() {
 
         {/* Description */}
         <Hyperlink linkDefault={true} linkStyle={{ color: "#2980b9" }}>
-          <MyCustomText style={styles.description}>{parsedEvent?.description}</MyCustomText>
+          <MyCustomText style={styles.description}>
+            {parsedEvent?.description}
+          </MyCustomText>
         </Hyperlink>
-
-        {/*Created by*/}
-        <UserAvatar
-          title={
-            isAdmin
-              ? `Creado el ${formatTimeStamp(
-                  parsedEvent?.created_at || ""
-                )} por:`
-              : "Creado por:"
-          }
-          user={parsedEvent?.created_by_full_info}
-        />
-
-        {/*Last Edit by*/}
-        {isAdmin && (
-          <UserAvatar
-            title={`Última edición el ${formatTimeStamp(
-              parsedEvent?.updated_at || ""
-            )} por:`}
-            user={parsedEvent?.last_edit_by_full_info}
-          />
-        )}
 
         {/* Groups */}
         <MyCustomText style={styles.groupLabel}>Evento para:</MyCustomText>
@@ -174,7 +165,9 @@ export default function EventDetails() {
         {isAdmin && (
           <>
             {/* Estado */}
-            <MyCustomText style={styles.groupLabel}>Estado del Evento:</MyCustomText>
+            <MyCustomText style={styles.groupLabel}>
+              Estado del Evento:
+            </MyCustomText>
             <MyCustomText style={styles.groupName}>
               • {parsedEvent?.is_canceled ? "Cancelado" : "No Cancelado"}
             </MyCustomText>
@@ -188,6 +181,29 @@ export default function EventDetails() {
                 : "Cerrado a reservaciones"}
             </MyCustomText>
           </>
+        )}
+
+        {isAdmin && (
+          <Collapsible
+            title="Datos del Creador"
+            style={{ marginTop: 25, marginLeft: -5 }}
+          >
+            {/*Created by*/}
+            <UserAvatar
+              title={`Creado el ${formatTimeStamp(
+                parsedEvent?.created_at || ""
+              )} por:`}
+              user={parsedEvent?.created_by_full_info}
+            />
+
+            {/*Last Edit by*/}
+            <UserAvatar
+              title={`Última edición el ${formatTimeStamp(
+                parsedEvent?.updated_at || ""
+              )} por:`}
+              user={parsedEvent?.last_edit_by_full_info}
+            />
+          </Collapsible>
         )}
       </ScrollView>
 
@@ -224,7 +240,7 @@ const eventDetailsStyles = (theme: AppTheme) => ({
     marginBottom: 2,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: "700",
   },
   time: {
@@ -277,7 +293,7 @@ const eventDetailsStyles = (theme: AppTheme) => ({
     marginBottom: 5,
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
   },
   groupsContainer: {
     flexDirection: "row",

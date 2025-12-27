@@ -29,7 +29,7 @@ export function SimpleThreeDotsMenu({
                   right: 15,
                   backgroundColor: "white",
                   borderRadius: 8,
-                  padding: 20,
+                  padding: 10,
                   shadowColor: "#000",
                   shadowOpacity: 0.2,
                   shadowRadius: 4,

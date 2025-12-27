@@ -22,7 +22,7 @@ export function CheckBox({ label, checked, onCheck, disabled = false, variant = 
       {checked ? (
         <Ionicons name="checkbox-outline" size={25} color="#000" />
       ) : (
-        <Ionicons name="square-outline" size={25} color="#000" />
+        <Ionicons name="square-outline" size={25} color="#00000066" />
       )}
       <MyCustomText style={[styles.label, variant === "light"? {fontWeight:"500"}:{}]}>{label}</MyCustomText>
     </Pressable>

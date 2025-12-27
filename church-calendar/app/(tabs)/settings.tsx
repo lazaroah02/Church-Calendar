@@ -29,6 +29,8 @@ export default function Settings() {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         <MyCustomText style={styles.title}>Opciones</MyCustomText>
+
+        {/*Font Size*/}
         <Collapsible title="Tamaño de Letra" style={styles.optionCollapsible}>
           <CheckBox
             label="Normal"
@@ -41,69 +43,77 @@ export default function Settings() {
             onCheck={() => setThemeName("large")}
           />
         </Collapsible>
-        <View>
-          <MyCustomText
-            style={[styles.title, { width: 300, marginTop: 50, fontSize: 24 }]}
-          >
-            Acerca de la Aplicación
-          </MyCustomText>
-          <MyCustomText style={styles.text}>
-            Versión Actual: {Constants.expoConfig?.version}
-          </MyCustomText>
-          {lastCheck && (
-            <View style={{ marginTop: 10 }}>
-              <MyCustomText style={styles.text}>Ultima comprobación:</MyCustomText>
-              <MyCustomText style={styles.text}>
-                {lastCheck.toLocaleDateString()}{" "}
-                {lastCheck.toLocaleTimeString("es-ES", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: true,
-                })}
-              </MyCustomText>
-            </View>
-          )}
-          <TouchableOpacity
-            style={styles.checkUpdatesButton}
-            onPress={checkForUpdate}
-          >
-            <Ionicons name="download-outline" size={22} />
+
+        {/*About the app*/}
+        <Collapsible
+          title="Acerca de la Aplicación"
+          style={styles.optionCollapsible}
+        >
+          <View>
             <MyCustomText style={styles.text}>
-              {checkingForUpdates
-                ? "Buscando Actualizaciones ..."
-                : "Buscar Actualizaciones"}
+              Versión Actual: {Constants.expoConfig?.version}
             </MyCustomText>
-          </TouchableOpacity>
-          {confirmUpdate({
-            title: "Nueva versión encontrada!",
-            message: `Una nueva versión de la aplicación (v${updateInfo.version}) está disponible. ¿Deseas descargarla?`,
-          })}
-        </View>
-        <View>
-          <MyCustomText
-            style={[styles.title, { width: 300, marginTop: 50, fontSize: 24 }]}
-          >
-            Soporte y Contacto
-          </MyCustomText>
-          <MyCustomText style={styles.text}>
-            Tienes alguna duda o has detectado algún error en la aplicación?
-          </MyCustomText>
-          <TouchableOpacity
-            style={styles.checkUpdatesButton}
-            onPress={async () => {
-              await openBrowserAsync(
-                "https://wa.me/+51706583"
-              );
-            }}
-          >
-            <Ionicons name="logo-whatsapp" size={22} />
-            <MyCustomText style={styles.text}>Contactar con Soporte</MyCustomText>
-          </TouchableOpacity>
-        </View>
+            {lastCheck && (
+              <View style={{ marginTop: 10 }}>
+                <MyCustomText style={styles.text}>
+                  Ultima comprobación:
+                </MyCustomText>
+                <MyCustomText style={styles.text}>
+                  {lastCheck.toLocaleDateString()}{" "}
+                  {lastCheck.toLocaleTimeString("es-ES", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  })}
+                </MyCustomText>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.checkUpdatesButton}
+              onPress={checkForUpdate}
+            >
+              <Ionicons name="download-outline" size={22} />
+              <MyCustomText style={styles.text}>
+                {checkingForUpdates
+                  ? "Buscando Actualizaciones ..."
+                  : "Buscar Actualizaciones"}
+              </MyCustomText>
+            </TouchableOpacity>
+            {confirmUpdate({
+              title: "Nueva versión encontrada!",
+              message: `Una nueva versión de la aplicación (v${updateInfo.version}) está disponible. ¿Deseas descargarla?`,
+            })}
+          </View>
+        </Collapsible>
+
+        {/*Support*/}
+        <Collapsible
+          title="Soporte y Contacto"
+          style={styles.optionCollapsible}
+        >
+          <View>
+            <MyCustomText style={styles.text}>
+              Tienes alguna duda o has detectado algún error en la aplicación?
+            </MyCustomText>
+            <TouchableOpacity
+              style={styles.checkUpdatesButton}
+              onPress={async () => {
+                await openBrowserAsync("https://wa.me/+51706583");
+              }}
+            >
+              <Ionicons name="logo-whatsapp" size={22} />
+              <MyCustomText style={styles.text}>
+                Contactar con Soporte
+              </MyCustomText>
+            </TouchableOpacity>
+          </View>
+        </Collapsible>
         <View style={{ height: 100 }}></View>
       </ScrollView>
+
+      {/*Close Session Button*/}
       <Button
-        style={{ marginBottom: -10 }}
+        style={{ width:250, marginBottom: 20, borderRadius: 20 }}
         text="Cerrar Sesión"
         variant="cancel"
         onPress={() => {
@@ -130,7 +140,9 @@ export default function Settings() {
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <Ionicons name="log-out-outline" size={24} />
-          <MyCustomText style={styles.closeSessionButtonText}>Cerrar Sesión</MyCustomText>
+          <MyCustomText style={styles.closeSessionButtonText}>
+            Cerrar Sesión
+          </MyCustomText>
         </View>
       </Button>
     </SafeAreaView>
@@ -141,7 +153,8 @@ const settingsStyles = (theme: AppTheme) => ({
   container: {
     flex: 1,
     paddingTop: 20,
-    paddingLeft: 40,
+    paddingLeft: 30,
+    paddingRight:10
   },
   title: {
     width: 200,
@@ -158,7 +171,7 @@ const settingsStyles = (theme: AppTheme) => ({
   closeSessionButtonText: {
     color: "#000",
     fontSize: theme.fontSizes.md,
-    fontWeight: "500",
+    fontWeight: "900",
     fontFamily: "InterVariable",
   },
   text: {

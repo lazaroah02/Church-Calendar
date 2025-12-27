@@ -137,7 +137,7 @@ const DateTimePickerGroupStyles = (theme: AppTheme) => {
       fontWeight: 500,
       color: "#000",
       fontFamily: "InterVariable",
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
       opacity: 0.8,
     },
     dateTimeInputPicker: {

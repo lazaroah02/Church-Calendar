@@ -42,7 +42,7 @@ const collapsibleStyles = (theme: AppTheme) =>({
     marginLeft: 24,
   },
   title:{
-    fontSize:theme.fontSizes.lg,
+    fontSize:theme.fontSizes.md,
     fontFamily:"InterVariable",
     fontWeight:700
   }

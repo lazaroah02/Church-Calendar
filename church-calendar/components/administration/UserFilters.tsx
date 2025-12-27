@@ -143,6 +143,7 @@ export function UserFiltersBottomSheet({
             text="Limpiar"
             onPress={resetFilters}
             style={{ width: "45%" }}
+            textStyle={{fontWeight:900}}
           />
           <Button
             text="Aplicar"
@@ -153,6 +154,7 @@ export function UserFiltersBottomSheet({
             }}
             style={{ width: "50%" }}
             variant="submit"
+            textStyle={{fontWeight:900}}
           />
         </View>
       </BottomSheetScrollView>

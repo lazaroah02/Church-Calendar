@@ -47,8 +47,8 @@ export function ChangePasswordForm({
       <View style={styles.form}>
         <Ionicons
           name="lock-open-outline"
-          size={50}
-          style={{ alignSelf: "center", marginBottom:10 }}
+          size={60}
+          style={{ alignSelf: "center", marginBottom:50 }}
         />
         {error && (
           <FormErrorBanner
@@ -86,6 +86,7 @@ export function ChangePasswordForm({
           loadingText={"Enviando"}
           variant="submit"
           onPress={() => onSubmit(formValues)}
+          textStyle={{fontWeight:900}}
         />
       </View>
     </KeyboardAwareScrollView>
@@ -112,7 +113,7 @@ const changePasswordFormStyles = (theme: AppTheme) => {
       marginTop: 20,
       color: "#000",
       fontFamily: "LexendBold",
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
       opacity: 0.8,
     },
   };

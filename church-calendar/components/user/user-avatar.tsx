@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Pressable, View, Image } from "react-native";
 import { MyCustomText } from "../MyCustomText";
+import { getFirstWord, truncText } from "@/lib/text-manipulation";
 
 export const UserAvatar = ({
   title,
@@ -49,7 +50,7 @@ export const UserAvatar = ({
           )}
         </View>
         <MyCustomText style={styles.userName}>
-          {user?.full_name || user?.username || user?.email.split("@")[0]}
+          {truncText(getFirstWord(user?.full_name || user?.username || user?.email.split("@")[0] || ""), 10)}
         </MyCustomText>
       </Pressable>
     </>

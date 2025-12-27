@@ -210,11 +210,13 @@ export function EventForm({
           label="Cancelado"
           checked={formValues.is_canceled}
           onCheck={(checked) => handleFieldChange("is_canceled", checked)}
+          variant="light"
         />
         <CheckBox
           label="Visible"
           checked={formValues.visible}
           onCheck={(checked) => handleFieldChange("visible", checked)}
+          variant="light"
         />
         <CheckBox
           label="Abierto a reservaciones"
@@ -223,6 +225,7 @@ export function EventForm({
             scrollViewRef.current?.scrollToEnd(true);
             handleFieldChange("open_to_reservations", checked);
           }}
+          variant="light"
         />
 
         {/*Reservations Limit*/}
@@ -247,7 +250,7 @@ export function EventForm({
             <CustomInput
               value={formValues.reservations_limit?.toString() || ""}
               error={errors?.reservations_limit}
-              placeholder="Número máximo de reservaciones"
+              placeholder="Límite de reservaciones"
               inputStyle={{ backgroundColor: inputColor, height: "auto" }}
               containerStyle={{ height: "auto", width: "100%" }}
               keyboardType="number-pad"
@@ -270,6 +273,7 @@ export function EventForm({
           disabled={isPending}
           onPress={onCancel}
           style={{ width: "40%" }}
+          textStyle={{fontWeight:"900"}}
         />
         <Button
           text="Enviar"
@@ -279,6 +283,7 @@ export function EventForm({
           onPress={() => handleSubmit({ img: eventImage, ...formValues })}
           variant="submit"
           style={{ width: "50%" }}
+          textStyle={{fontWeight:"900"}}
         />
       </View>
     </>
@@ -329,7 +334,7 @@ const EventFormStyles = (theme: AppTheme) => {
       marginTop: 20,
       color: "#000",
       fontFamily: "LexendBold",
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
       opacity: 0.8,
     },
   };

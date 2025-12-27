@@ -26,8 +26,6 @@ const formBannerErrorStyles = (theme: AppTheme) => ({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fee2e2",
-    borderWidth: 1,
-    borderColor: "#fca5a5",
     padding: 10,
     borderRadius: 8,
     marginBottom: 15,

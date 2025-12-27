@@ -90,7 +90,7 @@ export function useConfirm({
                   onPress={handleCancel}
                   style={styles.cancelButton}
                 >
-                  <MyCustomText style={[styles.text]}>Cancelar</MyCustomText>
+                  <MyCustomText style={[styles.text, {fontWeight: 900}]}>Cancelar</MyCustomText>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -98,7 +98,7 @@ export function useConfirm({
                   onPress={handleConfirm}
                   disabled={loading}
                 >
-                  <MyCustomText style={[styles.text]}>Continuar</MyCustomText>
+                  <MyCustomText style={[styles.text, {fontWeight: 900, color:"#fff"}]}>Continuar</MyCustomText>
                   {loading && <ActivityIndicator size="small" />}
                 </TouchableOpacity>
               </View>
@@ -115,7 +115,7 @@ export function useConfirm({
 
 const ConfirmStyles = (theme: AppTheme) => ({
   text: {
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontFamily: "InterVariable",
   },
   confirmButton: {
@@ -127,7 +127,7 @@ const ConfirmStyles = (theme: AppTheme) => ({
     borderRadius: 15,
   },
   cancelButton: {
-    backgroundColor: "rgba(181, 181, 181, 0.6)",
+    backgroundColor: "rgba(181, 181, 181, 0.4)",
     flexDirection: "row",
     alignItems: "center",
     gap: 5,

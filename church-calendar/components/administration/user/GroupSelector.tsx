@@ -89,7 +89,7 @@ const GroupSelectorStyles = (theme: AppTheme) => ({
     borderRadius: 10,
   },
   itemSelected: {
-    backgroundColor: "#707070",
+    backgroundColor: "rgba(236, 161, 0, 1)",
   },
   itemText: {
     fontSize: theme.fontSizes.md,
@@ -111,7 +111,7 @@ const GroupSelectorStyles = (theme: AppTheme) => ({
   },
   confirmButtonText: {
     color: "#fff",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: "600",
   },
   cancelButton: {
@@ -121,6 +121,6 @@ const GroupSelectorStyles = (theme: AppTheme) => ({
   },
   cancelButtonText: {
     color: "#707070",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
   },
 });

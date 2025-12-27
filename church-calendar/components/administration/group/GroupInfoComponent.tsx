@@ -181,7 +181,7 @@ const groupInfoStyles = (theme: AppTheme) => {
     },
     name: {
       fontWeight: 500,
-      fontSize: theme.fontSizes.xl,
+      fontSize: theme.fontSizes.lg,
       color: "#000",
       fontFamily: "LexendBold",
     },
@@ -197,7 +197,7 @@ const groupInfoStyles = (theme: AppTheme) => {
       marginTop: 20,
       color: "#000",
       fontFamily: "LexendBold",
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
       opacity: 0.8,
     },
     clearSelectedButton: {

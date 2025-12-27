@@ -120,7 +120,7 @@ const OptionsStyles = (theme: AppTheme) => ({
   },
   touchable: {
     flexDirection: "row",
-    gap: 5,
+    gap: 10,
     alignItems: "center",
     padding: 10,
   },

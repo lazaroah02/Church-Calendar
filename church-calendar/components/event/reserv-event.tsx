@@ -65,7 +65,7 @@ export function ReserveEvent({ event }: { event?: Event | null }) {
 
 const reserveEventStyles = (theme: AppTheme) => ({
   button: {
-    backgroundColor: "#5D3731",
+    backgroundColor: "#6a7073ff",
     paddingVertical: 12,
     marginHorizontal: 20,
     marginBottom: 10,
@@ -77,11 +77,11 @@ const reserveEventStyles = (theme: AppTheme) => ({
     gap: 20,
   },
   buttonActive: {
-    backgroundColor: "#3D2520",
+    backgroundColor: "#6a7073ff",
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "600",
+    fontWeight: "900",
     fontFamily: "InterVariable",
     fontSize: theme.fontSizes.md,
   },

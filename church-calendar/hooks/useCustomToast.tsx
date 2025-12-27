@@ -19,8 +19,8 @@ export function useCustomToast() {
   // Memoize color and style objects to ensure they are stable across renders
   const colors: Record<ToastType, string> = useMemo(
     () => ({
-      success: "#4BB543", // verde
-      error: "#E74C3C", // rojo
+      success: "#0ab5875d", // verde
+      error: "#c9140072", // rojo
       warning: "#db9b3aff", // amarillo
     }),
     []

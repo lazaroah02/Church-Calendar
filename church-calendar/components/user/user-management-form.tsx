@@ -228,7 +228,7 @@ export function UserManagementForm({
         />
       </KeyboardAwareScrollView>
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center" }}>
-        <Button text="Cancelar" onPress={onCancel} style={{ width: "40%" }} />
+        <Button text="Cancelar" onPress={onCancel} style={{ width: "40%" }} textStyle={{fontWeight:900}}/>
         <Button
           text="Enviar"
           loadingText="Enviando"
@@ -236,6 +236,7 @@ export function UserManagementForm({
           onPress={() => handleSubmit()}
           variant="submit"
           style={{ width: "50%" }}
+          textStyle={{fontWeight:900}}
         />
       </View>
     </>
@@ -281,7 +282,7 @@ const userManagementForm = (theme: AppTheme) => {
       marginTop: 20,
       color: "#000",
       fontFamily: "LexendBold",
-      fontSize: theme.fontSizes.lg,
+      fontSize: theme.fontSizes.md,
       opacity: 0.8,
     },
   };

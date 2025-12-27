@@ -42,6 +42,6 @@ const MenuItemNoScaleStyles = (theme: AppTheme) => ({
     alignItems: "center",
   },
   title: {
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
   },
 });
