@@ -18,6 +18,7 @@ export default function AccountCreated() {
           variant="submit"
           onPress={() => router.replace("/sign-in")}
           style={{ width: 250 }}
+          textStyle = {{fontWeight:"900"}}
         />
       </View>
     </SafeAreaView>

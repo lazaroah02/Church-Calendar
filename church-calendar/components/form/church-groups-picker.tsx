@@ -204,7 +204,7 @@ const ChurchGroupsPickerStyles = (theme: AppTheme) => ({
     marginTop: 5,
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 10,
     marginRight: 6,
   },
   chipText: {
@@ -234,7 +234,7 @@ const ChurchGroupsPickerStyles = (theme: AppTheme) => ({
     borderRadius: 10,
   },
   itemSelected: {
-    backgroundColor: "#707070",
+    backgroundColor: "rgba(236, 161, 0, 1)",
   },
   itemText: {
     fontSize: theme.fontSizes.md,
@@ -253,7 +253,7 @@ const ChurchGroupsPickerStyles = (theme: AppTheme) => ({
   },
   confirmButtonText: {
     color: "#fff",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     fontWeight: "600",
   },
   cancelButton: {
@@ -263,7 +263,7 @@ const ChurchGroupsPickerStyles = (theme: AppTheme) => ({
   },
   cancelButtonText: {
     color: "#707070",
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
   },
 });
 

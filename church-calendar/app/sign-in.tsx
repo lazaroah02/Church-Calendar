@@ -199,7 +199,7 @@ const signInStyles = (theme: AppTheme) =>({
   },
   logginButtonText: {
     color: "#442525",
-    fontSize: theme.fontSizes.xl,
+    fontSize: theme.fontSizes.md,
     fontWeight: "900",
     fontFamily: "InterVariable",
   },

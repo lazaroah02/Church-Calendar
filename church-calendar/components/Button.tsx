@@ -9,6 +9,7 @@ import {
   RegisteredStyle,
   View,
   ViewStyle,
+  TextStyle
 } from "react-native";
 import { MyCustomText } from "./MyCustomText";
 
@@ -19,6 +20,7 @@ export function Button({
   loading = false,
   variant = "cancel",
   disabled = false,
+  textStyle = {},
   style = {},
   onPress,
 }: ButtonProps) {
@@ -29,7 +31,7 @@ export function Button({
         children
       ) : (
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <MyCustomText style={styles[variant].text}>
+          <MyCustomText style={[styles[variant].text, textStyle]}>
             {loadingText && loading ? loadingText : text}
           </MyCustomText>
           {loading && <ActivityIndicator size="small" color="#000" />}
@@ -50,6 +52,12 @@ interface ButtonProps {
   style?:
     | Falsy
     | ViewStyle
+    | RegisteredStyle<ViewStyle>
+    | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
+  textStyle?:
+    | Falsy
+    | ViewStyle
+    | TextStyle
     | RegisteredStyle<ViewStyle>
     | RecursiveArray<Falsy | ViewStyle | RegisteredStyle<ViewStyle>>;
 }

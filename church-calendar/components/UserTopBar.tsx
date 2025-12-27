@@ -58,9 +58,8 @@ export function UserTopBar() {
             style={styles.createEventButton}
             onPress={() => router.push("/event/create")}
           >
-            <Ionicons name="add" size={normalThemeSize ? 23 : 30}/>
             <MyCustomText style={styles.createEventButtonText}>
-              Evento
+              +
             </MyCustomText>
           </Pressable>
         </View>
@@ -89,7 +88,7 @@ const userTopBarStyles = (theme: AppTheme) => ({
     padding: 10,
   },
   profilePictureContainer: {
-    backgroundColor: "#37C6FF",
+    backgroundColor: "#6a7073ff",
     width: 45,
     height: 45,
     borderRadius: 100,
@@ -105,7 +104,7 @@ const userTopBarStyles = (theme: AppTheme) => ({
     color: "#000",
     fontFamily: "InterVariable",
     fontSize: theme.fontSizes.md,
-    fontWeight: 500,
+    fontWeight: 900,
   },
   welcomeMessage: {
     color: "#000",
@@ -122,15 +121,14 @@ const userTopBarStyles = (theme: AppTheme) => ({
   createEventButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 2,
-    backgroundColor: "#FFAE00",
+    justifyContent: "center",
     borderRadius: 100,
-    padding: 10,
+    marginRight: 10
   },
   createEventButtonText: {
-    color: "#000",
-    fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.md,
+    color: "rgba(236, 161, 0, 1)",
+    fontFamily: "LexendBold",
+    fontSize: 40,
     fontWeight: 900,
   },
 });

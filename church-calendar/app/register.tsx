@@ -267,7 +267,7 @@ const registerStyles = (theme: AppTheme) => ({
   },
   formTitle: {
     alignSelf: "center",
-    color: "#442525",
+    color: "black",
     fontFamily: "InterVariable",
     fontSize: 25,
     fontWeight: "900",
@@ -279,7 +279,7 @@ const registerStyles = (theme: AppTheme) => ({
   },
   formSectionTitle: {
     fontWeight: "bold",
-    fontSize: theme.fontSizes.xl,
+    fontSize: theme.fontSizes.lg,
     marginBottom: 20,
   },
   input: {
@@ -294,8 +294,8 @@ const registerStyles = (theme: AppTheme) => ({
     alignSelf: "flex-start",
     color: "#000",
     fontFamily: "InterVariable",
-    fontSize: theme.fontSizes.lg,
-    fontWeight: "600",
+    fontSize: theme.fontSizes.md,
+    fontWeight: "700",
     opacity: 0.8,
   },
   registerButton: {
@@ -316,8 +316,8 @@ const registerStyles = (theme: AppTheme) => ({
   },
   registerButtonText: {
     color: "#fff",
-    fontSize: theme.fontSizes.xl,
-    fontWeight: "600",
+    fontSize: theme.fontSizes.md,
+    fontWeight: "900",
     fontFamily: "InterVariable",
   },
   errorIcon: {
