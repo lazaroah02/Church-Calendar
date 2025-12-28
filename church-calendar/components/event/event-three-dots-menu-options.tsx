@@ -11,6 +11,7 @@ import { notifyAboutEvent } from "@/services/notifications/notify-about-event";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { useSession } from "@/hooks/auth/useSession";
 import { MyCustomText } from "../MyCustomText";
+import { useTemplates } from "@/hooks/events/useTemplates";
 
 export function EventTrheeDotsmenuOptions({
   event,
@@ -28,6 +29,8 @@ export function EventTrheeDotsmenuOptions({
     onConfirm: () => handleDeleteEvent(event.id),
     onCancel: closeParent,
   });
+
+  const { createTemplate } = useTemplates();
 
   const { showSuccessToast, showErrorToast } = useCustomToast();
 
@@ -59,7 +62,7 @@ export function EventTrheeDotsmenuOptions({
     onConfirm: handleNotifyAboutEvent,
     onCancel: closeParent,
   });
-  
+
   return (
     <>
       {confirm({})}
@@ -68,7 +71,7 @@ export function EventTrheeDotsmenuOptions({
         <Ionicons name="trash-outline" size={20} />
         <MyCustomText style={styles.text}>Eliminar</MyCustomText>
       </TouchableOpacity>
-      <OptionsSeparator/>
+      <OptionsSeparator />
       <TouchableOpacity
         style={styles.touchable}
         onPress={() => {
@@ -84,7 +87,7 @@ export function EventTrheeDotsmenuOptions({
         <Ionicons name="pencil-outline" size={20} />
         <MyCustomText style={styles.text}>Editar</MyCustomText>
       </TouchableOpacity>
-      <OptionsSeparator/>
+      <OptionsSeparator />
       <TouchableOpacity
         style={styles.touchable}
         onPress={() => {
@@ -98,21 +101,55 @@ export function EventTrheeDotsmenuOptions({
         <Ionicons name="book-outline" size={20} />
         <MyCustomText style={styles.text}>Reservaciones</MyCustomText>
       </TouchableOpacity>
-      <OptionsSeparator/>
+      <OptionsSeparator />
       <TouchableOpacity
         style={styles.touchable}
         onPress={showEventNotificationConfirm}
       >
         <Ionicons name="notifications-outline" size={20} />
-        <MyCustomText style={styles.text}>Notificar a los usuarios</MyCustomText>
+        <MyCustomText style={styles.text}>
+          Notificar a los usuarios
+        </MyCustomText>
+      </TouchableOpacity>
+      <OptionsSeparator />
+      <TouchableOpacity
+        style={styles.touchable}
+        onPress={() => {
+          createTemplate(event);
+          showSuccessToast({ message: "Evento guardado como plantilla" });
+          closeParent();
+        }}
+      >
+        <Ionicons name="document-outline" size={20} />
+        <MyCustomText style={styles.text}>Guardar como Plantilla</MyCustomText>
+      </TouchableOpacity>
+      <OptionsSeparator />
+      <TouchableOpacity
+        style={styles.touchable}
+        onPress={() => {
+          closeParent();
+          router.push("/templates/templates");
+        }}
+      >
+        <Ionicons name="document-outline" size={20} />
+        <MyCustomText style={styles.text}>Ver Plantillas</MyCustomText>
       </TouchableOpacity>
     </>
   );
 }
 
 export const OptionsSeparator = () => {
-  return <View style={{ height: 1, width: "100%", backgroundColor: "black", opacity:0.1 }} />
-}
+  return (
+    <View
+      style={{
+        height: 1,
+        width: "100%",
+        backgroundColor: "black",
+        opacity: 0.1,
+      }}
+    />
+  );
+};
 
 const OptionsStyles = (theme: AppTheme) => ({
   text: {

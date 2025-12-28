@@ -7,7 +7,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { CheckBox } from "@/components/form/checkbox";
 import { Button } from "@/components/Button";
 import { pickImage } from "@/lib/pick-image";
-import type { EventFormType, Event } from "@/types/event";
+import type { EventFormType, Event, EventTemplate } from "@/types/event";
 import { DateTimePickerGroup } from "@/components/form/date-time-picker-group";
 import { ChurchGroupsPicker } from "@/components/form/church-groups-picker";
 import FormErrorBanner from "@/components/form/form-banner-error";
@@ -24,6 +24,7 @@ export function EventForm({
   isPending = false,
   handleSubmit = (values) => null,
   onCancel = () => null,
+  submitButtonText = { text: "Enviar", loading: "Enviando" },
 }: {
   event?: Event | null;
   reset?: () => void;
@@ -31,6 +32,7 @@ export function EventForm({
   isPending: boolean;
   handleSubmit: (values: EventFormType) => void;
   onCancel?: () => void;
+  submitButtonText?: { text: string; loading: string };
 }) {
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const styles = useThemeStyles(EventFormStyles);
@@ -38,23 +40,20 @@ export function EventForm({
     start_time: false | "date" | "time";
     end_time: false | "date" | "time";
   }>({ start_time: false, end_time: false });
-  
-  const [formValues, setFormValues] = useState({
-    title: event?.title || "",
-    location: event?.location || "",
-    description: event?.description || "",
-    start_time: event && event.start_time ? new Date(event.start_time): new Date(),
-    end_time: event && event.end_time ? new Date(event.end_time): new Date(),
-    groups: event?.groups || [],
-    is_canceled: event?.is_canceled || false,
-    visible: event?.visible || true,
-    open_to_reservations: event?.open_to_reservations || false,
-    reservations_limit: event?.reservations_limit || null,
-  });
+
+  const [formValues, setFormValues] = useState(
+    createFormValuesInitialData(event)
+  );
 
   const [eventImage, setEventImage] = useState(
     event?.img ? getImageUri(event?.img) : null
   );
+
+  //update form values on event param change
+  useEffect(() => {
+    setFormValues(createFormValuesInitialData(event));
+    setEventImage(event?.img ? getImageUri(event?.img) : null);
+  }, [event]);
 
   const handleFieldChange = (
     key: keyof typeof formValues,
@@ -234,14 +233,16 @@ export function EventForm({
             <View
               style={{ flexDirection: "row", alignItems: "flex-end", gap: 20 }}
             >
-              <MyCustomText style={styles.label}>Límite de Reservas:</MyCustomText>
+              <MyCustomText style={styles.label}>
+                Límite de Reservas:
+              </MyCustomText>
               <CheckBox
                 label="Sin límite"
                 checked={formValues.reservations_limit === null}
                 onCheck={(checked) => {
                   if (checked) {
                     handleFieldChange("reservations_limit", null);
-                  }else{
+                  } else {
                     handleFieldChange("reservations_limit", 100);
                   }
                 }}
@@ -273,22 +274,36 @@ export function EventForm({
           disabled={isPending}
           onPress={onCancel}
           style={{ width: "40%" }}
-          textStyle={{fontWeight:"900"}}
+          textStyle={{ fontWeight: "900" }}
         />
         <Button
-          text="Enviar"
-          loadingText="Enviando"
+          text={submitButtonText.text}
+          loadingText={submitButtonText.loading}
           loading={isPending}
           disabled={isPending}
           onPress={() => handleSubmit({ img: eventImage, ...formValues })}
           variant="submit"
           style={{ width: "50%" }}
-          textStyle={{fontWeight:"900"}}
+          textStyle={{ fontWeight: "900" }}
         />
       </View>
     </>
   );
 }
+
+export const createFormValuesInitialData = (event: Event | EventTemplate | null) => ({
+  title: event?.title || "",
+  location: event?.location || "",
+  description: event?.description || "",
+  start_time:
+    event && event.start_time ? new Date(event.start_time) : new Date(),
+  end_time: event && event.end_time ? new Date(event.end_time) : new Date(),
+  groups: event?.groups || [],
+  is_canceled: event?.is_canceled || false,
+  visible: event?.visible || true,
+  open_to_reservations: event?.open_to_reservations || false,
+  reservations_limit: event?.reservations_limit || null,
+});
 
 const EventFormStyles = (theme: AppTheme) => {
   return {

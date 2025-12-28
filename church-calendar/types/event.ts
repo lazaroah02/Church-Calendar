@@ -50,3 +50,9 @@ export type EventFormType = {
     open_to_reservations: boolean
     reservations_limit?: number | null
 }
+
+export interface EventTemplate extends EventFormType {
+  id: string;
+  createdAt: number;
+  updatedAt: number;
+}

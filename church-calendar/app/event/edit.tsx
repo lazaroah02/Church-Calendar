@@ -51,12 +51,6 @@ export default function EventEdit() {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <PageHeader
         title="Editar Evento"
-        rightComponent={
-          <SimpleThreeDotsMenu
-            modalStyles={{ right: 30, top: 70 }}
-            childrenComponentFunction={(closeParent) => null}
-          ></SimpleThreeDotsMenu>
-        }
       />
       <EventForm
         isPending={isUpdatingEvent}

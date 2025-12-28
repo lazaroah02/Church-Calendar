@@ -31,6 +31,7 @@ interface ChurchGroupsPickerProps {
   onChange: (selectedGroups: number[]) => void;
   defaultSelectedGroups?: number[];
   excluded_groups?: (number | string)[];
+  onlyPresentational?: boolean;
 }
 
 const ChurchGroupsPicker = ({
@@ -40,6 +41,7 @@ const ChurchGroupsPicker = ({
   onChange = () => null,
   defaultSelectedGroups = [],
   excluded_groups = [],
+  onlyPresentational = false,
 }: ChurchGroupsPickerProps) => {
   const defaultNotExcludedSelectedGroups = useMemo(
     () =>
@@ -92,32 +94,40 @@ const ChurchGroupsPicker = ({
   return (
     <View style={[styles.container, containerStyle]}>
       {/* Selector visible */}
-      <TouchableOpacity
-        style={[styles.dropdown, selectStyle]}
-        onPress={() => setModalVisible(true)}
-      >
-        <MyCustomText style={styles.placeholderStyle}>{placeholder}</MyCustomText>
-        <Ionicons
-          name="caret-down-outline"
-          size={18}
-          color={"rgba(0, 0, 0, 0.7)"}
-        />
-      </TouchableOpacity>
+      {!onlyPresentational && (
+        <TouchableOpacity
+          style={[styles.dropdown, selectStyle]}
+          onPress={() => setModalVisible(true)}
+        >
+          <MyCustomText style={styles.placeholderStyle}>
+            {placeholder}
+          </MyCustomText>
+          <Ionicons
+            name="caret-down-outline"
+            size={18}
+            color={"rgba(0, 0, 0, 0.7)"}
+          />
+        </TouchableOpacity>
+      )}
 
       {selectedGroups.length > 0 && (
         <View style={styles.chipsContainer}>
           {selectedGroups.map((id) => (
             <View key={id} style={styles.chip}>
-              <MyCustomText style={styles.chipText}>{getLabelByValue(id)}</MyCustomText>
-              <TouchableOpacity
-                onPress={() => {
-                  const updated = selectedGroups.filter((v) => v !== id);
-                  setSelectedGroups(updated);
-                  onChange(updated);
-                }}
-              >
-                <MyCustomText style={styles.chipClose}>×</MyCustomText>
-              </TouchableOpacity>
+              <MyCustomText style={styles.chipText}>
+                {getLabelByValue(id)}
+              </MyCustomText>
+              {!onlyPresentational && (
+                <TouchableOpacity
+                  onPress={() => {
+                    const updated = selectedGroups.filter((v) => v !== id);
+                    setSelectedGroups(updated);
+                    onChange(updated);
+                  }}
+                >
+                  <MyCustomText style={styles.chipClose}>×</MyCustomText>
+                </TouchableOpacity>
+              )}
             </View>
           ))}
         </View>
@@ -126,7 +136,9 @@ const ChurchGroupsPicker = ({
       {/* Modal para seleccionar grupos */}
       <Modal visible={modalVisible} animationType="slide">
         <View style={styles.modalStyle}>
-          <MyCustomText style={styles.modalTitle}>Selecciona grupos</MyCustomText>
+          <MyCustomText style={styles.modalTitle}>
+            Selecciona grupos
+          </MyCustomText>
 
           <FlatList
             data={data}
@@ -156,7 +168,9 @@ const ChurchGroupsPicker = ({
             onPress={confirmSelection}
             style={styles.confirmButton}
           >
-            <MyCustomText style={styles.confirmButtonText}>Confirmar selección</MyCustomText>
+            <MyCustomText style={styles.confirmButtonText}>
+              Confirmar selección
+            </MyCustomText>
           </TouchableOpacity>
 
           {/* Cancel Button */}
@@ -167,7 +181,9 @@ const ChurchGroupsPicker = ({
             }}
             style={styles.cancelButton}
           >
-            <MyCustomText style={styles.cancelButtonText}>Cancelar</MyCustomText>
+            <MyCustomText style={styles.cancelButtonText}>
+              Cancelar
+            </MyCustomText>
           </TouchableOpacity>
         </View>
       </Modal>

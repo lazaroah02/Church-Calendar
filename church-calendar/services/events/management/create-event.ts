@@ -1,6 +1,17 @@
-import { BASE_URL, MANAGE_EVENTS_URL } from "@/api-endpoints";
+import { MANAGE_EVENTS_URL } from "@/api-endpoints";
 import { EventFormType } from "@/types/event";
 
+/**
+ * Creates a new event.
+ *
+ * Behavior:
+ * - If the image already exists in the backend (`/media/...`), the request
+ *   is sent as JSON.
+ * - If the image is a new local file, the request is sent as multipart/form-data.
+ *
+ * @param token - Authentication token
+ * @param data - Event form data
+ */
 export function createEvent({
   token = "",
   data,
@@ -8,6 +19,72 @@ export function createEvent({
   token: string;
   data: EventFormType;
 }) {
+  const isExistingImage =
+    typeof data.img === "string" && data.img.startsWith("/media/");
+
+  /**
+   * ============================
+   * CASE 1: Existing image or no image
+   * → Send JSON payload
+   * ============================
+   */
+  if (isExistingImage || !data.img) {
+    const payload = buildJsonPayload(data);
+
+    return fetch(MANAGE_EVENTS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Token ${token}` } : {}),
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(handleResponse)
+      .catch(handleNetworkError);
+  }
+
+  /**
+   * ============================
+   * CASE 2: New image selected locally
+   * → Send multipart/form-data
+   * ============================
+   */
+  const formData = buildFormData(data);
+
+  return fetch(MANAGE_EVENTS_URL, {
+    method: "POST",
+    headers: {
+      ...(token ? { Authorization: `Token ${token}` } : {}),
+    },
+    body: formData,
+  })
+    .then(handleResponse)
+    .catch(handleNetworkError);
+}
+
+/**
+ * Builds the JSON payload used when the image already exists in the backend.
+ */
+function buildJsonPayload(data: EventFormType) {
+  return {
+    title: data.title,
+    start_time: data.start_time.toISOString(),
+    end_time: data.end_time.toISOString(),
+    location: data.location,
+    description: data.description,
+    is_canceled: data.is_canceled,
+    open_to_reservations: data.open_to_reservations,
+    visible: data.visible,
+    reservations_limit: data.reservations_limit,
+    groups: data.groups,
+    img: data.img, // string path: "/media/..."
+  };
+}
+
+/**
+ * Builds FormData used when uploading a new image file.
+ */
+function buildFormData(data: EventFormType) {
   const formData = new FormData();
 
   formData.append("title", data.title);
@@ -27,79 +104,68 @@ export function createEvent({
     formData.append("groups", id.toString());
   });
 
-  if (data.img && !data.img.startsWith(BASE_URL)) {
-    const filename = data.img.split("/").pop() || "photo.jpg";
-    const match = /\.(\w+)$/.exec(filename);
-    const type = match ? `image/${match[1]}` : "image/jpeg";
+  const filename = data?.img?.split("/").pop() || "photo.jpg";
+  const match = /\.(\w+)$/.exec(filename);
+  const type = match ? `image/${match[1]}` : "image/jpeg";
 
-    formData.append("img", {
-      uri: data.img,
-      name: filename,
-      type,
-    } as any);
+  formData.append("img", {
+    uri: data.img,
+    name: filename,
+    type,
+  } as any);
+
+  return formData;
+}
+
+/**
+ * Handles HTTP responses returned by the backend.
+ * Converts backend validation errors into a normalized error object.
+ */
+function handleResponse(res: Response) {
+  return res.json().then((data) => {
+    if (res.ok) {
+      return data;
+    }
+
+    const errors: Record<string, string> = {};
+
+    if (data.title) {
+      errors.title = "Invalid title. It cannot be empty.";
+    } else if (data.location) {
+      errors.location = "Invalid location. It cannot be empty.";
+    } else if (data.reservations_limit) {
+      errors.reservations_limit = "Invalid reservations limit.";
+    } else if (data.non_field_errors) {
+      if (
+        data.non_field_errors[0] ===
+        "End time must be after start time."
+      ) {
+        errors.end_time =
+          "Check event start and end times. End time must be after start time.";
+      }
+    } else {
+      errors.general =
+        "Failed to connect to the server. Please try again later.";
+    }
+
+    throw new Error(JSON.stringify(errors));
+  });
+}
+
+/**
+ * Handles network-level errors (no internet, DNS failure, server unreachable).
+ */
+function handleNetworkError(error: unknown) {
+  console.error(error);
+
+  if (error instanceof TypeError) {
+    throw new Error(
+      JSON.stringify({
+        general:
+          "Failed to create event. Please check your internet connection.",
+      })
+    );
   }
 
-  const options: RequestInit = {
-    method: "POST",
-    headers: {
-      ...(token ? { Authorization: `Token ${token}` } : {}),
-      credentials: "omit",
-    },
-    body: formData,
-  };
-
-  return fetch(MANAGE_EVENTS_URL, options)
-    .then((res) => {
-      return res.json().then((data) => {
-        if (res.ok) {
-          return data;
-        } else {
-          const errors: Record<string, string> = {};
-
-          if (data.title) {
-            errors.title = "Título Incorrecto. No puede estar vacío.";
-          }
-
-          else if (data.location) {
-            errors.location = "Lugar Incorrecto. No puede estar vacío.";
-          }
-
-          else if (data.reservations_limit) {
-            errors.reservations_limit =
-              "Número máximo de reservaciones inválido.";
-          }
-
-          else if (data.non_field_errors) {
-            if (
-              data.non_field_errors[0] === "End time must be after start time."
-            ) {
-              errors.end_time =
-                "Revisa el inicio y fin del evento. El fin debe ser después del inicio.";
-            }
-          }
-
-          else{
-            errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
-          }
-
-          throw errors;
-        }
-      });
-    })
-    .catch((error) => {
-      if (
-        error instanceof TypeError &&
-        error.message === "Network request failed"
-      ) {
-        throw new Error(
-          JSON.stringify({
-            general:
-              "Error al crear el evento. Revisa tu conexión de internet.",
-          })
-        );
-      }
-      throw new Error(
-        JSON.stringify(error)
-      );
-    });
+  throw error;
 }
