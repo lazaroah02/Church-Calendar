@@ -46,7 +46,7 @@ export function GroupManagementForm({
     handleCreateGroup,
     isCreatingGroup,
     errorCreatingGroup,
-  } = useManageGroups();
+  } = useManageGroups({});
 
   const loading = isUpdatingGroup || isCreatingGroup;
   const errors = errorUpdatingGroup || errorCreatingGroup;

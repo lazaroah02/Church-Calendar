@@ -42,14 +42,14 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = async () => {
-  setIsRefreshing(true);
-  refetchUsers(); 
+    setIsRefreshing(true);
+    refetchUsers();
 
-  // Show the spinner for an instant for better UX event if the loading time is really fast
-  setTimeout(() => {
-    setIsRefreshing(false);
-  }, 800); 
-};
+    // Show the spinner for an instant for better UX event if the loading time is really fast
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 800);
+  };
 
   return (
     <>
@@ -111,13 +111,23 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
         </View>
 
         {/*Members*/}
-        <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <MyCustomText style={styles.groupLabel}>
             Integrantes ({totalUsers}):
           </MyCustomText>
-          <View style={{marginTop:15}}>
-            {isGettingMoreUsers || isGettingUsers || isRefreshing? (
-              <ActivityIndicator size="small" color={"#000"} style={{transform:[{scale:1.3}]}}/>
+          <View style={{ marginTop: 15 }}>
+            {isGettingMoreUsers || isGettingUsers || isRefreshing ? (
+              <ActivityIndicator
+                size="small"
+                color={"#000"}
+                style={{ transform: [{ scale: 1.3 }] }}
+              />
             ) : (
               <Ionicons
                 name="refresh-outline"

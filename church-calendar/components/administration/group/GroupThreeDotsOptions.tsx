@@ -9,6 +9,7 @@ import { Group } from "@/types/group";
 import { useManageGroups } from "@/hooks/groups/useManageGroups";
 import { MyCustomText } from "@/components/MyCustomText";
 import { OptionsSeparator } from "@/components/event/event-three-dots-menu-options";
+import { useManageUsers } from "@/hooks/user/useManageUsers";
 
 export function GroupThreeDotsMenuOptions({
   group,
@@ -17,12 +18,14 @@ export function GroupThreeDotsMenuOptions({
   group: Group | null;
   closeParent: () => void;
 }) {
-  const {handleDeleteGroup, isDeletingGroup, errorDeletingGroup} = useManageGroups({})
+  const { refetchUsers } = useManageUsers({});
+  const { handleDeleteGroup, isDeletingGroup, errorDeletingGroup } =
+    useManageGroups({ refetchUsers: refetchUsers });
 
   const { confirm, showConfirm, hideConfirm } = useConfirm({
     loading: isDeletingGroup,
     onConfirm: () => handleDeleteGroup(group?.id || 0),
-    onCancel: closeParent
+    onCancel: closeParent,
   });
 
   useEffect(() => {
@@ -39,7 +42,7 @@ export function GroupThreeDotsMenuOptions({
         <Ionicons name="trash-outline" size={20} />
         <MyCustomText style={styles.text}>Eliminar Grupo</MyCustomText>
       </TouchableOpacity>
-      <OptionsSeparator/>
+      <OptionsSeparator />
       <TouchableOpacity
         style={styles.touchable}
         onPress={() => {
@@ -49,7 +52,7 @@ export function GroupThreeDotsMenuOptions({
             params: {
               groupInfo: JSON.stringify(group),
             },
-          })
+          });
         }}
       >
         <Ionicons name="pencil-outline" size={20} />

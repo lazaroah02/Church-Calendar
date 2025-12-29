@@ -18,7 +18,7 @@ export function GroupSelector({
   loading: boolean
 }) {
   const styles = useThemeStyles(GroupSelectorStyles);
-  const { groups } = useManageGroups();
+  const { groups } = useManageGroups({});
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
   return (

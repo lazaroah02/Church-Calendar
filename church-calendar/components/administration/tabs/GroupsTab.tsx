@@ -12,7 +12,7 @@ import { MenuItemNoScale } from "@/components/MenuItemNoScale";
 
 export const GroupsTab = () => {
   const { groups, loadingGroups, errorGettingGroups, refetchGroups } =
-    useManageGroups();
+    useManageGroups({});
 
   const { filteredGroups, handleSearch } = useGroupAdministrationFilters({
     groups: groups,

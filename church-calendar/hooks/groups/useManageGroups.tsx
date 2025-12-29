@@ -8,7 +8,7 @@ import { updateGroup } from "@/services/groups/management/update-group";
 import { GroupManagementData } from "@/types/group";
 import { createGroup } from "@/services/groups/management/create-group";
 
-export function useManageGroups() {
+export function useManageGroups({refetchUsers = () => null}:{refetchUsers?: () => void}) {
   const { session } = useSession();
 
   const { showSuccessToast, showErrorToast } = useCustomToast();
@@ -26,11 +26,13 @@ export function useManageGroups() {
     isPending: isDeletingGroup,
     error: errorDeletingGroup,
     reset: resetDeleteGroupMutation,
+    status: deleteGroupMutationStatus
   } = useMutation({
     mutationFn: (groupId: number | string) =>
       deleteGroup({ token: session?.token || "", groupId: groupId }),
     onSuccess: () => {
       refetchGroups();
+      refetchUsers()
       router.back();
       showSuccessToast({ message: "Grupo eliminado con éxito!" });
     },
@@ -47,6 +49,7 @@ export function useManageGroups() {
     isPending: isUpdatingGroup,
     error: errorUpdatingGroup,
     reset: resetUpdateGroupMutation,
+    status: updateGroupMutationStatus
   } = useMutation({
     mutationFn: ({
       data,
@@ -62,6 +65,7 @@ export function useManageGroups() {
       }),
     onSuccess: (data) => {
       refetchGroups();
+      refetchUsers()
       router.replace({
         pathname: "/group/management/detail",
         params: {
@@ -105,6 +109,8 @@ export function useManageGroups() {
     handleCreateGroup,
     isCreatingGroup,
     errorCreatingGroup,
-    resetCreateGroupMutation
+    resetCreateGroupMutation,
+    deleteGroupMutationStatus,
+    updateGroupMutationStatus
   };
 }
