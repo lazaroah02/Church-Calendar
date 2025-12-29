@@ -65,7 +65,7 @@ export function createEvent({
 /**
  * Builds the JSON payload used when the image already exists in the backend.
  */
-function buildJsonPayload(data: EventFormType) {
+export function buildJsonPayload(data: EventFormType) {
   return {
     title: data.title,
     start_time: data.start_time.toISOString(),
@@ -84,7 +84,7 @@ function buildJsonPayload(data: EventFormType) {
 /**
  * Builds FormData used when uploading a new image file.
  */
-function buildFormData(data: EventFormType) {
+export function buildFormData(data: EventFormType) {
   const formData = new FormData();
 
   formData.append("title", data.title);
@@ -121,7 +121,7 @@ function buildFormData(data: EventFormType) {
  * Handles HTTP responses returned by the backend.
  * Converts backend validation errors into a normalized error object.
  */
-function handleResponse(res: Response) {
+export function handleResponse(res: Response) {
   return res.json().then((data) => {
     if (res.ok) {
       return data;
@@ -155,7 +155,7 @@ function handleResponse(res: Response) {
 /**
  * Handles network-level errors (no internet, DNS failure, server unreachable).
  */
-function handleNetworkError(error: unknown) {
+export function handleNetworkError(error: unknown) {
   console.error(error);
 
   if (error instanceof TypeError) {

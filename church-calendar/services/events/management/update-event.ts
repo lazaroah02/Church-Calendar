@@ -1,6 +1,19 @@
-import { BASE_URL, MANAGE_EVENTS_URL } from "@/api-endpoints";
+import { MANAGE_EVENTS_URL } from "@/api-endpoints";
 import { EventFormType } from "@/types/event";
+import { buildFormData, buildJsonPayload, handleNetworkError, handleResponse } from "./create-event";
 
+/**
+ * Updates an existing event.
+ *
+ * Behavior:
+ * - If the image already exists in the backend (`/media/...`) or no image is provided,
+ *   the request is sent as JSON.
+ * - If the image is a new local file, the request is sent as multipart/form-data.
+ *
+ * @param token - Authentication token
+ * @param data - Event form data
+ * @param eventId - Event ID to update
+ */
 export function updateEvent({
   token = "",
   data,
@@ -10,97 +23,49 @@ export function updateEvent({
   data: EventFormType;
   eventId?: number | string;
 }) {
-  const formData = new FormData();
-
-  formData.append("title", data.title);
-  formData.append("start_time", data.start_time.toISOString());
-  formData.append("end_time", data.end_time.toISOString());
-  formData.append("location", data.location);
-  formData.append("description", data.description);
-  formData.append("is_canceled", data.is_canceled.toString());
-  formData.append("open_to_reservations", data.open_to_reservations.toString());
-  formData.append("visible", data.visible.toString());
-  formData.append(
-    "reservations_limit",
-    data.reservations_limit?.toString() || ""
-  );
-
-  data.groups.forEach((id) => {
-    formData.append("groups", id.toString());
-  });
-
-  if (data.img && !data.img.startsWith(BASE_URL)) {
-    const filename = data.img.split("/").pop() || "photo.jpg";
-    const match = /\.(\w+)$/.exec(filename);
-    const type = match ? `image/${match[1]}` : "image/jpeg";
-
-    formData.append("img", {
-      uri: data.img,
-      name: filename,
-      type,
-    } as any);
+  if (!eventId) {
+    throw new Error("Event ID is required to update an event.");
   }
 
-  const options: RequestInit = {
+  const isExistingImage =
+    typeof data.img === "string" && data.img.startsWith("/media/");
+
+  /**
+   * ============================
+   * CASE 1: Existing image or no image
+   * → Send JSON payload
+   * ============================
+   */
+  if (isExistingImage || !data.img) {
+    const payload = buildJsonPayload(data);
+
+    return fetch(`${MANAGE_EVENTS_URL}${eventId}/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Token ${token}` } : {}),
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(handleResponse)
+      .catch(handleNetworkError);
+  }
+
+  /**
+   * ============================
+   * CASE 2: New image selected locally
+   * → Send multipart/form-data
+   * ============================
+   */
+  const formData = buildFormData(data);
+
+  return fetch(`${MANAGE_EVENTS_URL}${eventId}/`, {
     method: "PUT",
     headers: {
       ...(token ? { Authorization: `Token ${token}` } : {}),
-      credentials: "omit",
     },
     body: formData,
-  };
-
-  return fetch(`${MANAGE_EVENTS_URL}${eventId}/`, options)
-    .then((res) => {
-      return res.json().then((data) => {
-        if (res.ok) {
-          return data;
-        } else {
-          const errors: Record<string, string> = {};
-
-          if (data.title) {
-            errors.title = "Título Incorrecto. No puede estar vacío.";
-          }
-
-          else if (data.location) {
-            errors.location = "Lugar Incorrecto. No puede estar vacío.";
-          }
-
-          else if (data.reservations_limit) {
-            errors.reservations_limit =
-              "Número máximo de reservaciones inválido.";
-          }
-
-          else if (data.non_field_errors) {
-            if (
-              data.non_field_errors[0] === "End time must be after start time."
-            ) {
-              errors.end_time =
-                "Revisa el inicio y fin del evento. El fin debe ser después del inicio.";
-            }
-          }
-
-          else{
-            errors.general = "Error al conectar con el servidor. Inténtalo mas tarde."
-          }
-
-          throw errors
-        }
-      });
-    })
-    .catch((error) => {
-      if (
-        error instanceof TypeError &&
-        error.message === "Network request failed"
-      ) {
-        throw new Error(
-          JSON.stringify({
-            general: "Error en la operación. Revisa tu conexión de internet.",
-          })
-        );
-      }
-      throw new Error(
-        JSON.stringify(error)
-      );
-    });
+  })
+    .then(handleResponse)
+    .catch(handleNetworkError);
 }

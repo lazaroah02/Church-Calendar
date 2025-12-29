@@ -130,7 +130,7 @@ export default function EventDetails() {
                 </Pressable>
 
                 <Image
-                  source={{ uri: `${BASE_URL}${parsedEvent?.img}` }}
+                  source={{ uri: getImageUri(parsedEvent?.img || "") }}
                   style={styles.fullscreenImage}
                   resizeMode="contain"
                 />

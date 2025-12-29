@@ -18,19 +18,22 @@ import { MyCustomText } from "../MyCustomText";
 const inputColor = "#EBEBEB";
 
 export function EventForm({
-  event = null,
-  reset = () => null,
+  formValues,
   errors = null,
-  isPending = false,
-  handleSubmit = (values) => null,
+  isPending,
+  handleSubmit,
+  handleFieldChange,
   onCancel = () => null,
   submitButtonText = { text: "Enviar", loading: "Enviando" },
 }: {
-  event?: Event | null;
-  reset?: () => void;
+  formValues: EventFormType;
   errors?: Record<string, string | null> | null;
   isPending: boolean;
-  handleSubmit: (values: EventFormType) => void;
+  handleSubmit: () => void;
+  handleFieldChange: (
+    key: keyof typeof formValues,
+    value: string | boolean | Date | number[] | undefined | number | null
+  ) => void;
   onCancel?: () => void;
   submitButtonText?: { text: string; loading: string };
 }) {
@@ -40,28 +43,6 @@ export function EventForm({
     start_time: false | "date" | "time";
     end_time: false | "date" | "time";
   }>({ start_time: false, end_time: false });
-
-  const [formValues, setFormValues] = useState(
-    createFormValuesInitialData(event)
-  );
-
-  const [eventImage, setEventImage] = useState(
-    event?.img ? getImageUri(event?.img) : null
-  );
-
-  //update form values on event param change
-  useEffect(() => {
-    setFormValues(createFormValuesInitialData(event));
-    setEventImage(event?.img ? getImageUri(event?.img) : null);
-  }, [event]);
-
-  const handleFieldChange = (
-    key: keyof typeof formValues,
-    value: string | boolean | Date | number[] | undefined | number | null
-  ) => {
-    setFormValues((prev) => ({ ...prev, [key]: value }));
-    reset();
-  };
 
   useEffect(() => {
     if (errors) {
@@ -81,10 +62,12 @@ export function EventForm({
         {/* Picture */}
         <Pressable
           style={styles.pictureContainer}
-          onPress={() => pickImage({ setImage: (img) => setEventImage(img) })}
+          onPress={() =>
+            pickImage({ setImage: (img) => handleFieldChange("img", img) })
+          }
         >
-          {eventImage ? (
-            <Image style={styles.picture} source={{ uri: eventImage }} />
+          {formValues.img ? (
+            <Image style={styles.picture} source={{ uri: formValues.img }} />
           ) : (
             <Ionicons
               name="camera-outline"
@@ -196,11 +179,12 @@ export function EventForm({
         {/*Groups*/}
         <MyCustomText style={styles.label}>Dirigido a:</MyCustomText>
         <ChurchGroupsPicker
+          key={formValues?.groups?.map((g) => g).join(",") || "empty"}
           onChange={(selectedGroups) =>
             handleFieldChange("groups", selectedGroups)
           }
           placeholder="Seleccionar"
-          defaultSelectedGroups={event?.groups}
+          defaultSelectedGroups={formValues?.groups}
         />
 
         {/*State*/}
@@ -281,7 +265,7 @@ export function EventForm({
           loadingText={submitButtonText.loading}
           loading={isPending}
           disabled={isPending}
-          onPress={() => handleSubmit({ img: eventImage, ...formValues })}
+          onPress={handleSubmit}
           variant="submit"
           style={{ width: "50%" }}
           textStyle={{ fontWeight: "900" }}
@@ -292,9 +276,10 @@ export function EventForm({
 }
 
 export const createFormValuesInitialData = (
-  event: Event | EventTemplate | null
+  event: Event | EventTemplate | EventFormType | null
 ) => ({
   title: event?.title || "",
+  img: event?.img ? getImageUri(event?.img) : null,
   location: event?.location || "",
   description: event?.description || "",
   start_time:

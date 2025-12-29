@@ -3,9 +3,12 @@ import { EventForm } from "@/components/event/event-form";
 import { router } from "expo-router";
 import { PageHeader } from "@/components/PageHeader";
 import { useTemplates } from "@/hooks/events/useTemplates";
+import { useEventFormValues } from "@/hooks/events/useEventFormValues";
 
 export default function CreateTemplate() {
   const { createTemplate } = useTemplates();
+
+  const {formValues, handleFieldChange} = useEventFormValues({})
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -13,9 +16,10 @@ export default function CreateTemplate() {
       <EventForm
         isPending={false}
         errors={null}
-        reset={() => null}
-        handleSubmit={(values) => {
-          createTemplate(values);
+        formValues={formValues}
+        handleFieldChange={handleFieldChange}
+        handleSubmit={() => {
+          createTemplate(formValues);
           router.back();
         }}
         onCancel={() => router.back()}

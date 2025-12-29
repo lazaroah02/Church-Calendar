@@ -1,6 +1,6 @@
 import { EventForm } from "@/components/event/event-form";
 import { PageHeader } from "@/components/PageHeader";
-import { SimpleThreeDotsMenu } from "@/components/SimpleThreeDotsMenu";
+import { useEventFormValues } from "@/hooks/events/useEventFormValues";
 import { useManageEvents } from "@/hooks/events/useManageEvents";
 import { Event } from "@/types/event";
 import { router, useFocusEffect, useNavigation } from "expo-router";
@@ -47,18 +47,21 @@ export default function EventEdit() {
     }, [navigation, event])
   );
 
+  const { formValues, handleFieldChange } = useEventFormValues({
+    resetMutation: resetUpdateEventMutation,
+    defaultValues: event,
+  });
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <PageHeader
-        title="Editar Evento"
-      />
+      <PageHeader title="Editar Evento" />
       <EventForm
         isPending={isUpdatingEvent}
-        event={event}
+        formValues={formValues}
         errors={updateEventErrors}
-        reset={resetUpdateEventMutation}
-        handleSubmit={(values) =>
-          handleUpdateEvent({ data: values, eventId: event?.id })
+        handleFieldChange={handleFieldChange}
+        handleSubmit={() =>
+          handleUpdateEvent({ data: formValues, eventId: event?.id })
         }
         onCancel={() =>
           router.replace({
