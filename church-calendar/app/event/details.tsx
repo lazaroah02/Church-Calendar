@@ -148,6 +148,7 @@ export default function EventDetails() {
 
         {/* Groups */}
         <MyCustomText style={styles.groupLabel}>Evento para:</MyCustomText>
+        {parsedEvent?.groups_full_info.length === 0 && <MyCustomText style={styles.groupName}>Nadie</MyCustomText>}
         <View style={styles.groupsContainer}>
           {parsedEvent?.groups_full_info?.map((group) => (
             <View key={group.name} style={styles.group}>
