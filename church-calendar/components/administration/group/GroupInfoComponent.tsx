@@ -8,9 +8,16 @@ import { AppTheme } from "@/theme";
 import { Group } from "@/types/group";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { ScrollView, View, Image, Pressable } from "react-native";
+import {
+  ScrollView,
+  View,
+  Image,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import { BulkDeleteUsersFromGroupButton } from "./BulkDeleteUsersFromGroupButton";
 import { MyCustomText } from "@/components/MyCustomText";
+import { useState } from "react";
 
 export function GroupInfoComponent({ group }: { group: Group | null }) {
   const styles = useThemeStyles(groupInfoStyles);
@@ -22,7 +29,7 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
     hasMoreUsers,
     fetchNextPageOfUsers,
     totalUsers,
-    refetchUsers
+    refetchUsers,
   } = useManageUsers({
     filters: { member_groups: [group?.id], is_active: "", is_staff: "" },
   });
@@ -30,6 +37,19 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
   const { selected, clearSelected, toggleSelect } = useSelectedItems<
     number | undefined
   >();
+
+  //state to show loading status to the user even if the loading time is too fast. This is for better UX
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+  setIsRefreshing(true);
+  refetchUsers(); 
+
+  // Show the spinner for an instant for better UX event if the loading time is really fast
+  setTimeout(() => {
+    setIsRefreshing(false);
+  }, 800); 
+};
 
   return (
     <>
@@ -60,7 +80,9 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
         {group?.description && (
           <>
             <MyCustomText style={styles.groupLabel}>Descripción:</MyCustomText>
-            <MyCustomText style={styles.description}>{group?.description}</MyCustomText>
+            <MyCustomText style={styles.description}>
+              {group?.description}
+            </MyCustomText>
           </>
         )}
 
@@ -73,7 +95,9 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
             marginTop: 20,
           }}
         >
-          <MyCustomText style={[styles.groupLabel, { marginTop: 0, marginBottom: 0 }]}>
+          <MyCustomText
+            style={[styles.groupLabel, { marginTop: 0, marginBottom: 0 }]}
+          >
             Color:
           </MyCustomText>
           <View
@@ -87,9 +111,22 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
         </View>
 
         {/*Members*/}
-        <View>
-          <MyCustomText style={styles.groupLabel}>Integrantes ({totalUsers}):</MyCustomText>
-          <Pressable onPress={() => refetchUsers()}><MyCustomText>Refresh</MyCustomText></Pressable>
+        <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+          <MyCustomText style={styles.groupLabel}>
+            Integrantes ({totalUsers}):
+          </MyCustomText>
+          <View style={{marginTop:15}}>
+            {isGettingMoreUsers || isGettingUsers || isRefreshing? (
+              <ActivityIndicator size="small" color={"#000"} style={{transform:[{scale:1.3}]}}/>
+            ) : (
+              <Ionicons
+                name="refresh-outline"
+                color="#000"
+                size={25}
+                onPress={handleRefresh}
+              />
+            )}
+          </View>
         </View>
         {users.map((user) => {
           const isSelected = selected.includes(user.id);
@@ -216,10 +253,10 @@ const groupInfoStyles = (theme: AppTheme) => {
       alignItems: "center",
       justifyContent: "center",
     },
-    membersListStatusMessage:{
+    membersListStatusMessage: {
       textAlign: "center",
       marginTop: 15,
-      fontSize:theme.fontSizes.md
-    }
+      fontSize: theme.fontSizes.md,
+    },
   };
 };

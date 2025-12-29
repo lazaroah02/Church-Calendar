@@ -15,11 +15,23 @@ export function useUserAdministrationFilters() {
     []
   );
 
-  return ({
+  return {
     search,
     setSearch,
     filters,
     setFilters,
     debouncedSearch,
-  })
+  };
+}
+
+export function areFiltersActive(search: string, filters: UserFilters) {
+  if (search !== "") return true;
+  if (
+    filters.is_active !== "" ||
+    filters.is_staff !== "" ||
+    filters.member_groups.length > 0
+  ) {
+    return true;
+  }
+  return false;
 }

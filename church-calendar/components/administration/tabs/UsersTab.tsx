@@ -5,7 +5,10 @@ import { Search } from "../Search";
 import { UserFiltersBottomSheet } from "../UserFilters";
 import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useUserAdministrationFilters } from "@/hooks/administration/useUserAdministrationFilters";
+import {
+  areFiltersActive,
+  useUserAdministrationFilters,
+} from "@/hooks/administration/useUserAdministrationFilters";
 import { useSelectedItems } from "@/hooks/administration/useSelectedItems";
 import { CustomMenu } from "@/components/CustomMenu";
 import { UserOptions } from "../user/UserOptions";
@@ -37,7 +40,15 @@ export const UsersTab = () => {
     number | undefined
   >();
 
-  const styles = useThemeStyles(UsersTabStyles)
+  const styles = useThemeStyles(UsersTabStyles);
+
+  //refect users on focus
+  useFocusEffect(
+    useCallback(() => {
+      if (areFiltersActive(search, filters) === false) return;
+      refetchUsers();
+    }, [refetchUsers, filters, search])
+  );
 
   return (
     <View style={{ flex: 1, padding: 20, paddingBottom: 0 }}>
@@ -51,7 +62,11 @@ export const UsersTab = () => {
 
         <CustomMenu
           renderItems={(closeParent) => (
-            <UserOptions closeParent={closeParent} selected={selected} clearSelected={clearSelected}/>
+            <UserOptions
+              closeParent={closeParent}
+              selected={selected}
+              clearSelected={clearSelected}
+            />
           )}
         />
       </View>
@@ -94,7 +109,9 @@ export const UsersTab = () => {
               </MyCustomText>
             )}
             {!isGettingMoreUsers && !isGettingUsers && !hasMoreUsers && (
-              <MyCustomText style={styles.usersListStatusMessage}>No hay mas usuarios</MyCustomText>
+              <MyCustomText style={styles.usersListStatusMessage}>
+                No hay mas usuarios
+              </MyCustomText>
             )}
           </View>
         }
@@ -133,8 +150,8 @@ const UsersTabStyles = (theme: AppTheme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-  usersListStatusMessage:{
+  usersListStatusMessage: {
     textAlign: "center",
-    fontSize: theme.fontSizes.md
-  }
-})
+    fontSize: theme.fontSizes.md,
+  },
+});
