@@ -70,7 +70,7 @@ export default function EventDetails() {
       />
       <ScrollView contentContainerStyle={styles.container}>
         {parsedEvent?.is_canceled && (
-          <View style={{ flexDirection: "row", marginBottom:10 }}>
+          <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <MyCustomText
               style={[
                 styles.groupLabel,
@@ -189,20 +189,24 @@ export default function EventDetails() {
             style={{ marginTop: 25, marginLeft: -5 }}
           >
             {/*Created by*/}
-            <UserAvatar
-              title={`Creado el ${formatTimeStamp(
-                parsedEvent?.created_at || ""
-              )} por:`}
-              user={parsedEvent?.created_by_full_info}
-            />
+            {parsedEvent?.created_by_full_info && (
+              <UserAvatar
+                title={`Creado el ${formatTimeStamp(
+                  parsedEvent?.created_at || ""
+                )} por:`}
+                user={parsedEvent?.created_by_full_info}
+              />
+            )}
 
             {/*Last Edit by*/}
-            <UserAvatar
-              title={`Última edición el ${formatTimeStamp(
-                parsedEvent?.updated_at || ""
-              )} por:`}
-              user={parsedEvent?.last_edit_by_full_info}
-            />
+            {parsedEvent?.last_edit_by_full_info && (
+              <UserAvatar
+                title={`Última edición el ${formatTimeStamp(
+                  parsedEvent?.updated_at || ""
+                )} por:`}
+                user={parsedEvent?.last_edit_by_full_info}
+              />
+            )}
           </Collapsible>
         )}
       </ScrollView>
