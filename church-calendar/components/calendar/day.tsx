@@ -46,7 +46,7 @@ export function Day({
                   event.groups_full_info?.length > 0 &&
                   event.groups_full_info[0]?.color !== ""
                     ? event.groups_full_info[0]?.color
-                    : "#f39c12",
+                    : "#000",
                 marginHorizontal: 1,
               }}
             />
