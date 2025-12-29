@@ -81,6 +81,7 @@ export function useManageUsers({
         userId: userId,
       }),
     onSuccess: (data) => {
+      refetchUsers()
       router.replace({
         pathname: "/user/detail",
         params: {
@@ -169,6 +170,7 @@ export function useManageUsers({
       bulkRemoveUsersFromGroup({ token: session?.token || "", groupId: groupId, userIds: userIds }),
     onSuccess: () => {
       showSuccessToast({ message: "Operación exitosa!" });
+      refetchUsers()
     },
     onError: (error) => {
       showErrorToast({
@@ -189,6 +191,7 @@ export function useManageUsers({
       bulkAddUsersToGroup({ token: session?.token || "", groupId: groupId, userIds: userIds }),
     onSuccess: () => {
       showSuccessToast({ message: "Operación exitosa!" });
+      refetchUsers()
     },
     onError: (error) => {
       showErrorToast({

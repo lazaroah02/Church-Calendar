@@ -11,21 +11,24 @@ export function BulkDeleteUsersFromGroupButton({
   group,
   selected,
   clearSelected,
+  onSuccess = () => null
 }: {
   group: Group | null;
   selected: any[];
   clearSelected: () => void;
+  onSuccess?: () => void
 }) {
   const styles = useThemeStyles(Styles);
 
+  /*
+  evoid passing filters to this hook for when bulkRemoveUsersFromGroup mutation executes, 
+  the refetchUser function updates the users of Users Tab on administration page.
+  */ 
   const {
     handleBulkRemoveUsersFromGroup,
     isRemovingUsersFromGroup,
     bulkRemoveUsersFromGroupStatus,
-    refetchUsers
-  } = useManageUsers({
-    filters: { member_groups: [group?.id], is_active: "", is_staff: "" },
-  });
+  } = useManageUsers({}); 
 
   const { showConfirm, hideConfirm, confirm } = useConfirm({
     onConfirm: () =>
@@ -44,13 +47,13 @@ export function BulkDeleteUsersFromGroupButton({
     if (bulkRemoveUsersFromGroupStatus === "success") {
       clearSelected();
       hideConfirm();
-      refetchUsers();
+      onSuccess()
     }
   }, [
     hideConfirm,
     bulkRemoveUsersFromGroupStatus,
     clearSelected,
-    refetchUsers,
+    onSuccess
   ]);
 
   return (

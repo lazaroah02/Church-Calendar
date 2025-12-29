@@ -206,6 +206,7 @@ export function UserManagementForm({
         {/*Groups*/}
         <MyCustomText style={styles.groupLabel}>Grupos a los que pertenece:</MyCustomText>
         <ChurchGroupsPicker
+          key={formValues?.member_groups?.map((g) => g).join(",") || "empty"}
           placeholder="Seleccionar"
           defaultSelectedGroups={formValues.member_groups}
           excluded_groups={[1, "Todos"]}

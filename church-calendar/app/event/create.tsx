@@ -25,7 +25,7 @@ export default function CreateEvent() {
 
   const { formValues, setFormValues, handleFieldChange } = useEventFormValues({
     resetMutation: resetCreateEventMutation,
-    defaultValues:{groups:[1]}
+    defaultValues: { groups: [1] }, //general group
   });
 
   return (

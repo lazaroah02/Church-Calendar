@@ -67,22 +67,35 @@ def ensure_general_group_exists(sender, **kwargs):
 @receiver(post_save, sender=get_user_model()) 
 def ensure_user_in_general_group(sender, instance, created, **kwargs): 
     '''This signal ensures that all users are in group general.''' 
-    def _add(): 
-        general, _ = ChurchGroup.objects.get_or_create(
-            name=GENERAL_GROUP_NAME, 
-            defaults={'description': GENERAL_GROUP_DESCRIPTION} 
-            ) 
-        instance.member_groups.add(general) 
-    transaction.on_commit(_add)        
+    try:
+        def _add(): 
+            general, _ = ChurchGroup.objects.get_or_create(
+                name=GENERAL_GROUP_NAME, 
+                defaults={'description': GENERAL_GROUP_DESCRIPTION} 
+                ) 
+            instance.member_groups.add(general) 
+        transaction.on_commit(_add)        
+    except Exception as e:
+        print("Error on church_groups signals at ensure_user_in_general_group: ", e)
 
 
 @receiver(m2m_changed, sender=get_user_model().member_groups.through)
-def ensure_user_in_general_group_after_m2m_changes(sender, instance, action, **kwargs):
+def ensure_user_in_general_group_after_m2m_changes(
+    sender, instance, action, reverse, **kwargs
+):
     """
     Ensures that the user is always in the general group.
-    This runs whenever the member_groups relation changes.
+    Runs whenever the member_groups relation changes.
     """
-    if action in ["post_add", "post_remove", "post_clear"]:
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    # 🚨 If reverse=True, instance is ChurchGroup → ignore
+    if reverse:
+        return
+
+    # ✅ Here instance IS CustomUser
+    try:
         general, _ = ChurchGroup.objects.get_or_create(
             name=GENERAL_GROUP_NAME,
             defaults={"description": GENERAL_GROUP_DESCRIPTION}
@@ -90,6 +103,13 @@ def ensure_user_in_general_group_after_m2m_changes(sender, instance, action, **k
 
         if not instance.member_groups.filter(pk=general.pk).exists():
             instance.member_groups.add(general)
+
+    except Exception as e:
+        print(
+            "Error on church_groups signals at: "
+            "ensure_user_in_general_group_after_m2m_changes",
+            e
+        )
 
 
 @receiver(pre_save, sender=ChurchGroup)

@@ -3,7 +3,7 @@ import { useManageUsers } from "@/hooks/user/useManageUsers";
 import { UserAvatar } from "@/components/user/user-avatar";
 import { Search } from "../Search";
 import { UserFiltersBottomSheet } from "../UserFilters";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useUserAdministrationFilters } from "@/hooks/administration/useUserAdministrationFilters";
 import { useSelectedItems } from "@/hooks/administration/useSelectedItems";
@@ -12,6 +12,7 @@ import { UserOptions } from "../user/UserOptions";
 import { MyCustomText } from "@/components/MyCustomText";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { useCallback } from "react";
 
 export const UsersTab = () => {
   const { search, setFilters, filters, debouncedSearch } =

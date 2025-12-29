@@ -22,6 +22,7 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
     hasMoreUsers,
     fetchNextPageOfUsers,
     totalUsers,
+    refetchUsers
   } = useManageUsers({
     filters: { member_groups: [group?.id], is_active: "", is_staff: "" },
   });
@@ -86,7 +87,10 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
         </View>
 
         {/*Members*/}
-        <MyCustomText style={styles.groupLabel}>Integrantes ({totalUsers}):</MyCustomText>
+        <View>
+          <MyCustomText style={styles.groupLabel}>Integrantes ({totalUsers}):</MyCustomText>
+          <Pressable onPress={() => refetchUsers()}><MyCustomText>Refresh</MyCustomText></Pressable>
+        </View>
         {users.map((user) => {
           const isSelected = selected.includes(user.id);
           return (
@@ -145,6 +149,7 @@ export function GroupInfoComponent({ group }: { group: Group | null }) {
         selected={selected}
         clearSelected={clearSelected}
         group={group}
+        onSuccess={refetchUsers}
       />
     </>
   );

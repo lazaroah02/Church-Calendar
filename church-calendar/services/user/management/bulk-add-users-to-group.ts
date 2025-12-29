@@ -29,6 +29,7 @@ export function bulkAddUsersToGroup({
         if (res.ok) {
           return;
         } else {
+          console.log(data)
           throw new Error(data.message);
         }
       });
