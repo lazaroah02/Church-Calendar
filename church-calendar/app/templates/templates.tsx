@@ -97,6 +97,11 @@ export default function EventTemplates() {
             </View>
           );
         }}
+        ListEmptyComponent={
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <MyCustomText style={styles.text}>No tienes Plantillas</MyCustomText>
+          </View>
+        }
       />
     </SafeAreaView>
   );

@@ -291,7 +291,9 @@ export function EventForm({
   );
 }
 
-export const createFormValuesInitialData = (event: Event | EventTemplate | null) => ({
+export const createFormValuesInitialData = (
+  event: Event | EventTemplate | null
+) => ({
   title: event?.title || "",
   location: event?.location || "",
   description: event?.description || "",

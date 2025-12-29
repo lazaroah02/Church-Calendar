@@ -28,16 +28,31 @@ export function CreateEventTrheeDotsmenuOptions({
           hide={() => setShowTemplatesModal(false)}
         >
           <View style={{ paddingHorizontal: 10 }}>
-            {templates.map((template) => (
-              <TemplateComponent
-                key={template.id}
-                item={template}
-                onPress={() => {
-                  handleImportTemplate(template);
-                  closeParent();
-                }}
-              />
-            ))}
+            <>
+              {templates.length === 0 && (
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 10,
+                  }}
+                >
+                  <MyCustomText style={styles.text}>
+                    No tienes Plantillas
+                  </MyCustomText>
+                </View>
+              )}
+              {templates.map((template) => (
+                <TemplateComponent
+                  key={template.id}
+                  item={template}
+                  onPress={() => {
+                    handleImportTemplate(template);
+                    closeParent();
+                  }}
+                />
+              ))}
+            </>
           </View>
         </TemplatesModal>
       }

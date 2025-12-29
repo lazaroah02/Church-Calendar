@@ -90,7 +90,9 @@ export function useConfirm({
                   onPress={handleCancel}
                   style={styles.cancelButton}
                 >
-                  <MyCustomText style={[styles.text, {fontWeight: 900}]}>Cancelar</MyCustomText>
+                  <MyCustomText style={[styles.text, { fontWeight: 900 }]}>
+                    Cancelar
+                  </MyCustomText>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -98,8 +100,12 @@ export function useConfirm({
                   onPress={handleConfirm}
                   disabled={loading}
                 >
-                  <MyCustomText style={[styles.text, {fontWeight: 900, color:"#fff"}]}>Continuar</MyCustomText>
-                  {loading && <ActivityIndicator size="small" />}
+                  <MyCustomText
+                    style={[styles.text, { fontWeight: 900, color: "#fff" }]}
+                  >
+                    Continuar
+                  </MyCustomText>
+                  {loading && <ActivityIndicator size="small" color={"#000"} />}
                 </TouchableOpacity>
               </View>
             </View>
