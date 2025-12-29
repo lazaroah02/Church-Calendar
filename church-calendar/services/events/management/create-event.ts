@@ -130,22 +130,23 @@ export function handleResponse(res: Response) {
     const errors: Record<string, string> = {};
 
     if (data.title) {
-      errors.title = "Invalid title. It cannot be empty.";
+      errors.title = "El título no es válido. No puede estar vacío.";
     } else if (data.location) {
-      errors.location = "Invalid location. It cannot be empty.";
+      errors.location = "La ubicación no es válida. No puede estar vacía.";
     } else if (data.reservations_limit) {
-      errors.reservations_limit = "Invalid reservations limit.";
+      errors.reservations_limit =
+        "El límite de reservas no es válido.";
     } else if (data.non_field_errors) {
       if (
         data.non_field_errors[0] ===
         "End time must be after start time."
       ) {
         errors.end_time =
-          "Check event start and end times. End time must be after start time.";
+          "Verifica las fechas del evento. La hora de finalización debe ser posterior a la hora de inicio.";
       }
     } else {
       errors.general =
-        "Failed to connect to the server. Please try again later.";
+        "No se pudo conectar con el servidor. Inténtalo nuevamente más tarde.";
     }
 
     throw new Error(JSON.stringify(errors));
@@ -156,13 +157,12 @@ export function handleResponse(res: Response) {
  * Handles network-level errors (no internet, DNS failure, server unreachable).
  */
 export function handleNetworkError(error: unknown) {
-  console.error(error);
 
   if (error instanceof TypeError) {
     throw new Error(
       JSON.stringify({
         general:
-          "Failed to create event. Please check your internet connection.",
+          "No se pudo crear el evento. Verifica tu conexión a internet.",
       })
     );
   }

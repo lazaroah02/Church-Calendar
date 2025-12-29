@@ -43,6 +43,7 @@ export function updateEvent({
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Accept-Language": "es",
         ...(token ? { Authorization: `Token ${token}` } : {}),
       },
       body: JSON.stringify(payload),
@@ -62,6 +63,7 @@ export function updateEvent({
   return fetch(`${MANAGE_EVENTS_URL}${eventId}/`, {
     method: "PUT",
     headers: {
+      "Accept-Language": "es",
       ...(token ? { Authorization: `Token ${token}` } : {}),
     },
     body: formData,

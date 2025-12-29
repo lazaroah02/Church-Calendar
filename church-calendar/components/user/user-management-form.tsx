@@ -252,7 +252,7 @@ const userManagementForm = (theme: AppTheme) => {
       flexDirection: "column",
     },
     profilePictureContainer: {
-      backgroundColor: "#37C6FF",
+      backgroundColor: "#6a7073ff",
       width: 200,
       height: 200,
       borderRadius: 100,

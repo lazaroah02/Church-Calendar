@@ -1,6 +1,12 @@
 from django.db import models
 from django.db import transaction
-from django.db.models.signals import post_save, post_migrate, pre_save, post_delete
+from django.db.models.signals import (
+    post_save,
+    post_migrate,
+    pre_save, 
+    post_delete,
+    m2m_changed
+    )
 from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 import os
@@ -9,10 +15,9 @@ GROUPS_IMAGES_FILDER = 'church_groups_images'
 GENERAL_GROUP_NAME = "Todos"
 GENERAL_GROUP_DESCRIPTION = "Grupo general para todos los usuarios"
 
+
 # The following ChurchGroupQuerySet and ChurchGroupManager ensures that 
 # the general group cannot be deleted or bulk updated.
-
-
 class ChurchGroupQuerySet(models.QuerySet):
     def delete(self, *args, **kwargs):
         # evoid deleting the general Cgroup
@@ -59,16 +64,32 @@ def ensure_general_group_exists(sender, **kwargs):
         })
 
 
-@receiver(post_save, sender=get_user_model())
-def add_user_to_general_group(sender, instance, created, **kwargs):
-    '''This signal ensures that all users are in group general.'''
-    def _add():
+@receiver(post_save, sender=get_user_model()) 
+def ensure_user_in_general_group(sender, instance, created, **kwargs): 
+    '''This signal ensures that all users are in group general.''' 
+    def _add(): 
+        general, _ = ChurchGroup.objects.get_or_create(
+            name=GENERAL_GROUP_NAME, 
+            defaults={'description': GENERAL_GROUP_DESCRIPTION} 
+            ) 
+        instance.member_groups.add(general) 
+    transaction.on_commit(_add)        
+
+
+@receiver(m2m_changed, sender=get_user_model().member_groups.through)
+def ensure_user_in_general_group_after_m2m_changes(sender, instance, action, **kwargs):
+    """
+    Ensures that the user is always in the general group.
+    This runs whenever the member_groups relation changes.
+    """
+    if action in ["post_add", "post_remove", "post_clear"]:
         general, _ = ChurchGroup.objects.get_or_create(
             name=GENERAL_GROUP_NAME,
-            defaults={'description': GENERAL_GROUP_DESCRIPTION}
-            )
-        instance.member_groups.add(general)
-    transaction.on_commit(_add)
+            defaults={"description": GENERAL_GROUP_DESCRIPTION}
+        )
+
+        if not instance.member_groups.filter(pk=general.pk).exists():
+            instance.member_groups.add(general)
 
 
 @receiver(pre_save, sender=ChurchGroup)
