@@ -16,21 +16,26 @@ import { openBrowserAsync } from "expo-web-browser";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { MyCustomText } from "@/components/MyCustomText";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useMyNavigationBar } from "@/hooks/useMyNavigationBar";
 
 export default function SignIn() {
   const { signIn } = useSession();
   const [loading, setLoading] = useState(false);
   const styles = useThemeStyles(signInStyles)
+  useMyNavigationBar({buttonsStyle:"dark", backgroundColor:"rgba(236, 161, 0, 1)"})
+
   const [formValues, setFormValues] = useState<{ email: string; pass: string }>(
     { email: "", pass: "" }
   );
   const [errors, setErrors] = useState<LoginFormErrors | null>(null);
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <KeyboardAwareScrollView
       contentContainerStyle={{ flexGrow: 1 }}
       keyboardShouldPersistTaps="handled"
       enableOnAndroid
-      extraScrollHeight={100}
+      extraScrollHeight={10}
     >
       <View
         style={{
@@ -140,6 +145,7 @@ export default function SignIn() {
       </View>
 
     </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 }
 

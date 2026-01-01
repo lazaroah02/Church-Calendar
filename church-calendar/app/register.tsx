@@ -13,13 +13,13 @@ import { useRef, useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
 import { CustomInput } from "@/components/form/custom-input";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChurchGroupsPicker } from "@/components/form/church-groups-picker";
 import { Ionicons } from "@expo/vector-icons";
 import FormErrorBanner from "@/components/form/form-banner-error";
 import { MyCustomText } from "@/components/MyCustomText";
+import { useMyNavigationBar } from "@/hooks/useMyNavigationBar";
 
 type RegisterErrors = {
   email: string;
@@ -34,6 +34,7 @@ type RegisterErrors = {
 export default function Register() {
   const { register } = useSession();
   const styles = useThemeStyles(registerStyles);
+  useMyNavigationBar({buttonsStyle:"dark", backgroundColor:"#EAEAEA"})
 
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -83,10 +84,9 @@ export default function Register() {
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid
-        extraScrollHeight={20}
+        extraScrollHeight={10}
         style={{ backgroundColor: "rgba(236, 161, 0, 1)" }}
       >
-        <MyNavigationBar buttonsStyle="dark" />
         <View style={styles.form}>
           <MyCustomText style={styles.formTitle}>Crear Cuenta</MyCustomText>
 

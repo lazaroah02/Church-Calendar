@@ -16,7 +16,9 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
+      "androidNavigationBar": {
+        "backgroundColor": "#6a7073ff"
+      },
       "package": "com.lazaroaltedill.churchcalendar",
       "googleServicesFile": "./google-services.json"
     },

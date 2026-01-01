@@ -200,6 +200,7 @@ export function useCalendarEventsLogic() {
     onRefetch, // extended refetch (visible + selectedDay month)
     loadingEvents,
     errorEvents,
+    interval, // current visible month interval
     setInterval, // update visible month interval
     selectedDay, // current selected day
     setSelectedDay, // update selected day

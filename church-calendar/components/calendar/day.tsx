@@ -3,6 +3,8 @@ import type { DayProps } from "@/types/calendar";
 import { MyCustomText } from "../MyCustomText";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
+import { useMemo } from "react";
 
 export function Day({
   today,
@@ -12,24 +14,40 @@ export function Day({
   getSpecificDayEvents,
 }: DayProps) {
   const dayEvents = getSpecificDayEvents(date.date?.dateString);
-  const styles = useThemeStyles(DayComponentStyles)
+  const styles = useThemeStyles(DayComponentStyles);
+  const { interval } = useCalendarEventsContext();
+
+  const withinVisibleMonth = useMemo(
+    () =>
+      date.date &&
+      date.date.timestamp >= new Date(interval.start_date).getTime() &&
+      date.date.timestamp <= new Date(interval.end_date).getTime(),
+    [date.date, interval.end_date, interval.start_date]
+  );
+
+  const disabledDay = useMemo(
+    () => date.state === "disabled" || !withinVisibleMonth,
+    [date.state, withinVisibleMonth]
+  );
+
   return (
     <Pressable
       onPress={() => {
         if (date.date == null) return;
         setSelectedDay(date.date);
       }}
-      disabled={date.state === "disabled"}
+      disabled={disabledDay}
       style={[
         styles.dayContainer,
-        date.date?.dateString === today && {
-          backgroundColor: "#fff",
-        },
+        date.date?.dateString === today &&
+          !disabledDay && {
+            backgroundColor: "#fff",
+          },
         date.date?.dateString === selectedDay?.dateString && {
           borderWidth: 3,
           borderColor: "rgba(236, 161, 0, 1)",
         },
-        date.state === "disabled" && { opacity: 0.2 },
+        disabledDay && { opacity: 0.2 },
       ]}
     >
       <MyCustomText style={styles.dayNumber}>{date.date?.day}</MyCustomText>
@@ -71,14 +89,16 @@ export function Day({
           ))}
         </View>
         {dayEvents && dayEvents.length > 6 && (
-          <MyCustomText style={{ textAlign: "center", marginTop: -8 }}>...</MyCustomText>
+          <MyCustomText style={{ textAlign: "center", marginTop: -8 }}>
+            ...
+          </MyCustomText>
         )}
       </View>
     </Pressable>
   );
 }
 
-const DayComponentStyles = (theme:AppTheme) =>({
+const DayComponentStyles = (theme: AppTheme) => ({
   dayContainer: {
     width: 50,
     height: 50,

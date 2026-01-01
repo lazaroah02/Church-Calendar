@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { useCalendarEventsLogic } from "./useCalendarEventsLogic"; 
-import type { Event, DateString } from "@/types/event";
+import type { Event, DateString, Interval } from "@/types/event";
 import { DateData } from "react-native-calendars";
 
 
@@ -19,6 +19,7 @@ interface CalendarContextType {
     // Refetch and Interval Update Functions
     refetchEvents: () => Promise<any>;
     onRefetch: () => Promise<void>;
+    interval: Interval; // current visible month interval
     setInterval: (interval: { start_date: DateString; end_date: DateString }) => void;
     getSpecificDayEvents: (date: DateString) => Event[];
 

@@ -6,9 +6,11 @@ import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Ionicons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/auth/useSession";
+import { useMyNavigationBar } from "@/hooks/useMyNavigationBar";
 
 export default function TabLayout() {
   const { session } = useSession();
+  useMyNavigationBar({})
   return (
     <Tabs
       screenOptions={{

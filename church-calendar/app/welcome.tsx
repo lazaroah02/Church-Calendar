@@ -6,12 +6,15 @@ import { AppTheme } from "@/theme";
 import { useSession } from "@/hooks/auth/useSession";
 import { router } from "expo-router";
 import { MyCustomText } from "@/components/MyCustomText";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useMyNavigationBar } from "@/hooks/useMyNavigationBar";
 
 export default function Welcome() {
   const styles = useThemeStyles(welcomeStyles);
+  useMyNavigationBar({backgroundColor:"rgba(236, 161, 0, 1)", buttonsStyle:"dark"})
   const { updateGuestStatus } = useSession();
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{ height: 350, justifyContent: "center", alignItems: "center" }}
       >
@@ -53,7 +56,7 @@ export default function Welcome() {
           <MyCustomText style={styles.continueLikeGuestText}>Continuar como invitado</MyCustomText>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
