@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-25 16:54-0500\n"
+"POT-Creation-Date: 2026-01-01 12:50-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
-#: .\authentication\serializers.py:54 .\user\serializers.py:85
+#: .\authentication\serializers.py:56 .\user\serializers.py:85
 msgid "A user with this email already exists."
 msgstr "Ya existe un usuario con este correo electrónico."
 
-#: .\authentication\serializers.py:59 .\user\serializers.py:91
+#: .\authentication\serializers.py:61 .\user\serializers.py:91
 msgid "A user with this username already exists."
 msgstr "Ya existe un usuario con este nombre de usuario."
 
-#: .\authentication\serializers.py:66
+#: .\authentication\serializers.py:68
 msgid "You must be at least 10 years old to use the app."
 msgstr "Debes tener al menos 10 años para usar la aplicación."
 
@@ -39,27 +39,54 @@ msgstr "Este color está siendo usado por otro grupo. Por favor usa otro."
 msgid "White color is not allowed. Please choose another color."
 msgstr "El color blanco no puede ser usado. Por favor utiliza otro."
 
-#: .\church_group\serializers.py:26
+#: .\church_group\serializers.py:23
+#, fuzzy
+#| msgid "White color is not allowed. Please choose another color."
+msgid "Black color is not allowed. Please choose another color."
+msgstr "El color negro no puede ser usado. Por favor utiliza otro."
+
+#: .\church_group\serializers.py:28
 msgid "Invalid color format. Please provide a valid hex color code."
 msgstr "Formato de color inválido. Por favor utiliza otro."
 
-#: .\church_group\views.py:60
+#: .\church_group\views.py:59
 msgid "You cannot remove users from the general group."
 msgstr "No puedes eliminar usuarios del grupo general."
 
-#: .\church_group\views.py:66
+#: .\church_group\views.py:65
 #, fuzzy
-msgid "Missing users_to_delete in query body"
+msgid "Missing users_to_remove in query body"
 msgstr "Debes seleccionar al menos un usuario."
 
-#: .\church_group\views.py:72
+#: .\church_group\views.py:71 .\church_group\views.py:97
 #, fuzzy
 msgid "Invalid users IDs."
 msgstr "Los IDs de usuario proporcionados no son correctos."
 
-#: .\church_group\views.py:81
+#: .\church_group\views.py:80 .\church_group\views.py:107
 msgid "Error on the request. Verify the group exists."
 msgstr "Error en la operación. Verifica que el grupo exista."
+
+#: .\church_group\views.py:91
+#, fuzzy
+msgid "Missing users in query body"
+msgstr "Debes seleccionar al menos un usuario."
+
+#: .\event\serializers.py:94
+msgid "Invalid timezone"
+msgstr "Zona Horaria no válida"
+
+#: .\event\serializers.py:107
+msgid "start_date and end_date are required when group_by is specified."
+msgstr "Se requieren start_date y end_date cuando se especifica group_by."
+
+#: .\event\serializers.py:117
+msgid "start_date must be earlier than end_date."
+msgstr "start_date debe ser anterior a end_date."
+
+#: .\event\serializers.py:122
+msgid "The date range cannot exceed 31 days."
+msgstr "El rango de fechas no puede exceder los 31 días."
 
 #: .\event\views.py:135 .\event\views.py:169 .\event\views.py:211
 msgid "Authentication required to make reservations."
@@ -97,6 +124,56 @@ msgstr "Reserva creada exitosamente."
 msgid "Reservation deleted successfully."
 msgstr "Reserva eliminada correctamente."
 
+#: .\notification\views.py:50
+msgid "Notification Token is required."
+msgstr "Se requiere el Token de notificación."
+
+#: .\notification\views.py:56
+msgid "Timezone is required."
+msgstr "Se requiere la zona horaria."
+
+#: .\notification\views.py:67
+msgid "Notification Token and timezone saved successfully."
+msgstr "Token de notificación y zona horaria guardados correctamente."
+
+#: .\notification\views.py:86
+msgid "Event ID is required."
+msgstr "Se requiere el ID del evento."
+
+#: .\notification\views.py:92
+msgid "Event not found."
+msgstr "Evento no encontrado."
+
+#: .\notification\views.py:99
+#, fuzzy
+#| msgid "Reservation created successfully."
+msgid "Notification sent successfully."
+msgstr "Notificación enviada correctamente."
+
+#: .\notification\views.py:105
+msgid "Failed to send notification. Try again later "
+msgstr "Error al enviar la notificación. Intenta de nuevo más tarde."
+
+#: .\notification\views.py:130
+msgid "The 'minutes' field must be a valid integer."
+msgstr "El campo 'minutes' debe ser un número entero válido."
+
+#: .\notification\views.py:158
+msgid "Checked for upcoming events and sent notifications successfully."
+msgstr "Se verificaron los próximos eventos y se enviaron las notificaciones correctamente."
+
+#: .\notification\views.py:165
+msgid "Failed to check for upcoming events. Try again later."
+msgstr "Error al verificar los próximos eventos. Intenta de nuevo más tarde."
+
+#: .\notification\views.py:199
+msgid "Notification sent to everyone."
+msgstr "Notificación enviada a todos."
+
+#: .\notification\views.py:206
+msgid "Failed sending notification. Try again later."
+msgstr "Error al enviar la notificación. Intenta de nuevo más tarde."
+
 #: .\user\serializers.py:23
 msgid "Designates whether the user can log in"
 msgstr "Indica si el usuario puede iniciar sesión"
@@ -107,8 +184,7 @@ msgstr "Indica si el usuario puede acceder al panel de administración"
 
 #: .\user\serializers.py:77
 msgid "An admin/superuser user must be staff too"
-msgstr ""
-"Un usuario administrador o superusuario también debe ser parte del personal"
+msgstr "Un usuario administrador o superusuario también debe ser parte del personal"
 
 #: .\user\utils\bulk_operations.py:34
 msgid "You can't delete yourself while you're logged in"
@@ -129,6 +205,6 @@ msgstr "IDs de {log_name} inválido."
 msgid "No {log_name} were deleted. Check if the IDs are correct."
 msgstr "Ningún {log_name} fue borrado. Verifica que sus IDs sean correctos."
 
-#: .\user\views.py:95
+#: .\user\views.py:94
 msgid "Password was not provided"
 msgstr "No se proporcionó una contraseña."

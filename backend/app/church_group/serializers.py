@@ -19,6 +19,8 @@ class ChurchGroupsManagementSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_("This color is being used by other group."))
         if value.lower() == "#ffffff":
             raise serializers.ValidationError(_("White color is not allowed. Please choose another color."))
+        if value.lower() == "#000000":
+            raise serializers.ValidationError(_("Black color is not allowed. Please choose another color."))
         if value.startswith("#") and len(value) == 7:
             try:
                 int(value[1:], 16)
