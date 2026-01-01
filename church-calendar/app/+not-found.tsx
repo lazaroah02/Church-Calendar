@@ -1,5 +1,5 @@
 import { MyCustomText } from "@/components/MyCustomText";
-import { MyNavigationBar } from "@/components/navigation/my-navigation-bar";
+import { useMyNavigationBar } from "@/hooks/useMyNavigationBar";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { router } from "expo-router";
@@ -8,9 +8,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function NotFoundScreen() {
   const styles = useThemeStyles(notFoundStyles);
+  useMyNavigationBar({backgroundColor: "#EAEAEA", buttonsStyle: "dark"});
   return (
     <SafeAreaView style={styles.container}>
-      <MyNavigationBar buttonsStyle="dark" />
       <MyCustomText style={styles.notFoundMessage}>No Encontrado</MyCustomText>
       <Pressable onPress={() => router.back()} style={styles.backButton}>
         <MyCustomText style={styles.backButtonText}>Volver</MyCustomText>
@@ -25,6 +25,7 @@ const notFoundStyles = (theme: AppTheme) => ({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
+    backgroundColor:"#EAEAEA"
   },
   notFoundMessage: {
     fontSize: theme.fontSizes.lg,
