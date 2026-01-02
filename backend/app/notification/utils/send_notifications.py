@@ -11,25 +11,8 @@ EXPO_URL = "https://exp.host/--/api/v2/push/send"
 
 
 # ===========================
-#  USER TIMEZONE CONVERSION
-# ===========================
-
-def convert_event_time_for_user(event_time, user_timezone):
-    """
-    Convierte event_time al timezone del usuario usando pytz.
-    """
-    try:
-        tz = pytz.timezone(user_timezone)
-    except Exception:
-        tz = pytz.timezone("UTC")
-
-    return event_time.astimezone(tz)
-
-
-# ===========================
 #  NOTIFY ABOUT UPCOMING EVENTS
 # ===========================
-
 def send_push_notification_for_upcomming_events(
         title="Eventos Próximos",
         data={},
@@ -37,9 +20,11 @@ def send_push_notification_for_upcomming_events(
         ):
     now = timezone.now()
 
+    # GET UPCOMING EVENTS
     upcoming_events = Event.objects.filter(
-        start_time__gte=now,
-        start_time__lte=datetime_lapse,
+        start_time__date__lte=now,
+        end_time__date__gte=now,
+        start_time__time__gte=datetime_lapse.time(),
         visible=True,
         is_canceled=False,
     )
@@ -77,7 +62,6 @@ def send_push_notification_for_upcomming_events(
 # ===========================
 #  TODAY EVENTS NOTIFICATION
 # ===========================
-
 def send_push_notification_for_today_events():
     # Convert current UTC time to Havana timezone
     havana_tz = pytz.timezone("America/Havana")
@@ -115,7 +99,6 @@ def send_push_notification_for_today_events():
 # ===========================
 #  NOTIFY ABOUT A SPECIFIC EVENT
 # ===========================
-
 def send_push_notification_for_event(event, title="Evento en Camino!"):
     users = (
         User.objects
@@ -126,25 +109,26 @@ def send_push_notification_for_event(event, title="Evento en Camino!"):
     )
 
     for user in users:
-        event_time_user = convert_event_time_for_user(
+
+        event_start = convert_event_time_for_user(
             event.start_time, user.timezone
         )
 
         payload = {
             "to": user.fcm_token,
             "title": title,
-            "body": f"{event_time_user.strftime('%d-%m-%Y')} | {event_time_user.strftime('%I:%M %p').lower()}\n{event.title}",
+            "body": f"{get_event_date_interval_string(event, user.timezone)} | {event_start.strftime('%I:%M %p').lower()}\n{event.title}",
             "sound": "default",
             "priority": "high",
             "data": {
                 "pathname": "/(tabs)/calendar",
                 "params": {
                     "selectedDayParam": {
-                        "year": event_time_user.year,
-                        "month": event_time_user.month,
-                        "day": event_time_user.day,
-                        "timestamp": int(event_time_user.timestamp() * 1000),
-                        "dateString": event_time_user.strftime("%Y-%m-%d")
+                        "year": event_start.year,
+                        "month": event_start.month,
+                        "day": event_start.day,
+                        "timestamp": int(event_start.timestamp() * 1000),
+                        "dateString": event_start.strftime("%Y-%m-%d")
                     }
                 }
             }
@@ -156,7 +140,6 @@ def send_push_notification_for_event(event, title="Evento en Camino!"):
 # ===========================
 #  BODY BUILD FOR NOTIFICATIONS
 # ===========================
-
 def build_events_notification_body_for_user(events, user_timezone):
     body = ""
 
@@ -186,3 +169,43 @@ def send_notification_to_everyone(title, body, data):
             "data": data
         }
         requests.post(EXPO_URL, json=payload)
+
+
+# ===========================
+#  USER TIMEZONE CONVERSION
+# ===========================
+def convert_event_time_for_user(event_time, user_timezone):
+    """
+    Convierte event_time al timezone del usuario usando pytz.
+    """
+    try:
+        tz = pytz.timezone(user_timezone)
+    except Exception:
+        tz = pytz.timezone("UTC")
+
+    return event_time.astimezone(tz)
+
+
+def get_event_date_interval_string(event, timezone_str):
+    """
+    Docstring for get_event_date_interval_string
+    This function returns a string representing the date interval of an event
+    in the user's timezone. If the event starts and ends on the same day, it returns
+    that single date. If the event spans multiple days, it returns a range of dates.
+
+    :param event: Event object
+    :param timezone_str: User timezone string
+    """
+    start_date_str = convert_event_time_for_user(
+            event.start_time, timezone_str
+        ).strftime("%d-%m-%Y")
+    end_date_str = convert_event_time_for_user(
+        event.end_time, timezone_str
+    ).strftime("%d-%m-%Y")
+
+    print(f"Start date: {start_date_str}, End date: {end_date_str}")
+
+    if start_date_str == end_date_str:
+        return start_date_str
+    else:
+        return f"{start_date_str} - {end_date_str}"
