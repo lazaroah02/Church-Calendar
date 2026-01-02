@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -40,8 +39,6 @@ msgid "White color is not allowed. Please choose another color."
 msgstr "El color blanco no puede ser usado. Por favor utiliza otro."
 
 #: .\church_group\serializers.py:23
-#, fuzzy
-#| msgid "White color is not allowed. Please choose another color."
 msgid "Black color is not allowed. Please choose another color."
 msgstr "El color negro no puede ser usado. Por favor utiliza otro."
 
@@ -54,12 +51,10 @@ msgid "You cannot remove users from the general group."
 msgstr "No puedes eliminar usuarios del grupo general."
 
 #: .\church_group\views.py:65
-#, fuzzy
 msgid "Missing users_to_remove in query body"
 msgstr "Debes seleccionar al menos un usuario."
 
 #: .\church_group\views.py:71 .\church_group\views.py:97
-#, fuzzy
 msgid "Invalid users IDs."
 msgstr "Los IDs de usuario proporcionados no son correctos."
 
@@ -68,7 +63,6 @@ msgid "Error on the request. Verify the group exists."
 msgstr "Error en la operación. Verifica que el grupo exista."
 
 #: .\church_group\views.py:91
-#, fuzzy
 msgid "Missing users in query body"
 msgstr "Debes seleccionar al menos un usuario."
 
@@ -145,8 +139,6 @@ msgid "Event not found."
 msgstr "Evento no encontrado."
 
 #: .\notification\views.py:99
-#, fuzzy
-#| msgid "Reservation created successfully."
 msgid "Notification sent successfully."
 msgstr "Notificación enviada correctamente."
 
