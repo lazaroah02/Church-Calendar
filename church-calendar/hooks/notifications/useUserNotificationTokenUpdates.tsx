@@ -2,15 +2,16 @@ import { updateUserNotificationTokenAndTimezone } from "@/services/notifications
 import { useSession } from "../auth/useSession";
 import { useNotifications } from "@/contexts/notifications-context";
 import { useEffect } from "react";
+import { useNetworkStatus } from "../useNetworkStatus";
 
-export function useUserNotificationToken() {
+export function useUserNotificationTokenUpdates() {
   const { session, updateSession } = useSession();
   const { expoPushToken } = useNotifications();
+  const isConnected = useNetworkStatus()
 
   useEffect(() => {
-    console.log(
-      "Checking if user notification token and timezone need update..."
-    );
+    if (!session || !expoPushToken || !isConnected) return;
+
     const currentDeviceTimezone =
       Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -24,7 +25,7 @@ export function useUserNotificationToken() {
         if (session) {
           const sessionCopy = JSON.parse(JSON.stringify(session));
           sessionCopy.userInfo.timezone = currentDeviceTimezone;
-          sessionCopy.userInfo.fcm_token = expoPushToken
+          sessionCopy.userInfo.fcm_token = expoPushToken;
           updateSession(sessionCopy);
         }
       } catch (error) {
@@ -35,21 +36,18 @@ export function useUserNotificationToken() {
       }
     };
 
-    if (
-      expoPushToken &&
-      session &&
-      (expoPushToken !== session.userInfo.fcm_token ||
-        session.userInfo.timezone !== currentDeviceTimezone)
-    ) {
-      expoPushToken !== session.userInfo.fcm_token &&
-        console.log("FCM token has changed, updating...");
-      session.userInfo.timezone !== currentDeviceTimezone &&
-        console.log("Timezone has changed, updating...");
+    const tokenHasChanged = expoPushToken !== session?.userInfo.fcm_token;
+    const timezoneHasChanged =
+      session.userInfo.timezone !== currentDeviceTimezone;
+
+    if (tokenHasChanged || timezoneHasChanged) {
+      tokenHasChanged && console.log("FCM token has changed, updating...");
+      timezoneHasChanged && console.log("Timezone has changed, updating...");
       handleUpdateUserNotificationTokenAndTimezone();
     } else {
-      console.log("No update needed for user notification token and timezone.");
+      console.log("FCM Token up to date:", expoPushToken);
     }
-  }, [session, expoPushToken, updateSession]);
+  }, [session, expoPushToken, updateSession, isConnected]);
 
   return null;
 }

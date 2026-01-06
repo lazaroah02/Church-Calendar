@@ -18,6 +18,7 @@ class UserManagmentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False)
     full_name = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True)
+    fcm_token = serializers.CharField(read_only=True)
     is_active = serializers.BooleanField(
         initial=True,
         help_text=gettext_lazy("Designates whether the user can log in")
@@ -32,7 +33,7 @@ class UserManagmentSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'email', 'username', 'password', 'phone_number', 'description',
-            'full_name', 'profile_img', 'member_groups', 'born_at',
+            'full_name', 'profile_img', 'member_groups', 'born_at', 'fcm_token',
             'is_staff', 'is_superuser', 'is_active', 'updated_at', 'created_at', "member_groups_full_info"
         ]
 

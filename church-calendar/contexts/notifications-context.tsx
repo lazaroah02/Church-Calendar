@@ -81,7 +81,7 @@ async function registerForPushNotificationsAsync() {
   }
 
   if (finalStatus !== "granted") {
-    alert("No se concedieron permisos de notificaciones");
+    alert("No se concedieron permisos de notificaciones. Actívalas en los ajustes del sistema.");
     return;
   }
 

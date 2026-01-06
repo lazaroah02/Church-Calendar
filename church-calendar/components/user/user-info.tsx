@@ -5,12 +5,15 @@ import { AppTheme } from "@/theme";
 import { UserInfo } from "@/types/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, View, Image } from "react-native";
-import { CheckBox } from "../form/checkbox";
 import { MyCustomText } from "../MyCustomText";
+import { copyToClipboard } from "@/lib/copy-to-clipboard";
+import { useCustomToast } from "@/hooks/useCustomToast";
 
 export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
   const styles = useThemeStyles(userInfoStyles);
   const { session } = useSession();
+  const isAdmin = session?.userInfo.is_staff;
+  const {showSuccessToast} = useCustomToast()
 
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
@@ -77,7 +80,7 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
       </View>
 
       {/*Access and Permissions*/}
-      {session?.userInfo.is_staff && (
+      {isAdmin && (
         <>
           <MyCustomText style={styles.groupLabel}>
             Acceso y Permisos:
@@ -89,6 +92,30 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
           </MyCustomText>
           <MyCustomText style={styles.groupName}>
             {user?.is_staff ? "Es administrador" : "No es administrador"}
+          </MyCustomText>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 20,
+              marginTop: 20,
+            }}
+          >
+            <MyCustomText style={styles.groupLabel}>FCM Token:</MyCustomText>
+            <Ionicons
+              name="copy-outline"
+              size={20}
+              color="#000"
+              style={{ marginTop: 15 }}
+              onPress={() => {
+                copyToClipboard(user?.fcm_token || "")
+                showSuccessToast({message: "Token copiado al portapapeles"})
+              }}
+            />
+          </View>
+          <MyCustomText style={styles.description}>
+            {user?.fcm_token}
           </MyCustomText>
         </>
       )}

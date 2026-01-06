@@ -12,6 +12,8 @@ import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarCo
 import { useSelectedDayFromParams } from "@/hooks/calendar/useSelectedDayFromParams";
 import { router } from "expo-router";
 import { useVersionsUpdates } from "@/hooks/useVersionUpdates";
+import { OfflineBanner } from "@/components/OffileBanner";
+import { useUserNotificationTokenUpdates } from "@/hooks/notifications/useUserNotificationTokenUpdates";
 
 export default function Calendar() {
   const todaysDate = new Date();
@@ -20,6 +22,7 @@ export default function Calendar() {
   const selectedDayParam = useSelectedDayFromParams();
 
   const { confirmUpdate, updateInfo } = useVersionsUpdates();
+  useUserNotificationTokenUpdates()
 
   const {
     setInterval,
@@ -60,6 +63,7 @@ export default function Calendar() {
         }
       >
         <UserTopBar />
+        <OfflineBanner/>
         <CalendarComponent
           setInterval={setInterval}
           initialSelectedDay={selectedDayParam}

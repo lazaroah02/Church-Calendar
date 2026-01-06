@@ -45,12 +45,6 @@ class UserNotificationTokenView(APIView):
         new_fcm_token = request.data.get('fcm_token')
         new_timezone = request.data.get('timezone')
 
-        if not new_fcm_token:
-            return Response(
-                {'error': _('Notification Token is required.')},
-                status=status.HTTP_400_BAD_REQUEST
-                )
-
         if not new_timezone:
             return Response(
                 {'error': _('Timezone is required.')},

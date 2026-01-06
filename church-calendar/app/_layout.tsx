@@ -15,7 +15,6 @@ import { CalendarContextProvider } from "@/contexts/calendar-context/calendarCon
 import { ToastProvider } from "expo-toast";
 import { MD3LightTheme, PaperProvider } from "react-native-paper";
 import { NotificationsProvider } from "@/contexts/notifications-context";
-import { useUserNotificationToken } from "@/hooks/notifications/useUserNotificationToken";
 import { useMyNavigationBar } from "@/hooks/useMyNavigationBar";
 
 export default function Root() {
@@ -57,8 +56,6 @@ function RootLayout() {
   const { session, isLoading } = useSession();
   useMyNavigationBar({})
 
-  useUserNotificationToken();
-
   if (!loaded || isLoading) {
     // Async font loading only occurs in development.
     return <SplashScreenController />;
@@ -67,7 +64,7 @@ function RootLayout() {
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
-        <StatusBar style="dark" />
+        <StatusBar style="dark" backgroundColor="#fff" translucent={false}/>
         <Stack>
           <Stack.Protected guard={!session}>
             <Stack.Screen

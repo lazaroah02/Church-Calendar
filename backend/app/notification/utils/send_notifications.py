@@ -203,8 +203,6 @@ def get_event_date_interval_string(event, timezone_str):
         event.end_time, timezone_str
     ).strftime("%d-%m-%Y")
 
-    print(f"Start date: {start_date_str}, End date: {end_date_str}")
-
     if start_date_str == end_date_str:
         return start_date_str
     else:
