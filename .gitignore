@@ -59,6 +59,4 @@ app-example
 # prebuilds
 church-calendar/android
 
-# google services
-church-calendar/google-services.json
 
