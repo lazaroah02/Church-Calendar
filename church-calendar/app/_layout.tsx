@@ -64,7 +64,7 @@ function RootLayout() {
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
-        <StatusBar style="dark" backgroundColor="#fff" translucent={false}/>
+        <StatusBar style="dark"/>
         <Stack>
           <Stack.Protected guard={!session}>
             <Stack.Screen

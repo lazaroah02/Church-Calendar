@@ -7,13 +7,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, View, Image } from "react-native";
 import { MyCustomText } from "../MyCustomText";
 import { copyToClipboard } from "@/lib/copy-to-clipboard";
-import { useCustomToast } from "@/hooks/useCustomToast";
 
 export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
   const styles = useThemeStyles(userInfoStyles);
   const { session } = useSession();
   const isAdmin = session?.userInfo.is_staff;
-  const {showSuccessToast} = useCustomToast()
 
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
@@ -110,7 +108,6 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
               style={{ marginTop: 15 }}
               onPress={() => {
                 copyToClipboard(user?.fcm_token || "")
-                showSuccessToast({message: "Token copiado al portapapeles"})
               }}
             />
           </View>

@@ -20,7 +20,7 @@ export function OfflineBanner() {
 const offlineBannerStyles = (theme: AppTheme) =>({
   container: {
     width: '100%',
-    backgroundColor: '#D32F2F',
+    backgroundColor: '#9d0303ff',
     paddingVertical: 2,
     zIndex: 999,
     alignItems: 'center',
