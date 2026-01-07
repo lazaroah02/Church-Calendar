@@ -32,11 +32,11 @@ export function GroupManagementForm({
     group?.img ? getImageUri(group?.img) : null
   );
 
-  const [groupColor, setGroupColor] = useState(group?.color || "ffe066");
+  const [groupColor, setGroupColor] = useState(group?.color?? "ffe066");
 
   const [formValues, setFormValues] = useState({
-    name: group?.name || "",
-    description: group?.description || "",
+    name: group?.name ?? "",
+    description: group?.description ?? "",
   });
 
   const {
@@ -48,8 +48,8 @@ export function GroupManagementForm({
     errorCreatingGroup,
   } = useManageGroups({});
 
-  const loading = isUpdatingGroup || isCreatingGroup;
-  const errors = errorUpdatingGroup || errorCreatingGroup;
+  const loading = isUpdatingGroup ?? isCreatingGroup;
+  const errors = errorUpdatingGroup ?? errorCreatingGroup;
 
   const handleChange = (
     key: keyof typeof formValues,
@@ -122,10 +122,10 @@ export function GroupManagementForm({
           <FormErrorBanner
             style={{ marginTop: 10, marginBottom: 0 }}
             message={
-              errors.name ||
-              errors.description ||
-              errors.color ||
-              errors.general ||
+              errors.name ??
+              errors.description ??
+              errors.color ??
+              errors.general ??
               "Ocurrió un error inesperado. Revisa tu conexión a internet."
             }
           />

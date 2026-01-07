@@ -37,13 +37,13 @@ export function UserManagementForm({
   const [password, setPassword] = useState("");
 
   const [formValues, setFormValues] = useState({
-    full_name: user?.full_name || "",
-    phone_number: user?.phone_number || "",
-    email: user?.email || "",
-    description: user?.description || "",
-    is_staff: user?.is_staff || false,
-    is_active: user?.is_active || true,
-    member_groups: user?.member_groups || [],
+    full_name: user?.full_name ?? "",
+    phone_number: user?.phone_number ?? "",
+    email: user?.email ?? "",
+    description: user?.description ?? "",
+    is_staff: user?.is_staff ?? false,
+    is_active: user?.is_active ?? true,
+    member_groups: user?.member_groups ?? [],
   });
 
   const {
@@ -55,8 +55,8 @@ export function UserManagementForm({
     errorCreatingUser,
   } = useManageUsers({});
 
-  const loading = isCreatingUser || isUpdatingUser;
-  const errors = errorCreatingUser || errorUpdatingUser
+  const loading = isCreatingUser ?? isUpdatingUser;
+  const errors = errorCreatingUser ?? errorUpdatingUser
 
   const handleChange = (
     key: keyof typeof formValues,
@@ -130,11 +130,11 @@ export function UserManagementForm({
           <FormErrorBanner
             style={{ marginTop: 10, marginBottom: 0 }}
             message={
-              errors.full_name ||
-              errors.password ||
-              errors.phone_number ||
-              errors.email ||
-              errors.description ||
+              errors.full_name ??
+              errors.password ??
+              errors.phone_number ??
+              errors.email ??
+              errors.description ??
               "Ocurrió un error inesperado. Revisa tu conexión a internet."
             }
           />
@@ -206,7 +206,7 @@ export function UserManagementForm({
         {/*Groups*/}
         <MyCustomText style={styles.groupLabel}>Grupos a los que pertenece:</MyCustomText>
         <ChurchGroupsPicker
-          key={formValues?.member_groups?.map((g) => g).join(",") || "empty"}
+          key={formValues?.member_groups?.map((g) => g).join(",") ?? "empty"}
           placeholder="Seleccionar"
           defaultSelectedGroups={formValues.member_groups}
           excluded_groups={[1, "Todos"]}

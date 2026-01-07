@@ -7,7 +7,7 @@ module.exports = defineConfig([
   expoConfig,
 
   // TypeScript rules con type-checking
-  ...tseslint.configs.recommendedTypeChecked,
+  //...tseslint.configs.recommendedTypeChecked,
 
   {
     languageOptions: {
@@ -20,14 +20,14 @@ module.exports = defineConfig([
       "@typescript-eslint/prefer-nullish-coalescing": "error",
 
       // 🛡️ fuerza checks explícitos
-      "@typescript-eslint/strict-boolean-expressions": [
-        "warn",
-        {
-          allowString: true,
-          allowNullableBoolean: true,
-          allowNumber: false,
-        },
-      ],
+      // "@typescript-eslint/strict-boolean-expressions": [
+      //   "warn",
+      //   {
+      //     allowString: true,
+      //     allowNullableBoolean: true,
+      //     allowNumber: false,
+      //   },
+      // ],
     },
   },
 

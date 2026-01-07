@@ -56,9 +56,9 @@ export default function SignIn() {
         {errors && (
           <FormErrorBanner
             message={
-              errors.email ||
-              errors.pass ||
-              errors.general ||
+              errors.email ??
+              errors.pass ??
+              errors.general ??
               "Ocurrió un error al iniciar sesión."
             }
           />

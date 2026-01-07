@@ -40,7 +40,7 @@ export function useReservation({
       return false;
     },
   });
-  const isReserved: boolean = data?.reservation || false;
+  const isReserved: boolean = data?.reservation ?? false;
 
   // show a message to the user in case reservation status check was not possible
   const hasShownErrorRef = useRef(false);

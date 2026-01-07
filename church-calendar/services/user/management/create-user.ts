@@ -25,7 +25,7 @@ export function createUser({
   });
 
   if (data.profile_img && !data.profile_img.startsWith(BASE_URL)) {
-    const filename = data.profile_img.split("/").pop() || "photo.jpg";
+    const filename = data.profile_img.split("/").pop()?? "photo.jpg";
     const match = /\.(\w+)$/.exec(filename);
     const type = match ? `image/${match[1]}` : "image/jpeg";
 

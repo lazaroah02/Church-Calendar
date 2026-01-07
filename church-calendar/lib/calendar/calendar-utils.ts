@@ -47,7 +47,7 @@ export function formatSelectedDay(dateString: string): string {
   const month = parts.find((p) => p.type === "month")?.value ?? "";
   const year = parts.find((p) => p.type === "year")?.value ?? "";
 
-  let formatted = `${
+  const formatted = `${
     weekday.charAt(0).toUpperCase() + weekday.slice(1)
   } ${day} de ${month.charAt(0).toUpperCase() + month.slice(1)}, ${year}`;
 

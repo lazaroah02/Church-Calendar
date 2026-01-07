@@ -28,6 +28,6 @@ export async function getEvents({
       throw new Error("Error getting events");
     }
   } catch (err: Error | any) {
-    throw new Error(err.message || "Error getting events");
+    throw new Error(err.message ?? "Error getting events");
   }
 }

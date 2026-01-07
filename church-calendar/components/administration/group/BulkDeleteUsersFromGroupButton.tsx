@@ -33,7 +33,7 @@ export function BulkDeleteUsersFromGroupButton({
   const { showConfirm, hideConfirm, confirm } = useConfirm({
     onConfirm: () =>
       handleBulkRemoveUsersFromGroup({
-        groupId: group?.id || 0,
+        groupId: group?.id ?? 0,
         userIds: selected,
       }),
     onCancel: clearSelected,

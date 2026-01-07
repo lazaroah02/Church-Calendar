@@ -28,8 +28,8 @@ export default function ChangeUserPassword() {
     }
     changeUserPassword({
       new_password: password1,
-      userId: userId || "",
-      token: session?.token || "",
+      userId: userId ?? "",
+      token: session?.token ?? "",
     })
       .then(() => {
         router.back();

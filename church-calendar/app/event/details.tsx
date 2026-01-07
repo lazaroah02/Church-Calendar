@@ -40,7 +40,7 @@ export default function EventDetails() {
   const parsedEvent: Event | null = eventParam ? JSON.parse(eventParam) : null;
   const styles = useThemeStyles(eventDetailsStyles);
   const { session } = useSession();
-  const isAdmin = session?.userInfo.is_staff || false;
+  const isAdmin = session?.userInfo.is_staff ?? false;
   const [isImageOpen, setIsImageOpen] = useState(false);
 
   useEffect(() => {
@@ -68,53 +68,51 @@ export default function EventDetails() {
         }
       />
       <ScrollView contentContainerStyle={styles.container}>
-        
         {/*Event Status Labels*/}
-        {(parsedEvent?.visible === false ||
-          parsedEvent?.is_canceled) && (
-            <View style={{ flexDirection: "row", marginBottom: 10, gap: 10 }}>
-              {parsedEvent?.is_canceled && (
-                <MyCustomText
-                  style={[
-                    styles.groupLabel,
-                    {
-                      alignSelf: "flex-start",
-                      backgroundColor: "orange",
-                      padding: 4,
-                      paddingHorizontal: 10,
-                      borderRadius: 10,
-                    },
-                  ]}
-                >
-                  Cancelado
-                </MyCustomText>
-              )}
-              {parsedEvent?.visible === false && (
-                <MyCustomText
-                  style={[
-                    styles.groupLabel,
-                    {
-                      alignSelf: "flex-start",
-                      backgroundColor: "rgba(178, 167, 10, 1)",
-                      padding: 4,
-                      paddingHorizontal: 10,
-                      borderRadius: 10,
-                    },
-                  ]}
-                >
-                  Oculto
-                </MyCustomText>
-              )}
-            </View>
-          )}
+        {(parsedEvent?.is_canceled ?? parsedEvent?.visible === false) && (
+          <View style={{ flexDirection: "row", marginBottom: 10, gap: 10 }}>
+            {parsedEvent?.is_canceled && (
+              <MyCustomText
+                style={[
+                  styles.groupLabel,
+                  {
+                    alignSelf: "flex-start",
+                    backgroundColor: "orange",
+                    padding: 4,
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                  },
+                ]}
+              >
+                Cancelado
+              </MyCustomText>
+            )}
+            {parsedEvent?.visible === false && (
+              <MyCustomText
+                style={[
+                  styles.groupLabel,
+                  {
+                    alignSelf: "flex-start",
+                    backgroundColor: "rgba(178, 167, 10, 1)",
+                    padding: 4,
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                  },
+                ]}
+              >
+                Oculto
+              </MyCustomText>
+            )}
+          </View>
+        )}
 
         {/* Date, time, and location */}
         <MyCustomText style={styles.date}>{currentDateReadable}</MyCustomText>
         <MyCustomText style={styles.time}>
           Horario:{" "}
           {formatTimeRange(
-            parsedEvent?.start_time || "",
-            parsedEvent?.end_time || ""
+            parsedEvent?.start_time ?? "",
+            parsedEvent?.end_time ?? ""
           )}
         </MyCustomText>
         <MyCustomText style={styles.location}>
@@ -177,7 +175,7 @@ export default function EventDetails() {
               <View
                 style={[
                   styles.groupColor,
-                  { backgroundColor: group.color || "#ccc" },
+                  { backgroundColor: group.color ?? "#ccc" },
                 ]}
               />
               <MyCustomText style={styles.groupName}>{group.name}</MyCustomText>

@@ -26,6 +26,6 @@ export async function getUserNotificationToken({
       throw new Error("Error getting user notification token");
     }
   } catch (err: Error | any) {
-    throw new Error(err.message || "Error getting user notification token. Check your network and try again.");
+    throw new Error(err.message ?? "Error getting user notification token. Check your network and try again.");
   }
 }

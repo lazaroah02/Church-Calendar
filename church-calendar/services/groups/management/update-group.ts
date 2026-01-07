@@ -17,7 +17,7 @@ export function updateGroup({
   formData.append("color", data.color);
 
   if (data.img && !data.img.startsWith(BASE_URL)) {
-    const filename = data.img.split("/").pop() || "photo.jpg";
+    const filename = data.img.split("/").pop() ?? "photo.jpg";
     const match = /\.(\w+)$/.exec(filename);
     const type = match ? `image/${match[1]}` : "image/jpeg";
 

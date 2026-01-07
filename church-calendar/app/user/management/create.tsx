@@ -7,7 +7,7 @@ import { useSession } from "@/hooks/auth/useSession";
 
 export default function CreateUser() {
   const { session } = useSession();
-  const isAdmin = session?.userInfo.is_staff || false;
+  const isAdmin = session?.userInfo.is_staff ?? false;
 
   useEffect(() => {
     if (!isAdmin) {

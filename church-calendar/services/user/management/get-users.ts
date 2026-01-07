@@ -41,6 +41,6 @@ export async function getUsers({
       throw new Error("Error getting users");
     }
   } catch (err: Error | any) {
-    throw new Error(err.message || "Error getting users");
+    throw new Error(err.message ?? "Error getting users");
   }
 }

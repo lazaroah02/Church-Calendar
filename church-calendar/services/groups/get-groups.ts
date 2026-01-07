@@ -17,6 +17,6 @@ export async function getGroups() {
       throw new Error("Error getting groups");
     }
   } catch (err: Error | any) {
-    throw new Error(err.message || "Error getting groups");
+    throw new Error(err.message ?? "Error getting groups");
   }
 }

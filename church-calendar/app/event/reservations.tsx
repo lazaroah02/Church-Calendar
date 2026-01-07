@@ -24,7 +24,7 @@ export default function EventReservations() {
     hasMoreReservations,
     isFetchingNextPage
   } = useManageReservations({
-    eventId: eventId || "",
+    eventId: eventId ?? "",
   });
 
   return (

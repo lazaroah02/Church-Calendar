@@ -31,7 +31,7 @@ export function useCalendarEventsLogic() {
    * Get the current user session (used to provide authentication token).
    */
   const { session, isGuestUser } = useSession();
-  const isAdmin = session?.userInfo?.is_staff || false;
+  const isAdmin = session?.userInfo?.is_staff ?? false;
 
   /**
    * Today's date string (YYYY-MM-DD) in calendar format.

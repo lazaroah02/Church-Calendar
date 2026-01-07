@@ -97,7 +97,7 @@ export function buildFormData(data: EventFormType) {
   formData.append("visible", data.visible.toString());
   formData.append(
     "reservations_limit",
-    data.reservations_limit?.toString() || ""
+    data.reservations_limit?.toString() ?? ""
   );
 
   data.groups.forEach((id) => {

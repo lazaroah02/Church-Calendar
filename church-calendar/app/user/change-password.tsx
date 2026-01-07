@@ -18,7 +18,7 @@ export default function ChangePassword() {
     changePassword({
       new_password1: password1,
       new_password2: password2,
-      token: session?.token || "",
+      token: session?.token ?? "",
     })
       .then(() => {
         router.back();

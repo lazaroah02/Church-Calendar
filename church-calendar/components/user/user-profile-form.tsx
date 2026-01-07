@@ -34,10 +34,10 @@ export function UserProfileForm({
   const [errors, setErrors] = useState<UserProfileFormErrors | null>(null);
 
   const [formValues, setFormValues] = useState({
-    full_name: user?.full_name || "",
-    phone_number: user?.phone_number || "",
-    email: user?.email || "",
-    description: user?.description || "",
+    full_name: user?.full_name ?? "",
+    phone_number: user?.phone_number ?? "",
+    email: user?.email ?? "",
+    description: user?.description ?? "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -94,11 +94,11 @@ export function UserProfileForm({
           <FormErrorBanner
             style={{ marginTop: 10, marginBottom: 0 }}
             message={
-              errors.full_name ||
-              errors.phone_number ||
-              errors.email ||
-              errors.description ||
-              errors.general ||
+              errors.full_name ??
+              errors.phone_number ??
+              errors.email ??
+              errors.description ??
+              errors.general ??
               "Ocurrió un error inesperado."
             }
           />

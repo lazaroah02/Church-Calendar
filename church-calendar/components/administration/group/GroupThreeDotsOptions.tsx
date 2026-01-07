@@ -24,7 +24,7 @@ export function GroupThreeDotsMenuOptions({
 
   const { confirm, showConfirm, hideConfirm } = useConfirm({
     loading: isDeletingGroup,
-    onConfirm: () => handleDeleteGroup(group?.id || 0),
+    onConfirm: () => handleDeleteGroup(group?.id ?? 0),
     onCancel: closeParent,
   });
 

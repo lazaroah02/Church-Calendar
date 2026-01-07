@@ -32,7 +32,7 @@ export async function makeReservation({
           throw new Error("Has alcanzado el límite de acciones. Inténtalo más tarde.");
         case 500:
         default:
-          throw new Error(data?.message || "Error en el operación. Inténtalo más tarde.");
+          throw new Error(data?.message ?? "Error en el operación. Inténtalo más tarde.");
       }
     }
 
@@ -42,6 +42,6 @@ export async function makeReservation({
     if (error.name === "TypeError") {
       throw new Error("No se pudo conectar con el servidor. Revisa tu conexión a Internet.");
     }
-    throw new Error(error.message || "Error desconocido al hacer la reserva. Inténtalo más tarde.");
+    throw new Error(error.message ?? "Error desconocido al hacer la reserva. Inténtalo más tarde.");
   }
 }
