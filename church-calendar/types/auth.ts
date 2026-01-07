@@ -65,7 +65,7 @@ export interface AuthContenxtProps {
   isLoading: boolean;
   isGuestUser: boolean
   updateGuestStatus: (newStatus: boolean) => void
-  updateSession: (newSession: Session) => void;
+  updateSession: (newSession: Session | null) => void;
 }
 
 export type ChangePasswordFormData = {

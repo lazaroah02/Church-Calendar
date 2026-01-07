@@ -39,7 +39,7 @@ const AccountCreatedStyles = (theme: AppTheme) => ({
     borderRadius: 10,
   },
   title: {
-    fontSize: theme.fontSizes.xl,
+    fontSize: theme.fontSizes.lg,
     textAlign: "center",
     marginBottom: 20,
     fontFamily: "LexendBold",

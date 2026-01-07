@@ -1,7 +1,6 @@
 import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSession } from "@/hooks/auth/useSession";
-import { navigate } from "expo-router/build/global-state/routing";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { Collapsible } from "@/components/Collapsible";
@@ -129,7 +128,6 @@ export default function Settings() {
                 text: "Continuar",
                 onPress: () => {
                   signOut();
-                  navigate("/welcome");
                 },
                 style: "default",
               },

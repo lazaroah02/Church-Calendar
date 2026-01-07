@@ -28,7 +28,7 @@ const notFoundStyles = (theme: AppTheme) => ({
     backgroundColor:"#EAEAEA"
   },
   notFoundMessage: {
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
     color: "#000",
     fontFamily: "InterVariable",
   },

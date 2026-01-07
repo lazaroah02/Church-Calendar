@@ -54,7 +54,7 @@ function RootLayout() {
     LexendBold: require("../assets/fonts/Lexend-Bold.ttf"),
   });
   const { session, isLoading } = useSession();
-  useMyNavigationBar({})
+  useMyNavigationBar({});
 
   if (!loaded || isLoading) {
     // Async font loading only occurs in development.
@@ -64,7 +64,7 @@ function RootLayout() {
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
-        <StatusBar style="dark"/>
+        <StatusBar style="dark" />
         <Stack>
           <Stack.Protected guard={!session}>
             <Stack.Screen
@@ -84,6 +84,7 @@ function RootLayout() {
             name="sign-in"
             options={{ headerShown: false, animation: "fade" }}
           />
+          <Stack.Screen name="logout" options={{ headerShown: false }} />
           <Stack.Screen
             name="register"
             options={{ headerShown: false, animation: "fade" }}

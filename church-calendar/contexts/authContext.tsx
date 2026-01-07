@@ -13,9 +13,7 @@ import {
   SignInProps,
   RegisterProps,
 } from "@/types/auth";
-import { persister, queryClient } from "@/lib/query-client";
 import { register } from "@/services/auth/register";
-import { updateUserNotificationTokenAndTimezone } from "@/services/notifications/update-user-notification-token-and-timezone";
 import { router } from "expo-router";
 import { getUserProfile } from "@/services/auth/get-user-profile";
 import { isDeepEqual } from "@/lib/deeply-compare-objects";
@@ -69,33 +67,19 @@ export function SessionProvider({ children }: PropsWithChildren) {
   }, []);
 
   const handleSignOut = useCallback(async () => {
-    // first unsubscribe user from notifications
-    if (session) {
-      try {
-        await updateUserNotificationTokenAndTimezone({
-          token: session ? JSON.parse(session).token : "",
-          new_fcm_token: "",
-        });
-      } catch (err: any) {
-        console.warn("Error clearing user notification token:", err.message);
-      }
-    }
-    // then clear session and cached data
-    setSession(null);
-    updateGuestStatus(false);
-    queryClient.clear();
-    queryClient.removeQueries();
-    await persister.removeClient();
-    queryClient.invalidateQueries({ queryKey: ["events"] });
-    router.replace("/welcome");
-  },[session, setSession, updateGuestStatus])
+    router.replace("/logout");
+  },[])
 
   const updateSession = useCallback(
-    (newSession: Session) => {
+    (newSession: Session | null) => {
+      if (!newSession) {
+        setSession(null);
+        return;
+      }
       setSession(
         JSON.stringify({
           token: newSession?.token,
-          userInfo: newSession.userInfo,
+          userInfo: newSession?.userInfo,
         })
       );
     },
@@ -107,7 +91,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
     
     const parsedSessionInfo: Session = JSON.parse(session)
     
-    getUserProfile({ token: parsedSessionInfo.token || "" })
+    getUserProfile({ token: parsedSessionInfo.token ?? "" })
       .then((data) => {
         if(data.is_active === false){
           return handleSignOut()

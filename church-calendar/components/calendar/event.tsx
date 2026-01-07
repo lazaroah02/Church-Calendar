@@ -33,7 +33,7 @@ export function EventComponent({
         >
           {item.title}
         </MyCustomText>
-        {(item.is_canceled || item.visible === false) && (
+        {(item.is_canceled ?? item.visible === false) && (
           <View style={{ flexDirection: "row", gap: 6, marginVertical: 4 }}>
             {item.is_canceled && (
               <MyCustomText
