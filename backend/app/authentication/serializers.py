@@ -36,6 +36,12 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
                   'profile_img', 'is_active', 'is_staff',
                   'is_superuser', 'born_at', 'created_at', 'updated_at', "member_groups_full_info")
 
+    def validate_email(self, value):
+        user_id = self.instance.id if self.instance else None
+        if User.objects.exclude(id=user_id).filter(email=value.lower()).exists():
+            raise serializers.ValidationError(_("There is an user with this email already."))
+        return value
+
 
 class CustomRegisterSerializer(RegisterSerializer):
     email = serializers.EmailField(required=True)

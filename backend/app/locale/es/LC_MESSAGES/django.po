@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 12:50-0500\n"
+"POT-Creation-Date: 2026-01-07 13:08-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
-#: .\authentication\serializers.py:56 .\user\serializers.py:85
+#: .\authentication\serializers.py:42
+msgid "There is an user with this email already."
+msgstr "Ya existe un usuario con este correo electrónico."
+
+#: .\authentication\serializers.py:62 .\user\serializers.py:86
 msgid "A user with this email already exists."
 msgstr "Ya existe un usuario con este correo electrónico."
 
-#: .\authentication\serializers.py:61 .\user\serializers.py:91
+#: .\authentication\serializers.py:67 .\user\serializers.py:92
 msgid "A user with this username already exists."
 msgstr "Ya existe un usuario con este nombre de usuario."
 
-#: .\authentication\serializers.py:68
+#: .\authentication\serializers.py:74
 msgid "You must be at least 10 years old to use the app."
 msgstr "Debes tener al menos 10 años para usar la aplicación."
 
@@ -119,64 +123,63 @@ msgid "Reservation deleted successfully."
 msgstr "Reserva eliminada correctamente."
 
 #: .\notification\views.py:50
-msgid "Notification Token is required."
-msgstr "Se requiere el Token de notificación."
-
-#: .\notification\views.py:56
 msgid "Timezone is required."
 msgstr "Se requiere la zona horaria."
 
-#: .\notification\views.py:67
+#: .\notification\views.py:61
 msgid "Notification Token and timezone saved successfully."
 msgstr "Token de notificación y zona horaria guardados correctamente."
 
-#: .\notification\views.py:86
+#: .\notification\views.py:80
 msgid "Event ID is required."
 msgstr "Se requiere el ID del evento."
 
-#: .\notification\views.py:92
+#: .\notification\views.py:86
 msgid "Event not found."
 msgstr "Evento no encontrado."
 
-#: .\notification\views.py:99
+#: .\notification\views.py:93
 msgid "Notification sent successfully."
 msgstr "Notificación enviada correctamente."
 
-#: .\notification\views.py:105
+#: .\notification\views.py:99
 msgid "Failed to send notification. Try again later "
 msgstr "Error al enviar la notificación. Intenta de nuevo más tarde."
 
-#: .\notification\views.py:130
+#: .\notification\views.py:124
 msgid "The 'minutes' field must be a valid integer."
 msgstr "El campo 'minutes' debe ser un número entero válido."
 
-#: .\notification\views.py:158
+#: .\notification\views.py:152
 msgid "Checked for upcoming events and sent notifications successfully."
-msgstr "Se verificaron los próximos eventos y se enviaron las notificaciones correctamente."
+msgstr ""
+"Se verificaron los próximos eventos y se enviaron las notificaciones "
+"correctamente."
 
-#: .\notification\views.py:165
+#: .\notification\views.py:159
 msgid "Failed to check for upcoming events. Try again later."
 msgstr "Error al verificar los próximos eventos. Intenta de nuevo más tarde."
 
-#: .\notification\views.py:199
+#: .\notification\views.py:193
 msgid "Notification sent to everyone."
 msgstr "Notificación enviada a todos."
 
-#: .\notification\views.py:206
+#: .\notification\views.py:200
 msgid "Failed sending notification. Try again later."
 msgstr "Error al enviar la notificación. Intenta de nuevo más tarde."
 
-#: .\user\serializers.py:23
+#: .\user\serializers.py:24
 msgid "Designates whether the user can log in"
 msgstr "Indica si el usuario puede iniciar sesión"
 
-#: .\user\serializers.py:27
+#: .\user\serializers.py:28
 msgid "Designates whether the user can access the admin panel"
 msgstr "Indica si el usuario puede acceder al panel de administración"
 
-#: .\user\serializers.py:77
+#: .\user\serializers.py:78
 msgid "An admin/superuser user must be staff too"
-msgstr "Un usuario administrador o superusuario también debe ser parte del personal"
+msgstr ""
+"Un usuario administrador o superusuario también debe ser parte del personal"
 
 #: .\user\utils\bulk_operations.py:34
 msgid "You can't delete yourself while you're logged in"
@@ -200,3 +203,6 @@ msgstr "Ningún {log_name} fue borrado. Verifica que sus IDs sean correctos."
 #: .\user\views.py:94
 msgid "Password was not provided"
 msgstr "No se proporcionó una contraseña."
+
+#~ msgid "Notification Token is required."
+#~ msgstr "Se requiere el Token de notificación."
