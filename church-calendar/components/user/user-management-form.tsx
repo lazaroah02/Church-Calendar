@@ -3,7 +3,7 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { AppTheme } from "@/theme";
 import { UserInfo } from "@/types/auth";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Image, Text, Pressable } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { Button } from "../Button";
 import { CustomInput } from "../form/custom-input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";

@@ -20,7 +20,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
-import { BASE_URL } from "@/api-endpoints";
 import Hyperlink from "react-native-hyperlink";
 import { useSession } from "@/hooks/auth/useSession";
 import { getImageUri } from "@/lib/get-image-uri";
@@ -69,24 +68,45 @@ export default function EventDetails() {
         }
       />
       <ScrollView contentContainerStyle={styles.container}>
-        {parsedEvent?.is_canceled && (
-          <View style={{ flexDirection: "row", marginBottom: 10 }}>
-            <MyCustomText
-              style={[
-                styles.groupLabel,
-                {
-                  alignSelf: "flex-start",
-                  backgroundColor: "orange",
-                  padding: 4,
-                  paddingHorizontal: 10,
-                  borderRadius: 10,
-                },
-              ]}
-            >
-              Cancelado
-            </MyCustomText>
-          </View>
-        )}
+        
+        {/*Event Status Labels*/}
+        {(parsedEvent?.visible === false ||
+          parsedEvent?.is_canceled) && (
+            <View style={{ flexDirection: "row", marginBottom: 10, gap: 10 }}>
+              {parsedEvent?.is_canceled && (
+                <MyCustomText
+                  style={[
+                    styles.groupLabel,
+                    {
+                      alignSelf: "flex-start",
+                      backgroundColor: "orange",
+                      padding: 4,
+                      paddingHorizontal: 10,
+                      borderRadius: 10,
+                    },
+                  ]}
+                >
+                  Cancelado
+                </MyCustomText>
+              )}
+              {parsedEvent?.visible === false && (
+                <MyCustomText
+                  style={[
+                    styles.groupLabel,
+                    {
+                      alignSelf: "flex-start",
+                      backgroundColor: "rgba(178, 167, 10, 1)",
+                      padding: 4,
+                      paddingHorizontal: 10,
+                      borderRadius: 10,
+                    },
+                  ]}
+                >
+                  Oculto
+                </MyCustomText>
+              )}
+            </View>
+          )}
 
         {/* Date, time, and location */}
         <MyCustomText style={styles.date}>{currentDateReadable}</MyCustomText>
@@ -148,7 +168,9 @@ export default function EventDetails() {
 
         {/* Groups */}
         <MyCustomText style={styles.groupLabel}>Evento para:</MyCustomText>
-        {parsedEvent?.groups_full_info.length === 0 && <MyCustomText style={styles.groupName}>Nadie</MyCustomText>}
+        {parsedEvent?.groups_full_info.length === 0 && (
+          <MyCustomText style={styles.groupName}>Nadie</MyCustomText>
+        )}
         <View style={styles.groupsContainer}>
           {parsedEvent?.groups_full_info?.map((group) => (
             <View key={group.name} style={styles.group}>

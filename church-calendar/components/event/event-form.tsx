@@ -195,10 +195,11 @@ export function EventForm({
           onCheck={(checked) => handleFieldChange("is_canceled", checked)}
           variant="light"
         />
+        
         <CheckBox
-          label="Visible"
-          checked={formValues.visible}
-          onCheck={(checked) => handleFieldChange("visible", checked)}
+          label="Oculto"
+          checked={!formValues.visible}
+          onCheck={(checked) => handleFieldChange("visible", !checked)}
           variant="light"
         />
         <CheckBox
@@ -277,20 +278,21 @@ export function EventForm({
 
 export const createFormValuesInitialData = (
   event: Event | EventTemplate | EventFormType | null
-) => ({
-  title: event?.title || "",
-  img: event?.img ? getImageUri(event?.img) : null,
-  location: event?.location || "",
-  description: event?.description || "",
-  start_time:
-    event && event.start_time ? new Date(event.start_time) : new Date(),
-  end_time: event && event.end_time ? new Date(event.end_time) : new Date(),
-  groups: event?.groups || [],
-  is_canceled: event?.is_canceled || false,
-  visible: event?.visible || true,
-  open_to_reservations: event?.open_to_reservations || false,
-  reservations_limit: event?.reservations_limit || null,
-});
+) => {
+  return {
+    title: event?.title ?? "",
+    img: event?.img ? getImageUri(event?.img) : null,
+    location: event?.location ?? "",
+    description: event?.description ?? "",
+    start_time: event?.start_time ? new Date(event.start_time) : new Date(),
+    end_time: event?.end_time ? new Date(event.end_time) : new Date(),
+    groups: event?.groups ?? [],
+    is_canceled: event?.is_canceled ?? false,
+    visible: event?.visible ?? true,
+    open_to_reservations: event?.open_to_reservations ?? false,
+    reservations_limit: event?.reservations_limit ?? null,
+  };
+};
 
 const EventFormStyles = (theme: AppTheme) => {
   return {

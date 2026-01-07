@@ -33,9 +33,10 @@ export function EventComponent({
         >
           {item.title}
         </MyCustomText>
-        {item.is_canceled && (
-          <View style={{ flexDirection: "row" }}>
-            <MyCustomText
+        {(item.is_canceled || item.visible === false) && (
+          <View style={{ flexDirection: "row", gap: 6, marginVertical: 4 }}>
+            {item.is_canceled && (
+              <MyCustomText
               style={[
                 styles.eventTime,
                 {
@@ -43,11 +44,30 @@ export function EventComponent({
                   backgroundColor: "orange",
                   padding: 4,
                   borderRadius: 10,
+                  opacity:1
                 },
               ]}
             >
               Cancelado
             </MyCustomText>
+            )}
+            {item.visible === false && (
+              <MyCustomText
+              style={[
+                styles.eventTime,
+                {
+                  alignSelf: "flex-start",
+                  backgroundColor: "rgba(178, 167, 10, 1)",
+                  padding: 4,
+                  borderRadius: 10,
+                  opacity:1
+                },
+              ]}
+            >
+              Oculto
+            </MyCustomText>
+            )}
+            
           </View>
         )}
         <MyCustomText style={styles.eventTime}>

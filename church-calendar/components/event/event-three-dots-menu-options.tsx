@@ -103,8 +103,17 @@ export function EventTrheeDotsmenuOptions({
       </TouchableOpacity>
       <OptionsSeparator />
       <TouchableOpacity
-        style={styles.touchable}
-        onPress={showEventNotificationConfirm}
+        style={[
+          styles.touchable,
+          event?.is_canceled || event?.visible === false
+            ? { opacity: 0.5 }
+            : null,
+        ]}
+        onPress={() =>
+          event?.is_canceled === false &&
+          event?.visible &&
+          showEventNotificationConfirm()
+        }
       >
         <Ionicons name="notifications-outline" size={20} />
         <MyCustomText style={styles.text}>
