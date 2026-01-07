@@ -26,7 +26,9 @@ export default function Logout() {
       token: session?.token ?? "",
       new_fcm_token: "",
     })
-      .then()
+      .then(() => {
+        console.log("User notification token cleared successfully on log out.");
+      })
       .catch((e) =>
         console.warn("Error clearing user notification token:", e.message)
       )

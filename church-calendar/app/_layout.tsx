@@ -1,6 +1,6 @@
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "react-native";
 import "react-native-reanimated";
 import { SessionProvider } from "@/contexts/authContext";
 import { useSession } from "@/hooks/auth/useSession";
@@ -64,7 +64,11 @@ function RootLayout() {
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
-        <StatusBar style="dark" />
+        <StatusBar
+          barStyle="dark-content"
+          translucent
+          backgroundColor="transparent"
+        />
         <Stack>
           <Stack.Protected guard={!session}>
             <Stack.Screen
