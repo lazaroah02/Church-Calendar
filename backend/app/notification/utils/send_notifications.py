@@ -43,8 +43,11 @@ def send_push_notification_for_upcomming_events(
     print(f"Sending notifications to {users.count()} devices.")
 
     for user in users:
+        user_events = upcoming_events.filter(
+            groups__in=user.member_groups.all()
+            ).distinct()
         event_body = build_events_notification_body_for_user(
-            upcoming_events, user.timezone
+            user_events, user.timezone
         )
 
         payload = {
