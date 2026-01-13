@@ -21,18 +21,22 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     born_at = serializers.DateField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
-    member_groups_full_info = ChurchGroupsReducedSerializer(many=True, source="member_groups", read_only=True)
+    member_groups_full_info = ChurchGroupsReducedSerializer(
+        many=True, source="member_groups", read_only=True
+        )
     member_groups = serializers.SlugRelatedField(
         many=True,
         read_only=True,
         slug_field='id'
     )
-    devices_push_notification_info = DevicePushTokenSerializer(many=True, source="devices_push_notification_info", read_only=True)
+    devices_push_notification_info = DevicePushTokenSerializer(
+        many=True, read_only=True
+        )
 
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'full_name', 'member_groups',
-                  'description', 'phone_number', 'fcm_token', 'timezone',
+                  'description', 'phone_number',
                   'profile_img', 'is_active', 'is_staff',
                   'is_superuser', 'born_at', 'created_at', 'updated_at',
                   "member_groups_full_info", 'devices_push_notification_info')

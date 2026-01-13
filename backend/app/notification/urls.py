@@ -3,14 +3,14 @@ from .views import (
     CheckForUpcommingEventsAndNotify,
     NotifyEveryone,
     SendNotificationAboutEvent,
-    UserNotificationTokenView
+    UserDevicesNotificationView
     )
 
 urlpatterns = [
     path(
-        'user-notification-token/',
-        UserNotificationTokenView.as_view(),
-        name='user-notification-token'),
+        'user-devices-notification-info/',
+        UserDevicesNotificationView.as_view(),
+        name='user-devices-notification-info'),
     path(
         'send-notification-about-event/',
         SendNotificationAboutEvent.as_view(),

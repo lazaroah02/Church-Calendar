@@ -1,5 +1,6 @@
-from time import time
 from django.contrib.auth import get_user_model
+from notification.serializers import DevicePushTokenSerializer
+from notification.models import DevicePushToken
 from notification.utils.send_notifications import (
     send_notification_to_everyone,
     send_push_notification_for_event,
@@ -20,7 +21,7 @@ User = get_user_model()
 logger = logging.getLogger("notification")
 
 
-class UserNotificationTokenView(APIView):
+class UserDevicesNotificationView(APIView):
     """
     View to handle user notification tokens.
     """
@@ -31,36 +32,108 @@ class UserNotificationTokenView(APIView):
         """
         Handle GET request to retrieve user notification token and timezone.
         """
-        user = User.objects.get(id=request.user.id)
-        fcm_token = getattr(user, 'fcm_token', None)
-        timezone = getattr(user, 'timezone', None)
+        devices_push_notification_info = DevicePushToken.objects.filter(
+            user=request.user.id
+            )
 
-        return Response({'fcm_token': fcm_token, 'timezone':timezone}, status=status.HTTP_200_OK)
+        return Response(
+            {'devices_push_notification_info': devices_push_notification_info},
+            status=status.HTTP_200_OK
+            )
 
     def post(self, request, *args, **kwargs):
         """
-        Handle POST request to save or update user notification token and timezone.
+        Handle POST request to save or update user devices notification info.
         """
-        user = User.objects.get(id=request.user.id)
-        new_fcm_token = request.data.get('fcm_token')
-        new_timezone = request.data.get('timezone')
+        try:
+            new_device_name = request.data.get('device_name', '')
+            new_fcm_token = request.data.get('fcm_token', '')
+            new_timezone = request.data.get('timezone', 'America/Havana')
+            new_platform = request.data.get('platform', '').lower()
+            new_type_ = request.data.get('type', '').lower()
 
-        if not new_timezone:
+            if not new_device_name:
+                return Response(
+                    {'error': _('Device name is required.')},
+                    status=status.HTTP_400_BAD_REQUEST
+                    )
+            if not new_fcm_token:
+                return Response(
+                    {'error': _('FCM Token is required.')},
+                    status=status.HTTP_400_BAD_REQUEST
+                    )
+            if not new_timezone:
+                return Response(
+                    {'error': _('Timezone is required.')},
+                    status=status.HTTP_400_BAD_REQUEST
+                    )
+            if not new_platform:
+                return Response(
+                    {'error': _('Platform is required. Valid values are android or ios.')},
+                    status=status.HTTP_400_BAD_REQUEST
+                    )
+            if not new_type_:
+                return Response(
+                    {'error': _('Type is required. Valid values are fcm or apns.')},
+                    status=status.HTTP_400_BAD_REQUEST
+                    )
+
+            # Save or update the token in the database
+            DevicePushToken.objects.update_or_create(
+                fcm_token=new_fcm_token,
+                defaults={
+                    "user": request.user,
+                    "device_name": new_device_name,
+                    "timezone": new_timezone,
+                    "platform": new_platform,
+                    "type": new_type_,
+                }
+            )
+
+            news_devices_notification_info = DevicePushTokenSerializer(DevicePushToken.objects.filter(
+                user=request.user.id
+                ), many=True).data
+
             return Response(
-                {'error': _('Timezone is required.')},
+                {
+                    'message': _('Device Notification info saved successfully.'),
+                    'news_devices_notification_info': news_devices_notification_info
+                },
+                status=status.HTTP_200_OK
+                )
+        except Exception as e:
+            print(e)
+            return Response(
+                {"error": _('Failed to save device notification info. Try again later.')},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE request to remove user device notification info.
+        """
+        fcm_token = request.data.get('fcm_token', '')
+
+        if not fcm_token:
+            return Response(
+                {'error': _('FCM Token is required to delete.')},
                 status=status.HTTP_400_BAD_REQUEST
                 )
 
-        # Save or update the token in the database
-        user.fcm_token = new_fcm_token
-        user.timezone = new_timezone
-        user.save()
+        deleted, _ = DevicePushToken.objects.filter(
+            user=request.user,
+            fcm_token=fcm_token
+            ).delete()
+
+        if deleted == 0:
+            return Response(
+                {'error': _('No matching device found to delete.')},
+                status=status.HTTP_404_NOT_FOUND
+                )
 
         return Response(
             {
-                'message': _('Notification Token and timezone saved successfully.'),
-                'fcm_token': new_fcm_token,
-                'timezone': new_timezone
+                'message': _('Device Notification info deleted successfully.'),
             },
             status=status.HTTP_200_OK
             )

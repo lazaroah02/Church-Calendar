@@ -16,7 +16,10 @@ class DevicePushToken(models.Model):
         ("apns", "APNs"),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="devices_push_notification_info")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="devices_push_notification_info"
+        )
+    device_name = models.CharField(max_length=255, blank=True, null=True)
     fcm_token = models.TextField(unique=True, blank=True, null=True)
     timezone = models.CharField(max_length=50, blank=True, default="America/Havana")
     platform = models.CharField(max_length=10, choices=PLATFORM_CHOICES)

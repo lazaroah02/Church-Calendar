@@ -1,4 +1,4 @@
-export const BASE_URL = process.env.NODE_ENV === "development" ? 'https://laresurreccioncalendar.pythonanywhere.com' : 'https://laresurreccioncalendar.pythonanywhere.com';
+export const BASE_URL = process.env.NODE_ENV === "development" ? 'http://192.168.1.202:8000' : 'https://laresurreccioncalendar.pythonanywhere.com';
 
 export const EVENTS_URL = `${BASE_URL}/api/events`
 export const CHURCH_GROUPS_URL = `${BASE_URL}/api/church-groups/`
@@ -17,7 +17,7 @@ export const MANAGE_USERS_URL = `${BASE_URL}/api/users/manage/`
 export const MANAGE_GROUPS_URL = `${BASE_URL}/api/church-groups/manage/`
 
 //notifications endpoints
-export const USER_NOTIFICATION_TOKEN_URL = `${BASE_URL}/api/notification/user-notification-token/`
+export const USER_NOTIFICATION_TOKEN_URL = `${BASE_URL}/api/notification/user-devices-notification-info/`
 export const NOTIFY_ABOUT_EVENT_URL = `${BASE_URL}/api/notification/send-notification-about-event/`
 
 export const VERSIONS_FILE_URL = "https://laresurreccioncalendar.pythonanywhere.com/static/versions.json"

@@ -33,7 +33,7 @@ class UserManagmentSerializer(serializers.ModelSerializer):
         many=True, source="member_groups", read_only=True
         )
     devices_push_notification_info = DevicePushTokenSerializer(
-        many=True, source="devices_push_notification_info", read_only=True
+        many=True, read_only=True
         )
 
     class Meta:
@@ -41,7 +41,7 @@ class UserManagmentSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'email', 'username', 'password', 'phone_number',
             'description', 'full_name', 'profile_img', 'member_groups', 
-            'born_at', 'fcm_token', 'is_staff', 'is_superuser', 'is_active',
+            'born_at', 'is_staff', 'is_superuser', 'is_active',
             'updated_at', 'created_at', "member_groups_full_info",
             "devices_push_notification_info"
         ]

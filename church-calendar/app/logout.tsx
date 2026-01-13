@@ -4,7 +4,7 @@ import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
 import { persister, queryClient } from "@/lib/query-client";
-import { updateUserNotificationTokenAndTimezone } from "@/services/notifications/update-user-notification-token-and-timezone";
+import { updateUserNotificationTokenAndTimezone } from "@/services/notifications/update-user-device-notification-info";
 import { AppTheme } from "@/theme";
 import { Redirect } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";

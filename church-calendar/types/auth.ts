@@ -1,4 +1,5 @@
 import { GroupReducedInfo } from "./group";
+import { DevicePushNotificationInfo } from "./notification";
 
 export type UserInfo = {
   id: number
@@ -8,14 +9,13 @@ export type UserInfo = {
   full_name: string
   profile_img: string
   description: string
-  fcm_token: string
-  timezone: string
   is_staff: boolean
   is_active: boolean
   is_superuser: boolean
   born_at: string
   member_groups: number[]
   member_groups_full_info: GroupReducedInfo[]
+  devices_push_notification_info: DevicePushNotificationInfo[]
 };
 
 export type Session = {

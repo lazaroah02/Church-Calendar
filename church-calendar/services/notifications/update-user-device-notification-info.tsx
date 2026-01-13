@@ -1,11 +1,12 @@
 import { USER_NOTIFICATION_TOKEN_URL } from "@/api-endpoints";
+import { DevicePushNotificationInfo } from "@/types/notification";
 
-export async function updateUserNotificationTokenAndTimezone({
-  new_fcm_token,
+export async function updateUserDeviceNotificationInfo({
+  data,
   token,
 }: {
-  new_fcm_token: string;
   token: string;
+  data: DevicePushNotificationInfo;
 }) {
   const options: RequestInit = {
     method: "POST",
@@ -15,10 +16,7 @@ export async function updateUserNotificationTokenAndTimezone({
       credentials: "omit",
       "Accept-Language": "es",
     },
-    body: JSON.stringify({
-      fcm_token: new_fcm_token,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    }),
+    body: JSON.stringify(data),
   };
   try {
     const res = await fetch(`${USER_NOTIFICATION_TOKEN_URL}`, options);
@@ -36,7 +34,7 @@ export async function updateUserNotificationTokenAndTimezone({
       if(data.error){
         throw new Error(data.error);
       }
-      throw new Error("Error updating notification token");
+      throw new Error("Error updating notification info");
     }
   } catch (error: any) {
     if (

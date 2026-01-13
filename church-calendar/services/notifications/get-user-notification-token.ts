@@ -23,9 +23,9 @@ export async function getUserNotificationToken({
         return data;
       });
     } else {
-      throw new Error("Error getting user notification token");
+      throw new Error("Error getting user devices notification info");
     }
   } catch (err: Error | any) {
-    throw new Error(err.message ?? "Error getting user notification token. Check your network and try again.");
+    throw new Error(err.message ?? "Error getting user devices notification info. Check your network and try again.");
   }
 }
