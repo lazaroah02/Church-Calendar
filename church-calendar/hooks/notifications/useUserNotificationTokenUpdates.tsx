@@ -6,11 +6,11 @@ import { useNetworkStatus } from "../useNetworkStatus";
 
 export function useUserNotificationTokenUpdates() {
   const { session, updateSession } = useSession();
-  const { expoPushToken } = useNotifications();
+  const { FCMPushToken } = useNotifications();
   const isConnected = useNetworkStatus()
 
   useEffect(() => {
-    if (!session || !expoPushToken || !isConnected) return;
+    if (!session || !FCMPushToken || !isConnected) return;
 
     const currentDeviceTimezone =
       Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -18,14 +18,14 @@ export function useUserNotificationTokenUpdates() {
     const handleUpdateUserNotificationTokenAndTimezone = async () => {
       try {
         const data = await updateUserNotificationTokenAndTimezone({
-          new_fcm_token: expoPushToken,
+          new_fcm_token: FCMPushToken,
           token: session?.token ?? "",
         });
         console.log("User notification token and timezone updated:", data);
         if (session) {
           const sessionCopy = JSON.parse(JSON.stringify(session));
           sessionCopy.userInfo.timezone = currentDeviceTimezone;
-          sessionCopy.userInfo.fcm_token = expoPushToken;
+          sessionCopy.userInfo.fcm_token = FCMPushToken;
           updateSession(sessionCopy);
         }
       } catch (error) {
@@ -36,7 +36,7 @@ export function useUserNotificationTokenUpdates() {
       }
     };
 
-    const tokenHasChanged = expoPushToken !== session?.userInfo.fcm_token;
+    const tokenHasChanged = FCMPushToken !== session?.userInfo.fcm_token;
     const timezoneHasChanged =
       session.userInfo.timezone !== currentDeviceTimezone;
 
@@ -45,9 +45,9 @@ export function useUserNotificationTokenUpdates() {
       timezoneHasChanged && console.log("Timezone has changed, updating...");
       handleUpdateUserNotificationTokenAndTimezone();
     } else {
-      console.log("FCM Token up to date:", expoPushToken);
+      console.log("FCM Token up to date:", FCMPushToken);
     }
-  }, [session, expoPushToken, updateSession, isConnected]);
+  }, [session, FCMPushToken, updateSession, isConnected]);
 
   return null;
 }

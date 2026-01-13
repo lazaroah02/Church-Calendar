@@ -13,7 +13,7 @@ import { useRouter } from "expo-router";
 import { useNotificationsHistory } from "@/hooks/notifications/useNotificationHistory";
 
 type NotificationsContextType = {
-  expoPushToken: string;
+  FCMPushToken: string;
   notificationHistory: ReturnType<
     typeof useNotificationsHistory
   >["notificationHistory"];
@@ -91,14 +91,16 @@ async function registerForPushNotificationsAsync() {
 
   if (!projectId) throw new Error("Project ID not found");
 
-  return (await Notifications.getExpoPushTokenAsync({ projectId })).data;
+  // before I was using getFCMPushTokenAsync but it was causing 
+  // 403 when connecting expo push service with eas project from Cuba ip
+  return (await Notifications.getDevicePushTokenAsync()).data;
 }
 
 // --------------------
 // PROVIDER
 // --------------------
 export function NotificationsProvider({ children }: { children: ReactNode }) {
-  const [expoPushToken, setExpoPushToken] = useState("");
+  const [FCMPushToken, setFCMPushToken] = useState("");
 
   const {
     notificationHistory,
@@ -115,9 +117,10 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   // EFFECT: TOKEN + LISTENERS
   // --------------------
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token ?? "")
-    );
+    registerForPushNotificationsAsync().then((token) =>{
+      setFCMPushToken(token ?? "")
+    }
+    ).catch((err) => console.error(err));
 
     // When notification is received (APP OPEN)
     const receivedSubscription = Notifications.addNotificationReceivedListener(
@@ -185,7 +188,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   }, [router, saveNotificationForColdStarts]);
 
   const value = {
-    expoPushToken,
+    FCMPushToken,
     notificationHistory,
     refetchNotifications,
     removeNotification,
