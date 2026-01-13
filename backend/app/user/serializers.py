@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
+from notification.serializers import DevicePushTokenSerializer
 from church_group.serializers import ChurchGroupsReducedSerializer
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy, gettext as _
@@ -18,23 +19,31 @@ class UserManagmentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False)
     full_name = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True)
-    fcm_token = serializers.CharField(read_only=True)
     is_active = serializers.BooleanField(
         initial=True,
         help_text=gettext_lazy("Designates whether the user can log in")
         )
     is_superuser = serializers.BooleanField(
         initial=False,
-        help_text=gettext_lazy("Designates whether the user can access the admin panel")
+        help_text=gettext_lazy(
+            "Designates whether the user can access the admin panel"
+            )
         )
-    member_groups_full_info = ChurchGroupsReducedSerializer(many=True, source="member_groups", read_only=True)
+    member_groups_full_info = ChurchGroupsReducedSerializer(
+        many=True, source="member_groups", read_only=True
+        )
+    devices_push_notification_info = DevicePushTokenSerializer(
+        many=True, source="devices_push_notification_info", read_only=True
+        )
 
     class Meta:
         model = User
         fields = [
-            'id', 'email', 'username', 'password', 'phone_number', 'description',
-            'full_name', 'profile_img', 'member_groups', 'born_at', 'fcm_token',
-            'is_staff', 'is_superuser', 'is_active', 'updated_at', 'created_at', "member_groups_full_info"
+            'id', 'email', 'username', 'password', 'phone_number',
+            'description', 'full_name', 'profile_img', 'member_groups', 
+            'born_at', 'fcm_token', 'is_staff', 'is_superuser', 'is_active',
+            'updated_at', 'created_at', "member_groups_full_info",
+            "devices_push_notification_info"
         ]
 
     def get_fields(self):

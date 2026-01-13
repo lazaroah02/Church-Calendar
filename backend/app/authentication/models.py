@@ -66,9 +66,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     description = models.TextField(blank=True, default="")
     phone_number = models.CharField(max_length=15, blank=True)
-    member_groups = models.ManyToManyField(ChurchGroup, blank=True, related_name="members")
-    fcm_token = models.TextField(blank=True, null=True)
-    timezone = models.CharField(max_length=50, blank=True, default="America/Havana")
+    member_groups = models.ManyToManyField(
+        ChurchGroup, blank=True, related_name="members"
+        )
     profile_img = models.ImageField(
         upload_to=USER_PROFILE_IMAGE_MEDIA_FOLDER, blank=True, null=True
         )
