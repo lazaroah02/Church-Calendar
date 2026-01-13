@@ -1,10 +1,11 @@
 import { MyCustomText } from "@/components/MyCustomText";
 import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
+import { useNotifications } from "@/contexts/notifications-context";
 import { useSession } from "@/hooks/auth/useSession";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
 import { persister, queryClient } from "@/lib/query-client";
-import { updateUserNotificationTokenAndTimezone } from "@/services/notifications/update-user-device-notification-info";
+import { removeUserDeviceNotificationInfo } from "@/services/notifications/remove-user-device-notification-info";
 import { AppTheme } from "@/theme";
 import { Redirect } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -18,18 +19,19 @@ export default function Logout() {
   const todaysDate = useMemo(() => new Date(), []);
   const today = CalendarUtils.getCalendarDateString(todaysDate);
   const { session, updateGuestStatus, updateSession } = useSession();
+  const {FCMPushToken} = useNotifications()
   const styles = useThemeStyles(logoutStyles)
 
   const handleSignOut = useCallback(async () => {
     // first unsubscribe user from notifications
-    updateUserNotificationTokenAndTimezone({
+    removeUserDeviceNotificationInfo({
       token: session?.token ?? "",
-      new_fcm_token: "",
+      fcm_token: FCMPushToken ?? "",
     })
       .then(() => {
-        console.log("User notification token cleared successfully on log out.");
+        console.log("User device notification token cleared successfully on log out.");
       })
-      .catch((e) =>
+      .catch((e: Error) =>
         console.warn("Error clearing user notification token:", e.message)
       )
       .finally(() => {
@@ -63,6 +65,7 @@ export default function Logout() {
     today,
     todaysDate,
     setInterval,
+    FCMPushToken
   ]);
 
   useEffect(() => {

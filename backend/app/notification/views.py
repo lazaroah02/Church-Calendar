@@ -120,7 +120,7 @@ class UserDevicesNotificationView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
                 )
 
-        deleted, _ = DevicePushToken.objects.filter(
+        deleted, result = DevicePushToken.objects.filter(
             user=request.user,
             fcm_token=fcm_token
             ).delete()
