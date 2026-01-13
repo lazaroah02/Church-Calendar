@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, View, Image } from "react-native";
 import { MyCustomText } from "../MyCustomText";
 import { copyToClipboard } from "@/lib/copy-to-clipboard";
+import { Collapsible } from "../Collapsible";
 
 export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
   const styles = useThemeStyles(userInfoStyles);
@@ -92,33 +93,65 @@ export function UserInfoComponent({ user }: { user: UserInfo | undefined }) {
             {user?.is_staff ? "Es administrador" : "No es administrador"}
           </MyCustomText>
 
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 20,
-              marginTop: 20,
-            }}
-          >
-            <MyCustomText style={styles.groupLabel}>FCM Token:</MyCustomText>
-            <Ionicons
-              name="copy-outline"
-              size={20}
-              color="#000"
-              style={{ marginTop: 15 }}
-              onPress={() => {
-                copyToClipboard(user?.fcm_token || "")
-              }}
-            />
-          </View>
-          <MyCustomText style={styles.description}>
-            {user?.fcm_token}
+          {/*User Devices Info*/}
+          <MyCustomText style={[styles.groupLabel, { marginTop: 40 }]}>
+            Dispositivos:
           </MyCustomText>
+          {user?.devices_push_notification_info?.map((device) => (
+            <Collapsible
+              title={
+                <View style={[styles.deviceInfoSection, {}]}>
+                  {device.platform === "ios" ? (
+                    <Ionicons name="logo-apple" size={22} />
+                  ) : (
+                    <Ionicons name="logo-android" size={22} />
+                  )}
+                  <MyCustomText style={styles.description}>
+                    {device.device_name}
+                  </MyCustomText>
+                </View>
+              }
+              key={device.fcm_token}
+              style={{ marginTop: 10 }}
+            >
+              {/*FCM Token*/}
+              <View style={styles.deviceInfoSection}>
+                <MyCustomText style={[styles.groupLabel, { marginTop: 0 }]}>
+                  FCM Token:
+                </MyCustomText>
+                <CopyToClipBoardIcon dataToCopy={device.fcm_token} />
+              </View>
+              <MyCustomText style={styles.description}>
+                {device.fcm_token}
+              </MyCustomText>
+
+              {/*Zona Horaria*/}
+              <MyCustomText style={[styles.groupLabel, { marginTop: 5 }]}>
+                Zona Horaria:
+              </MyCustomText>
+              <MyCustomText style={styles.description}>
+                {device.timezone}
+              </MyCustomText>
+            </Collapsible>
+          ))}
         </>
       )}
     </ScrollView>
   );
 }
+
+const CopyToClipBoardIcon = ({ dataToCopy }: { dataToCopy?: string }) => {
+  return (
+    <Ionicons
+      name="copy-outline"
+      size={20}
+      color="#000"
+      onPress={() => {
+        copyToClipboard(dataToCopy ?? "");
+      }}
+    />
+  );
+};
 
 const userInfoStyles = (theme: AppTheme) => {
   return {
@@ -188,6 +221,11 @@ const userInfoStyles = (theme: AppTheme) => {
       width: 20,
       height: 20,
       borderRadius: 10,
+    },
+    deviceInfoSection: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 20,
     },
   };
 };
