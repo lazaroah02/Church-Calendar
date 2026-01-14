@@ -206,17 +206,15 @@ class CheckForUpcommingEventsAndNotify(APIView):
             # Convert current UTC time to Havana local time
             now_havana = timezone.now().astimezone(havana_tz)
 
-            # Add the minutes in Havana timezone
-            lapse_havana = now_havana + timezone.timedelta(minutes=minutes)
-
-            # Convert the local lapse back to UTC for DB filtering
-            datetime_lapse_utc = lapse_havana.astimezone(dt_timezone.utc)
+            datetime_lapse_utc = timezone.now() + timezone.timedelta(
+                minutes=minutes
+                )
 
             # Make the call exactly like your management command
             send_push_notification_for_upcomming_events(
                 datetime_lapse=datetime_lapse_utc,
                 data=request.data.get("data", {
-                    "pathname": "/(tabs)/calendar", 
+                    "pathname": "/(tabs)/calendar",
                     "params": json.dumps({
                         "selectedDayParam": {
                             "year": now_havana.year,

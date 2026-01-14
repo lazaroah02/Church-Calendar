@@ -11,7 +11,6 @@ class Command(BaseCommand):
     help = "This command sends a notification to the users about the events of the day"
 
     def handle(self, *args, **kwargs):
-        self.stdout.write("Sending notifications ...")
         try:
             send_push_notification_for_today_events()
             self.stdout.write("Notifications sent successfully.")
