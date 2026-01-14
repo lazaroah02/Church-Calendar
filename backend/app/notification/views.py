@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth import get_user_model
 from notification.serializers import DevicePushTokenSerializer
 from notification.models import DevicePushToken
@@ -214,7 +215,19 @@ class CheckForUpcommingEventsAndNotify(APIView):
             # Make the call exactly like your management command
             send_push_notification_for_upcomming_events(
                 datetime_lapse=datetime_lapse_utc,
-                data=request.data.get("data", {"pathname": "/(tabs)/calendar"})
+                data=request.data.get("data", {
+                    "pathname": "/(tabs)/calendar", 
+                    "params": json.dumps({
+                        "selectedDayParam": {
+                            "year": now_havana.year,
+                            "month": now_havana.month,
+                            "day": now_havana.day,
+                            # Convert to milliseconds for frontend
+                            "timestamp": int(now_havana.timestamp() * 1000),
+                            "dateString": now_havana.strftime("%Y-%m-%d")
+                        }
+                    })
+                })
             )
 
             logger.info(

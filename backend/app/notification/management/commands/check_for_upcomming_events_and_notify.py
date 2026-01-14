@@ -26,7 +26,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--data",
             type=str,
-            default={"pathname": "/(tabs)/calendar"},
+            default={"pathname": "/(tabs)/calendar", },
             help="JSON data sent with the notification"
         )
 
