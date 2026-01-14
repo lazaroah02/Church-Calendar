@@ -6,7 +6,7 @@ import pytz
 # ===========================
 def convert_event_time_for_user(event_time, user_timezone):
     """
-    Convierte event_time al timezone del usuario usando pytz.
+    Convert event_time to user timezone using pytz.
     """
     try:
         tz = pytz.timezone(user_timezone)
