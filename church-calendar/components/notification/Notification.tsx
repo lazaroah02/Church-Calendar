@@ -30,8 +30,8 @@ export function Notification({
       <TouchableOpacity
         style={{ width: "85%" }}
         onPress={() => {
-          if (notif.data?.pathname){
-            const params = JSON.parse(notif.data.params)
+          if (notif.data?.pathname) {
+            const params = JSON.parse(notif.data.params);
             router.push({
               pathname: notif.data.pathname,
               params: {
@@ -41,8 +41,12 @@ export function Notification({
           }
         }}
       >
-        <MyCustomText style={styles.title}>{notif.title ?? "No Title"}</MyCustomText>
-        <MyCustomText style={styles.content}>{notif.body ?? "No Body"}</MyCustomText>
+        <MyCustomText style={styles.title}>
+          {notif.title ?? notif.data?.title}
+        </MyCustomText>
+        <MyCustomText style={styles.content}>
+          {notif.body ?? notif.data?.body}
+        </MyCustomText>
         <MyCustomText style={styles.receivetAt}>
           Recibido el:{" "}
           {new Date(notif.receivedAt).toLocaleString("es-ES", {

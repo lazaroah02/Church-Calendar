@@ -184,7 +184,11 @@ def send_notification_to_android_device(device, token, title, body, data):
                 title=title,
                 body=body,
             ),
-            data=data,
+            data={
+                **data,
+                "title": title,
+                "body": body,
+            },
             android=messaging.AndroidConfig(
                 priority="high",
                 notification=messaging.AndroidNotification(
@@ -194,16 +198,14 @@ def send_notification_to_android_device(device, token, title, body, data):
         )
         messaging.send(message)
 
-    # except exceptions.UnregisteredError:
-    #     device.delete()
-
     except exceptions.InvalidArgumentError as e:
         logger.warning(
-            f"Invalid payload for sending notification to device: {device.device_name} of user {device.user.full_name}", e
+            f"Invalid payload for sending notification to device: {device.device_name}", e
         )
 
     except exceptions.FirebaseError as e:
         logger.error(f"FCM error: {e}")
+
 
 
 # ===========================
