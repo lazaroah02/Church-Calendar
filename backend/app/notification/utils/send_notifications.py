@@ -30,9 +30,6 @@ def send_push_notification_for_upcomming_events(
     get_firebase_app()
     now = timezone.now()
 
-    now_time = now.time()
-    lapse_time = datetime_lapse.time()
-
     upcoming_events = Event.objects.filter(
         # --- CONDICIONES GENERALES ---
         visible=True,

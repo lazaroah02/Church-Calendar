@@ -214,7 +214,7 @@ class CheckForUpcommingEventsAndNotify(APIView):
             # Make the call exactly like your management command
             send_push_notification_for_upcomming_events(
                 datetime_lapse=datetime_lapse_utc,
-                data=request.data.get("data", {})
+                data=request.data.get("data", {"pathname": "/(tabs)/calendar"})
             )
 
             logger.info(
