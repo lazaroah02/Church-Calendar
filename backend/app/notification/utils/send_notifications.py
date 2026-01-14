@@ -1,14 +1,21 @@
+import json
+import logging
 from django.utils import timezone
 import pytz
-import requests
+from notification.firebase import get_firebase_app
 from event.models import Event
 from django.contrib.auth import get_user_model
 from datetime import timezone as dt_timezone
+from firebase_admin import messaging, exceptions
+from django.db.models import Q
 
 User = get_user_model()
+logger = logging.getLogger("notification")
 
-EXPO_URL = "https://exp.host/--/api/v2/push/send"
 
+# ************CURRENTLY ONLY ANDROID IS SUPPORTED************
+# ****Support up to 500 devices per request.
+# For a higher amount, check messaging.send_each_for_multicast*************
 
 # ===========================
 #  NOTIFY ABOUT UPCOMING EVENTS
@@ -18,48 +25,61 @@ def send_push_notification_for_upcomming_events(
         data={},
         datetime_lapse=timezone.now() + timezone.timedelta(minutes=60)
         ):
+
+    from notification.models import DevicePushToken
+    get_firebase_app()
     now = timezone.now()
 
-    # GET UPCOMING EVENTS
+    now_time = now.time()
+    lapse_time = datetime_lapse.time()
+
     upcoming_events = Event.objects.filter(
-        start_time__date__lte=now,
-        end_time__date__gte=now,
-        start_time__time__gte=datetime_lapse.time(),
+        # --- CONDICIONES GENERALES ---
         visible=True,
         is_canceled=False,
+    ).filter(
+        # --- LÓGICA DE TIEMPO (Caso A o Caso B) ---
+        Q(
+            # Caso A: Eventos que empiezan exactamente hoy dentro del rango
+            start_time__gte=now,
+            start_time__lte=datetime_lapse
+        ) |
+        Q(
+            start_time__date__lte=now,
+            end_time__date__gte=now,
+            start_time__time__gte=datetime_lapse.time(),
+        )
     )
 
     print(f"{upcoming_events.count()} upcoming events found.")
 
-    # GET USERS TO NOTIFY
-    users = (
-        User.objects
-        .filter(member_groups__event__id__in=upcoming_events.values_list("id"))
-        .exclude(fcm_token__isnull=True)
-        .exclude(fcm_token="")
+    # GET DEVICES TO NOTIFY
+    devices = (
+        DevicePushToken.objects
+        .filter(user__member_groups__event__id__in=upcoming_events.values_list("id", flat=True))
         .distinct()
     )
 
-    print(f"Sending notifications to {users.count()} devices.")
+    print(f"Sending notifications to {devices.count()} devices.")
 
-    for user in users:
+    for device in devices:
         user_events = upcoming_events.filter(
-            groups__in=user.member_groups.all()
+            groups__in=device.user.member_groups.all()
             ).distinct()
         event_body = build_events_notification_body_for_user(
-            user_events, user.timezone
+            user_events, device.timezone
         )
 
-        payload = {
-            "to": user.fcm_token,
-            "title": title,
-            "body": event_body,
-            "sound": "default",
-            "priority": "high",
-            "data": data
-        }
+        if device.platform != "android":
+            continue
 
-        requests.post(EXPO_URL, json=payload)
+        send_notification_to_android_device(
+            device=device,
+            token=device.fcm_token,
+            title=title,
+            body=event_body,
+            data=data
+        )
 
 
 # ===========================
@@ -83,7 +103,7 @@ def send_push_notification_for_today_events():
         title=f"Eventos de Hoy {today_havana.day}/{today_havana.month}/{today_havana.year}",
         data={
             "pathname": "/(tabs)/calendar",
-            "params": {
+            "params": json.dumps({
                 "selectedDayParam": {
                     "year": today_havana.year,
                     "month": today_havana.month,
@@ -92,7 +112,7 @@ def send_push_notification_for_today_events():
                     "timestamp": int(today_havana.timestamp() * 1000),
                     "dateString": today_havana.strftime("%Y-%m-%d")
                 }
-            }
+            })
         },
         # Convert end-of-day Havana time back to UTC for database filtering
         datetime_lapse=end_of_day_havana.astimezone(dt_timezone.utc)
@@ -103,29 +123,30 @@ def send_push_notification_for_today_events():
 #  NOTIFY ABOUT A SPECIFIC EVENT
 # ===========================
 def send_push_notification_for_event(event, title="Evento en Camino!"):
-    users = (
-        User.objects
-        .filter(member_groups__event__id=event.id)
-        .exclude(fcm_token__isnull=True)
-        .exclude(fcm_token="")
-        .distinct()
-    )
+    from notification.models import DevicePushToken
+    get_firebase_app()
 
-    for user in users:
+    devices = DevicePushToken.objects.filter(
+        user__member_groups__event__id=event.id
+        ).distinct()
+
+    for device in devices:
 
         event_start = convert_event_time_for_user(
-            event.start_time, user.timezone
+            event.start_time, device.timezone
         )
 
-        payload = {
-            "to": user.fcm_token,
-            "title": title,
-            "body": f"{get_event_date_interval_string(event, user.timezone)} | {event_start.strftime('%I:%M %p').lower()}\n{event.title}",
-            "sound": "default",
-            "priority": "high",
-            "data": {
+        if device.platform != "android":
+            continue
+
+        send_notification_to_android_device(
+            device=device,
+            token=device.fcm_token,
+            title=title,
+            body=f"{get_event_date_interval_string(event, device.timezone)} | {event_start.strftime('%I:%M %p').lower()}\n{event.title}",
+            data={
                 "pathname": "/(tabs)/calendar",
-                "params": {
+                "params": json.dumps({
                     "selectedDayParam": {
                         "year": event_start.year,
                         "month": event_start.month,
@@ -133,45 +154,59 @@ def send_push_notification_for_event(event, title="Evento en Camino!"):
                         "timestamp": int(event_start.timestamp() * 1000),
                         "dateString": event_start.strftime("%Y-%m-%d")
                     }
-                }
+                })
             }
-        }
-
-        requests.post(EXPO_URL, json=payload)
-
-
-# ===========================
-#  BODY BUILD FOR NOTIFICATIONS
-# ===========================
-def build_events_notification_body_for_user(events, user_timezone):
-    body = ""
-
-    for event in events:
-        event_time_user = convert_event_time_for_user(
-            event.start_time, user_timezone
         )
-        body += f"{event_time_user.strftime('%I:%M %p').lower()} {event.title}\n"
-
-    return body
 
 
 def send_notification_to_everyone(title, body, data):
-    users = User.objects.filter().exclude(
-        fcm_token__isnull=True
-        ).exclude(fcm_token="").distinct()
+    from notification.models import DevicePushToken
+    get_firebase_app()
 
-    print(f"Sending notification to {users.count()} users ...")
+    devices = DevicePushToken.objects.all()
 
-    for user in users:
-        payload = {
-            "to": user.fcm_token,
-            "title": title,
-            "body": body,
-            "sound": "default",
-            "priority": "high",
-            "data": data
-        }
-        requests.post(EXPO_URL, json=payload)
+    print(f"Sending notification to {devices.count()} devices ...")
+
+    for device in devices:
+        if device.platform != "android":
+            continue
+        send_notification_to_android_device(
+            device=device,
+            token=device.fcm_token,
+            title=title,
+            body=body,
+            data=data
+        )
+
+
+def send_notification_to_android_device(device, token, title, body, data):
+    try:
+        message = messaging.Message(
+            token=token,
+            notification=messaging.Notification(
+                title=title,
+                body=body,
+            ),
+            data=data,
+            android=messaging.AndroidConfig(
+                priority="high",
+                notification=messaging.AndroidNotification(
+                    sound="default",
+                ),
+            ),
+        )
+        messaging.send(message)
+
+    # except exceptions.UnregisteredError:
+    #     device.delete()
+
+    except exceptions.InvalidArgumentError as e:
+        logger.warning(
+            f"Invalid payload for sending notification to device: {device.device_name} of user {device.user.full_name}", e
+        )
+
+    except exceptions.FirebaseError as e:
+        logger.error(f"FCM error: {e}")
 
 
 # ===========================
@@ -210,3 +245,18 @@ def get_event_date_interval_string(event, timezone_str):
         return start_date_str
     else:
         return f"{start_date_str} - {end_date_str}"
+
+
+# ===========================
+#  BODY BUILD FOR NOTIFICATIONS
+# ===========================
+def build_events_notification_body_for_user(events, user_timezone):
+    body = ""
+
+    for event in events:
+        event_time_user = convert_event_time_for_user(
+            event.start_time, user_timezone
+        )
+        body += f"{event_time_user.strftime('%I:%M %p').lower()} {event.title}\n"
+
+    return body

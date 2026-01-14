@@ -81,7 +81,9 @@ async function registerForPushNotificationsAsync() {
   }
 
   if (finalStatus !== "granted") {
-    alert("No se concedieron permisos de notificaciones. Actívalas en los ajustes del sistema.");
+    alert(
+      "No se concedieron permisos de notificaciones. Actívalas en los ajustes del sistema."
+    );
     return;
   }
 
@@ -91,7 +93,7 @@ async function registerForPushNotificationsAsync() {
 
   if (!projectId) throw new Error("Project ID not found");
 
-  // before I was using getFCMPushTokenAsync but it was causing 
+  // before I was using getFCMPushTokenAsync but it was causing
   // 403 when connecting expo push service with eas project from Cuba ip
   return (await Notifications.getDevicePushTokenAsync()).data;
 }
@@ -109,7 +111,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     saveNotification,
     saveNotificationForColdStarts,
     clearNotifications,
-    loadingNotificationHistory
+    loadingNotificationHistory,
   } = useNotificationsHistory();
   const router = useRouter();
 
@@ -117,15 +119,15 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   // EFFECT: TOKEN + LISTENERS
   // --------------------
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>{
-      setFCMPushToken(token ?? "")
-    }
-    ).catch((err) => console.error(err));
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        setFCMPushToken(token ?? "");
+      })
+      .catch((err) => console.error(err));
 
     // When notification is received (APP OPEN)
     const receivedSubscription = Notifications.addNotificationReceivedListener(
       (notif) => {
-
         // <<< ADDED: Save received notification
         saveNotification({
           id: notif.request.identifier,
@@ -150,13 +152,15 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
         });
 
         const data: any = notif.request.content.data;
-        if (data?.pathname)
+        if (data?.pathname) {
+          const params = JSON.parse(data.params);
           router.push({
             pathname: data.pathname,
             params: {
-              selectedDayParam: JSON.stringify(data.params?.selectedDayParam),
+              selectedDayParam: JSON.stringify(params.selectedDayParam),
             },
           });
+        }
       });
 
     return () => {
@@ -193,7 +197,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     refetchNotifications,
     removeNotification,
     clearNotifications,
-    loadingNotificationHistory
+    loadingNotificationHistory,
   };
 
   return (

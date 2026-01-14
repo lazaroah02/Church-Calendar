@@ -17,6 +17,7 @@ import { register } from "@/services/auth/register";
 import { router } from "expo-router";
 import { getUserProfile } from "@/services/auth/get-user-profile";
 import { isDeepEqual } from "@/lib/deeply-compare-objects";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 
 export const AuthContext = createContext<AuthContenxtProps>({
   signIn: () => null,
@@ -32,6 +33,7 @@ export const AuthContext = createContext<AuthContenxtProps>({
 export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState("session");
   const [isGuestUser, setIsGuestUser] = useState(false);
+  const isConnected = useNetworkStatus()
 
   const handleSignIn = ({
     email,
@@ -87,7 +89,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
   );
 
   const handleVerifyCurrentUserInfo = useCallback(() => {
-    if (isLoading && !session) return
+    if (isLoading || !session || !isConnected ) return
     
     const parsedSessionInfo: Session = JSON.parse(session)
     
@@ -110,7 +112,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         }
         console.error(err)
       });
-  },[updateSession, handleSignOut, isLoading, session])
+  },[updateSession, handleSignOut, isLoading, session, isConnected])
 
   useEffect(() => {
     if (!isLoading && session) {

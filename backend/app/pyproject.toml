@@ -20,6 +20,7 @@ dependencies = [
     "python-decouple (==3.8)",
     "django-allauth (==65.9.0)",
     "pytz (>=2025.2,<2026.0)",
+    "firebase-admin (>=7.1.0,<8.0.0)",
 ]
 
 
