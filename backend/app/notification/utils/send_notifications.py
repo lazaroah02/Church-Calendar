@@ -6,7 +6,7 @@ from notification.firebase import get_firebase_app
 from event.models import Event
 from django.contrib.auth import get_user_model
 from datetime import timezone as dt_timezone
-from firebase_admin import messaging, exceptions
+from firebase_admin import messaging
 from django.db.models import Q
 
 User = get_user_model()
@@ -198,14 +198,28 @@ def send_notification_to_android_device(device, token, title, body, data):
         )
         messaging.send(message)
 
-    except exceptions.InvalidArgumentError as e:
-        logger.warning(
-            f"Invalid payload for sending notification to device: {device.device_name}", e
+    except messaging.UnregisteredError:
+        logger.info(
+            f"FCM token unregistered. Deleting device {device.device_name}"
         )
+        device.delete()
 
-    except exceptions.FirebaseError as e:
-        logger.error(f"FCM error: {e}")
+    except messaging.InvalidArgumentError:
+        logger.warning(
+            f"Invalid FCM token for device {device.device_name}. Deleting device."
+        )
+        device.delete()
 
+    except (
+        messaging.QuotaExceededError,
+        messaging.InternalError,
+        messaging.UnavailableError,
+        messaging.ThirdPartyAuthError,
+    ) as e:
+        logger.error(f"Transient FCM error: {e}")
+
+    except messaging.FirebaseError as e:
+        logger.error(f"Unhandled FCM error: {e}")
 
 
 # ===========================
