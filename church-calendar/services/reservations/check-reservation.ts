@@ -21,7 +21,7 @@ export async function checkReservation({
     const data = await res.json();
     if (!res.ok) {
       throw new Error(
-        data.message || "Error en la operación. Inténtalo mas tarde"
+        data.message ?? "Error en la operación. Inténtalo mas tarde"
       );
     }
     return data;
