@@ -17,7 +17,7 @@ export function ReserveEvent({ event }: { event?: Event | null }) {
     isMakingReservation,
     handleRemoveReservation,
     isRemovingReservation,
-  } = useReservation({eventId:event?.id});
+  } = useReservation({eventId:event?.id, event: event});
 
   const pending = isMakingReservation || isRemovingReservation || isCheckingReservationStatus;
 

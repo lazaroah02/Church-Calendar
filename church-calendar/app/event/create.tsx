@@ -12,6 +12,7 @@ import { CreateEventTrheeDotsmenuOptions } from "@/components/event/create-event
 import { useTemplates } from "@/hooks/events/useTemplates";
 import { useEventFormValues } from "@/hooks/events/useEventFormValues";
 import { EventTemplate } from "@/types/event";
+import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
 
 export default function CreateEvent() {
   const {
@@ -20,12 +21,26 @@ export default function CreateEvent() {
     createEventErrors,
     resetCreateEventMutation,
   } = useManageEvents();
+  const { selectedDay } = useCalendarEventsContext();
 
   const { templates } = useTemplates();
 
+  const startTimeUTC = new Date(
+    selectedDay.year,
+    selectedDay.month - 1,
+    selectedDay.day,
+    0,
+    0,
+    0
+  );
+
   const { formValues, setFormValues, handleFieldChange } = useEventFormValues({
     resetMutation: resetCreateEventMutation,
-    defaultValues: { groups: [1] }, //general group
+    defaultValues: {
+      groups: [1], //general group
+      start_time: startTimeUTC.toISOString(), //default selected day same as the calendar
+      end_time: startTimeUTC.toISOString(),
+    },
   });
 
   return (

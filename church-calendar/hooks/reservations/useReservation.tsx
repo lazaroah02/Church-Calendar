@@ -5,10 +5,13 @@ import { useCustomToast } from "../useCustomToast";
 import { removeReservation } from "@/services/reservations/remove-reservation";
 import { checkReservation } from "@/services/reservations/check-reservation";
 import { useEffect, useRef } from "react";
+import { Event } from "@/types/event";
 
 export function useReservation({
+  event,
   eventId,
 }: {
+  event: Event | null | undefined;
   eventId: number | string | undefined;
 }) {
   const { session } = useSession();
@@ -22,6 +25,12 @@ export function useReservation({
     eventId,
     session?.userInfo.id,
   ];
+  const ableToReserve =
+    eventId != null &&
+    event?.open_to_reservations === true &&
+    event?.is_canceled === false &&
+    event?.visible === true &&
+    session !== null;
 
   // reservation status
   const {
@@ -32,13 +41,14 @@ export function useReservation({
   } = useQuery({
     queryKey: reservationQueryKey,
     queryFn: () =>
-      checkReservation({ token: session?.token || "", eventId: eventId }),
+      checkReservation({ token: session?.token ?? "", eventId: eventId }),
     retry(failureCount, error) {
       if (failureCount <= 3) {
         return true;
       }
       return false;
     },
+    enabled: ableToReserve,
   });
   const isReserved: boolean = data?.reservation ?? false;
 
@@ -56,14 +66,14 @@ export function useReservation({
 
   function updateReservationStatusInCache(reserved: boolean) {
     queryClient.setQueryData(
-        reservationQueryKey,
-        (oldData: ReservationStatus) => {
-          return {
-            ...oldData,
-            reservation: reserved,
-          };
-        }
-      );
+      reservationQueryKey,
+      (oldData: ReservationStatus) => {
+        return {
+          ...oldData,
+          reservation: reserved,
+        };
+      }
+    );
   }
 
   // make reservation
@@ -73,7 +83,7 @@ export function useReservation({
     isPending: isMakingReservation,
   } = useMutation({
     mutationFn: () => {
-      return makeReservation({ eventId: eventId, token: session?.token || "" });
+      return makeReservation({ eventId: eventId, token: session?.token ?? "" });
     },
     onError: (error) => {
       showErrorToast({
@@ -86,7 +96,7 @@ export function useReservation({
     onSuccess: (data) => {
       updateReservationStatusInCache(true);
       showSuccessToast({
-        message: data.message || "Reserva realizada con éxito",
+        message: data.message ?? "Reserva realizada con éxito",
       });
     },
   });
@@ -100,7 +110,7 @@ export function useReservation({
     mutationFn: () => {
       return removeReservation({
         eventId: eventId,
-        token: session?.token || "",
+        token: session?.token ?? "",
       });
     },
     onError: (error) => {
@@ -114,7 +124,7 @@ export function useReservation({
     onSuccess: (data) => {
       updateReservationStatusInCache(false);
       showSuccessToast({
-        message: data.message || "Operación realizada con éxito",
+        message: data.message ?? "Operación realizada con éxito",
       });
     },
   });

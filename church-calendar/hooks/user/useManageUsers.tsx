@@ -40,14 +40,14 @@ export function useManageUsers({
     queryKey: ["users", searchTerm, filters],
     queryFn: ({ pageParam = 1 }) =>
       getUsers({
-        token: session?.token || "",
+        token: session?.token ?? "",
         pageParam: pageParam,
         search: searchTerm,
         filters: filters
       }),
     getNextPageParam: (lastPage) => {
       if (lastPage.next) {
-        return parseInt(new URL(lastPage.next).searchParams.get("page") || "1");
+        return parseInt(new URL(lastPage.next).searchParams.get("page") ?? "1");
       }
       return undefined;
     },
@@ -56,10 +56,10 @@ export function useManageUsers({
   });
 
   const users: UserInfo[] = useMemo(
-    () => data?.pages.flatMap((page) => page.results) || [],
+    () => data?.pages.flatMap((page) => page.results) ?? [],
     [data]
   );
-  const totalUsers: number = useMemo(() => data?.pages[0]?.count || 0, [data]);
+  const totalUsers: number = useMemo(() => data?.pages[0]?.count ?? 0, [data]);
 
   //UPDATE USER
   const {
@@ -76,7 +76,7 @@ export function useManageUsers({
       userId: number | string | undefined;
     }) =>
       updateUser({
-        token: session?.token || "",
+        token: session?.token ?? "",
         data: data,
         userId: userId,
       }),
@@ -106,7 +106,7 @@ export function useManageUsers({
       password: string
     }) =>
       createUser({
-        token: session?.token || "",
+        token: session?.token ?? "",
         data: data,
         password: password
       }),
@@ -124,7 +124,7 @@ export function useManageUsers({
     reset: resetDeleteUserMutation,
   } = useMutation({
     mutationFn: (userId: number | string) =>
-      deleteUser({ token: session?.token || "", userId: userId }),
+      deleteUser({ token: session?.token ?? "", userId: userId }),
     onSuccess: () => {
       router.back();
       showSuccessToast({ message: "Usuario eliminado con éxito!" });
@@ -145,7 +145,7 @@ export function useManageUsers({
     reset: resetBulkDeleteUsersMutation,
   } = useMutation({
     mutationFn: (userIds: number[]) => {
-      return bulkDeleteUsers({ token: session?.token || "", userIds: userIds })
+      return bulkDeleteUsers({ token: session?.token ?? "", userIds: userIds })
     },
     onSuccess: () => {
       refetchUsers()
@@ -167,7 +167,7 @@ export function useManageUsers({
     status: bulkRemoveUsersFromGroupStatus
   } = useMutation({
     mutationFn: ({groupId, userIds}:{groupId: number | string, userIds: number[]}) =>
-      bulkRemoveUsersFromGroup({ token: session?.token || "", groupId: groupId, userIds: userIds }),
+      bulkRemoveUsersFromGroup({ token: session?.token ?? "", groupId: groupId, userIds: userIds }),
     onSuccess: () => {
       showSuccessToast({ message: "Operación exitosa!" });
       refetchUsers()
@@ -188,7 +188,7 @@ export function useManageUsers({
     status: bulkAddUsersToGroupStatus
   } = useMutation({
     mutationFn: ({groupId, userIds}:{groupId: number | string, userIds: number[]}) =>
-      bulkAddUsersToGroup({ token: session?.token || "", groupId: groupId, userIds: userIds }),
+      bulkAddUsersToGroup({ token: session?.token ?? "", groupId: groupId, userIds: userIds }),
     onSuccess: () => {
       showSuccessToast({ message: "Operación exitosa!" });
       refetchUsers()

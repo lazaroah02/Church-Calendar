@@ -20,7 +20,7 @@ export function useManageEvents() {
     reset: resetCreateEventMutation,
   } = useMutation({
     mutationFn: (data: EventFormType) =>
-      createEvent({ token: session?.token || "", data: data }),
+      createEvent({ token: session?.token ?? "", data: data }),
     onSuccess: () => {
       onRefetch();
       router.back();
@@ -34,7 +34,7 @@ export function useManageEvents() {
     reset: resetDeleteEventMutation,
   } = useMutation({
     mutationFn: (eventId: number | string) =>
-      deleteEvent({ token: session?.token || "", eventId: eventId }),
+      deleteEvent({ token: session?.token ?? "", eventId: eventId }),
     onSuccess: () => {
       onRefetch();
       router.back();
@@ -61,7 +61,7 @@ export function useManageEvents() {
       eventId: number | string | undefined;
     }) =>
       updateEvent({
-        token: session?.token || "",
+        token: session?.token ?? "",
         data: data,
         eventId: eventId,
       }),
