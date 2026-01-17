@@ -18,7 +18,7 @@ export default function Welcome() {
   const { updateGuestStatus } = useSession();
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{flex: 1, flexDirection:"column"}}>
+      <ScrollView style={{ flex: 1, flexDirection: "column" }}>
         <View
           style={{
             height: 350,
@@ -92,7 +92,7 @@ const welcomeStyles = (theme: AppTheme) => ({
   },
   container: {
     flex: 1,
-    minHeight:"60%",
+    minHeight: "60%",
     display: "flex",
     gap: 10,
     alignItems: "center",

@@ -13,12 +13,16 @@ import { useVersionsUpdates } from "@/hooks/useVersionUpdates";
 import { openBrowserAsync } from "expo-web-browser";
 import { MyCustomText } from "@/components/MyCustomText";
 import { usePlatform } from "@/hooks/usePlatform";
+import { useConfirm } from "@/hooks/useConfirm";
 
 export default function Settings() {
   const { signOut } = useSession();
   const styles = useThemeStyles(settingsStyles);
   const { themeName, setThemeName } = useAppTheme();
   const {isWeb} = usePlatform()
+  const {confirm, showConfirm} = useConfirm({
+    onConfirm: () => signOut()
+  })
   
   const {
     checkForUpdate,
@@ -117,30 +121,12 @@ export default function Settings() {
       </ScrollView>
 
       {/*Close Session Button*/}
+      {confirm({title: "Cuidado!", message: "Quieres cerrar sesión"})}
       <Button
         style={{ width: 250, marginBottom: 20, borderRadius: 20 }}
         text="Cerrar Sesión"
         variant="cancel"
-        onPress={() => {
-          Alert.alert(
-            "Cuidado!",
-            "Quieres cerrar sesión?",
-            [
-              {
-                text: "Cancelar",
-                style: "cancel",
-              },
-              {
-                text: "Continuar",
-                onPress: () => {
-                  signOut();
-                },
-                style: "default",
-              },
-            ],
-            { cancelable: true }
-          );
-        }}
+        onPress={showConfirm}
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <Ionicons name="log-out-outline" size={24} />

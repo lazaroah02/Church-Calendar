@@ -1,10 +1,5 @@
 import { router } from "expo-router";
-import {
-  View,
-  Pressable,
-  ActivityIndicator,
-  Alert,
-} from "react-native";
+import { View, Pressable, ActivityIndicator, Alert } from "react-native";
 import { Image } from "expo-image";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSession } from "@/hooks/auth/useSession";
@@ -18,12 +13,23 @@ import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { MyCustomText } from "@/components/MyCustomText";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useMyNavigationBar } from "@/hooks/useMyNavigationBar";
+import { useConfirm } from "@/hooks/useConfirm";
 
 export default function SignIn() {
   const { signIn } = useSession();
   const [loading, setLoading] = useState(false);
-  const styles = useThemeStyles(signInStyles)
-  useMyNavigationBar({buttonsStyle:"dark", backgroundColor:"rgba(236, 161, 0, 1)"})
+  const styles = useThemeStyles(signInStyles);
+  useMyNavigationBar({
+    buttonsStyle: "dark",
+    backgroundColor: "rgba(236, 161, 0, 1)",
+  });
+  const { confirm, showConfirm } = useConfirm({
+    onConfirm: async () => {
+      await openBrowserAsync(
+        "https://wa.me/+51706583?text=Hola.%20Olvidé%20mi%20contraseña.%20Me%20puedes%20ayudar?"
+      );
+    },
+  });
 
   const [formValues, setFormValues] = useState<{ email: string; pass: string }>(
     { email: "", pass: "" }
@@ -31,125 +37,106 @@ export default function SignIn() {
   const [errors, setErrors] = useState<LoginFormErrors | null>(null);
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <KeyboardAwareScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-      enableOnAndroid
-      extraScrollHeight={10}
-    >
-      <View
-        style={{
-          height: 300,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraScrollHeight={10}
       >
-        <Image
-          source={require("@/assets/images/Logo.png")}
-          style={styles.logo}
-        />
-        <MyCustomText style={styles.title}>Calendario La Resurrección</MyCustomText>
-      </View>
-
-      <View style={styles.form}>
-        <MyCustomText style={styles.formTitle}>Iniciar Sesión</MyCustomText>
-        {errors && (
-          <FormErrorBanner
-            message={
-              errors.email ??
-              errors.pass ??
-              errors.general ??
-              "Ocurrió un error al iniciar sesión."
-            }
-          />
-        )}
-        {/* Email */}
-        <CustomInput
-          error={errors?.email}
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          placeholder="Correo"
-          onChangeText={(newValue) =>
-            setFormValues((prev) => ({
-              ...prev,
-              email: newValue,
-            }))
-          }
-        />
-        {/* Password */}
-        <CustomInput
-          placeholder="Contraseña"
-          textContentType="password"
-          error={errors?.pass}
-          isPassword={true}
-          onChangeText={(newValue) =>
-            setFormValues((prev) => ({
-              ...prev,
-              pass: newValue,
-            }))
-          }
-        />
-
-        <MyCustomText
-          style={styles.forgotPassword}
-          onPress={() =>
-            Alert.alert(
-              "Olvidaste tu contraseña?",
-              "Contacta un administrador para recuperar tu contraseña",
-              [
-                {
-                  text: "Cancelar",
-                  style: "cancel",
-                },
-                {
-                  text: "Contactar",
-                  onPress: async () => {
-                    await openBrowserAsync(
-                      "https://wa.me/+51706583?text=Hola.%20Olvidé%20mi%20contraseña.%20Me%20puedes%20ayudar?"
-                    );
-                  },
-                  style: "default",
-                },
-              ],
-              { cancelable: true }
-            )
-          }
-        >
-          ¿Olvidaste tu contraseña?
-        </MyCustomText>
-
-        <Pressable
-          style={styles.loginButton}
-          onPress={() => {
-            setLoading(true);
-            setErrors(null);
-            signIn({
-              email: formValues.email,
-              pass: formValues.pass,
-              onLoginSuccess: () => {
-                router.replace("/(tabs)/calendar");
-                setLoading(false);
-              },
-              onLoginError: (err) => {
-                setErrors(err as LoginFormErrors);
-                setLoading(false);
-              },
-            });
+        <View
+          style={{
+            height: 300,
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <MyCustomText style={styles.logginButtonText}>
-            {loading ? "Enviando" : "Iniciar Sesión"}
+          <Image
+            source={require("@/assets/images/Logo.png")}
+            style={styles.logo}
+          />
+          <MyCustomText style={styles.title}>
+            Calendario La Resurrección
           </MyCustomText>
-          {loading && <ActivityIndicator size="small" color="#000" />}
-        </Pressable>
-      </View>
+        </View>
 
-    </KeyboardAwareScrollView>
+        <View style={styles.form}>
+          <MyCustomText style={styles.formTitle}>Iniciar Sesión</MyCustomText>
+          {errors && (
+            <FormErrorBanner
+              message={
+                errors.email ??
+                errors.pass ??
+                errors.general ??
+                "Ocurrió un error al iniciar sesión."
+              }
+            />
+          )}
+          {/* Email */}
+          <CustomInput
+            error={errors?.email}
+            keyboardType="email-address"
+            textContentType="emailAddress"
+            placeholder="Correo"
+            onChangeText={(newValue) =>
+              setFormValues((prev) => ({
+                ...prev,
+                email: newValue,
+              }))
+            }
+          />
+          {/* Password */}
+          <CustomInput
+            placeholder="Contraseña"
+            textContentType="password"
+            error={errors?.pass}
+            isPassword={true}
+            onChangeText={(newValue) =>
+              setFormValues((prev) => ({
+                ...prev,
+                pass: newValue,
+              }))
+            }
+          />
+
+          {confirm({
+            title: "Olvidaste tu contraseña?",
+            message: "Contacta un administrador para recuperar tu contraseña",
+          })}
+          <MyCustomText style={styles.forgotPassword} onPress={showConfirm}>
+            ¿Olvidaste tu contraseña?
+          </MyCustomText>
+
+          <Pressable
+            style={styles.loginButton}
+            onPress={() => {
+              setLoading(true);
+              setErrors(null);
+              signIn({
+                email: formValues.email,
+                pass: formValues.pass,
+                onLoginSuccess: () => {
+                  router.replace("/(tabs)/calendar");
+                  setLoading(false);
+                },
+                onLoginError: (err) => {
+                  setErrors(err as LoginFormErrors);
+                  setLoading(false);
+                },
+              });
+            }}
+          >
+            <MyCustomText style={styles.logginButtonText}>
+              {loading ? "Enviando" : "Iniciar Sesión"}
+            </MyCustomText>
+            {loading && <ActivityIndicator size="small" color="#000" />}
+          </Pressable>
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
 
-const signInStyles = (theme: AppTheme) =>({
+const signInStyles = (theme: AppTheme) => ({
   logo: {
     width: 80,
     height: 130,
@@ -219,6 +206,6 @@ const signInStyles = (theme: AppTheme) =>({
     fontSize: theme.fontSizes.sm,
     fontWeight: "400",
     opacity: 0.7,
-    textDecorationLine:"underline"
+    textDecorationLine: "underline",
   },
 });
