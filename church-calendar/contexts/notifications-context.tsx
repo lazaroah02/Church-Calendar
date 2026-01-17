@@ -11,6 +11,7 @@ import Constants from "expo-constants";
 import { Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { useNotificationsHistory } from "@/hooks/notifications/useNotificationHistory";
+import { usePlatform } from "@/hooks/usePlatform";
 
 type NotificationsContextType = {
   FCMPushToken: string;
@@ -45,19 +46,23 @@ export const useNotifications = () => {
   return context;
 };
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+if (Platform.OS !== "web") {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+}
 
 // --------------------
 // REGISTER TOKEN
 // --------------------
 async function registerForPushNotificationsAsync() {
+  if (Platform.OS === "web") return "";
+
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
       name: "default",
@@ -69,14 +74,16 @@ async function registerForPushNotificationsAsync() {
 
   if (!Device.isDevice) {
     alert("Debes usar un dispositivo físico para notificaciones");
-    return;
+    return "";
   }
 
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  const { status: existingStatus } =
+    await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
 
   if (existingStatus !== "granted") {
-    const { status } = await Notifications.requestPermissionsAsync();
+    const { status } =
+      await Notifications.requestPermissionsAsync();
     finalStatus = status;
   }
 
@@ -84,7 +91,7 @@ async function registerForPushNotificationsAsync() {
     alert(
       "No se concedieron permisos de notificaciones. Actívalas en los ajustes del sistema."
     );
-    return;
+    return "";
   }
 
   const projectId =
@@ -102,6 +109,7 @@ async function registerForPushNotificationsAsync() {
 // PROVIDER
 // --------------------
 export function NotificationsProvider({ children }: { children: ReactNode }) {
+  const { isWeb } = usePlatform();
   const [FCMPushToken, setFCMPushToken] = useState("");
 
   const {
@@ -113,12 +121,15 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     clearNotifications,
     loadingNotificationHistory,
   } = useNotificationsHistory();
+
   const router = useRouter();
 
   // --------------------
   // EFFECT: TOKEN + LISTENERS
   // --------------------
   useEffect(() => {
+    if (isWeb) return;
+
     registerForPushNotificationsAsync()
       .then((token) => {
         setFCMPushToken(token ?? "");
@@ -126,70 +137,72 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
       .catch((err) => console.error(err));
 
     // When notification is received (APP OPEN)
-    const receivedSubscription = Notifications.addNotificationReceivedListener(
-      (notif) => {
-        // <<< ADDED: Save received notification
+    const receivedSubscription =
+      Notifications.addNotificationReceivedListener((notif) => {
         saveNotification({
           id: notif.request.identifier,
           title: notif.request.content.title,
           body: notif.request.content.body,
           data: notif.request.content.data,
         });
-      }
-    );
+      });
 
     // When tapped (APP OPEN / BACKGROUND)
     const responseSubscription =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        const notif = response.notification;
+      Notifications.addNotificationResponseReceivedListener(
+        (response) => {
+          const notif = response.notification;
 
-        // <<< ADDED: Save tapped notification
-        saveNotification({
-          id: notif.request.identifier,
-          title: notif.request.content.title,
-          body: notif.request.content.body,
-          data: notif.request.content.data,
-        });
-
-        const data: any = notif.request.content.data;
-        if (data?.pathname) {
-          const params = JSON.parse(data.params);
-          router.push({
-            pathname: data.pathname,
-            params: {
-              selectedDayParam: JSON.stringify(params.selectedDayParam),
-            },
+          saveNotification({
+            id: notif.request.identifier,
+            title: notif.request.content.title,
+            body: notif.request.content.body,
+            data: notif.request.content.data,
           });
+
+          const data: any = notif.request.content.data;
+          if (data?.pathname) {
+            const params = JSON.parse(data.params);
+            router.push({
+              pathname: data.pathname,
+              params: {
+                selectedDayParam: JSON.stringify(
+                  params.selectedDayParam
+                ),
+              },
+            });
+          }
         }
-      });
+      );
 
     return () => {
       receivedSubscription.remove();
       responseSubscription.remove();
     };
-  }, [router, saveNotification]);
+  }, [router, saveNotification, isWeb]);
 
   // --------------------
   // EFFECT: NOTIFICATION TAPPED WHEN APP WAS CLOSED
   // --------------------
   useEffect(() => {
+    if (isWeb) return;
+
     (async () => {
       const lastResponse =
         await Notifications.getLastNotificationResponseAsync();
 
-      if (lastResponse) {
-        const notif = lastResponse.notification;
+      if (!lastResponse) return;
 
-        // <<< ADDED: Save last notification (cold start)
-        saveNotificationForColdStarts({
-          id: notif.request.identifier,
-          title: notif.request.content.title,
-          body: notif.request.content.body,
-          data: notif.request.content.data,
-        });
-      }
+      const notif = lastResponse.notification;
+
+      saveNotificationForColdStarts({
+        id: notif.request.identifier,
+        title: notif.request.content.title,
+        body: notif.request.content.body,
+        data: notif.request.content.data,
+      });
     })();
-  }, [router, saveNotificationForColdStarts]);
+  }, [saveNotificationForColdStarts, isWeb]);
 
   const value = {
     FCMPushToken,
