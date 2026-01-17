@@ -6,13 +6,20 @@ import { useAdministrationTabs } from "@/hooks/administration/useAdministrationT
 import { MyCustomText } from "@/components/MyCustomText";
 import { AppTheme } from "@/theme";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
+import { useManageUsers } from "@/hooks/user/useManageUsers";
+import { useManageGroups } from "@/hooks/groups/useManageGroups";
 
 export default function Administration() {
   const { index, routes, renderScene, setIndex, layout } =
     useAdministrationTabs();
+  const { totalUsers } = useManageUsers({
+    searchTerm: "",
+    filters: { is_staff: "", is_active: "", member_groups: [] },
+  });
+  const { totalGroups } = useManageGroups({});
 
   const styles = useThemeStyles(AdministrationPageStyles);
-  const { width, height, scale, fontScale } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }} edges={["top"]}>
       <PageHeader title="Administración" />
@@ -56,7 +63,8 @@ export default function Administration() {
                 }}
               >
                 <MyCustomText style={styles.labelStyle}>
-                  {route.title}
+                  {route.title}(
+                  {route.key === "users" ? totalUsers : totalGroups})
                 </MyCustomText>
               </Pressable>
             )}

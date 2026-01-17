@@ -18,6 +18,7 @@ export function useManageGroups({refetchUsers = () => null}:{refetchUsers?: () =
     isLoading: loadingGroups,
     isError: errorGettingGroups,
     refetch: refetchGroups,
+    totalGroups
   } = useGroups();
 
   //DELETE GROUP
@@ -29,7 +30,7 @@ export function useManageGroups({refetchUsers = () => null}:{refetchUsers?: () =
     status: deleteGroupMutationStatus
   } = useMutation({
     mutationFn: (groupId: number | string) =>
-      deleteGroup({ token: session?.token || "", groupId: groupId }),
+      deleteGroup({ token: session?.token ?? "", groupId: groupId }),
     onSuccess: () => {
       refetchGroups();
       refetchUsers()
@@ -59,7 +60,7 @@ export function useManageGroups({refetchUsers = () => null}:{refetchUsers?: () =
       groupId: number | string | undefined;
     }) =>
       updateGroup({
-        token: session?.token || "",
+        token: session?.token ?? "",
         data: data,
         groupId: groupId,
       }),
@@ -84,7 +85,7 @@ export function useManageGroups({refetchUsers = () => null}:{refetchUsers?: () =
   } = useMutation({
     mutationFn: ({ data }: { data: GroupManagementData }) =>
       createGroup({
-        token: session?.token || "",
+        token: session?.token ?? "",
         data: data,
       }),
     onSuccess: (data) => {
@@ -95,6 +96,7 @@ export function useManageGroups({refetchUsers = () => null}:{refetchUsers?: () =
 
   return {
     groups,
+    totalGroups,
     loadingGroups,
     errorGettingGroups,
     refetchGroups,

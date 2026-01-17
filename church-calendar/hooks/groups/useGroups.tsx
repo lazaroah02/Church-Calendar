@@ -7,7 +7,8 @@ export function useGroups() {
     queryKey: ["groups"],
     queryFn: getGroups,
   });
-  const groups: Group[] = data || [];
+  const groups: Group[] = data ?? [];
+  const totalGroups: number = groups.length
 
-  return { groups, isLoading, isError, refetch };
+  return { groups, totalGroups, isLoading, isError, refetch };
 }
