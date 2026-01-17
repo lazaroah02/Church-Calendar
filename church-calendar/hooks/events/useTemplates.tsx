@@ -1,17 +1,18 @@
 import { EventFormType, EventTemplate } from "@/types/event";
 import { useState, useEffect, useCallback } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useUniversalStorage } from "@/hooks/useUniversalStorage";
 
 const STORAGE_KEY = "templates";
 
 export function useTemplates() {
+  const { getItem, setItem, removeItem } = useUniversalStorage();
   const [templates, setTemplates] = useState<EventTemplate[]>([]);
   const [loadingTemplates, setLoading] = useState(true);
 
   // ---- Load templates on mount ----
   const loadTemplates = useCallback(async () => {
     try {
-      const json = await AsyncStorage.getItem(STORAGE_KEY);
+      const json = await getItem(STORAGE_KEY);
       if (json) {
         const parsed: EventTemplate[] = JSON.parse(json);
         const sorted = parsed.sort((a, b) => b.updatedAt - a.updatedAt);
@@ -22,7 +23,7 @@ export function useTemplates() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [getItem]);
 
   useEffect(() => {
     loadTemplates();
@@ -42,15 +43,15 @@ export function useTemplates() {
 
       setTemplates((prev) => {
         const updated = [template, ...prev];
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated)).catch(
-          (err) => console.error("Error saving template:", err)
+        setItem(STORAGE_KEY, JSON.stringify(updated)).catch((err) =>
+          console.error("Error saving template:", err)
         );
         return updated;
       });
 
       return template.id;
     },
-    []
+    [setItem]
   );
 
   // ---- Update template ----
@@ -61,34 +62,37 @@ export function useTemplates() {
           tpl.id === id ? { ...tpl, ...updates, updatedAt: Date.now() } : tpl
         );
 
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated)).catch(
-          (err) => console.error("Error updating template:", err)
+        setItem(STORAGE_KEY, JSON.stringify(updated)).catch((err) =>
+          console.error("Error updating template:", err)
         );
 
         return updated;
       });
     },
-    []
+    [setItem]
   );
 
   // ---- Remove template ----
-  const removeTemplate = useCallback((id: string) => {
-    setTemplates((prev) => {
-      const updated = prev.filter((tpl) => tpl.id !== id);
-      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated)).catch((err) =>
-        console.error("Error removing template:", err)
-      );
-      return updated;
-    });
-  }, []);
+  const removeTemplate = useCallback(
+    (id: string) => {
+      setTemplates((prev) => {
+        const updated = prev.filter((tpl) => tpl.id !== id);
+        setItem(STORAGE_KEY, JSON.stringify(updated)).catch((err) =>
+          console.error("Error removing template:", err)
+        );
+        return updated;
+      });
+    },
+    [setItem]
+  );
 
   // ---- Clear all templates ----
   const clearTemplates = useCallback(() => {
     setTemplates([]);
-    AsyncStorage.removeItem(STORAGE_KEY).catch((err) =>
+    removeItem(STORAGE_KEY).catch((err) =>
       console.error("Error clearing templates:", err)
     );
-  }, []);
+  }, [removeItem]);
 
   // ---- Manual refetch ----
   const refetchTemplates = useCallback(() => {
