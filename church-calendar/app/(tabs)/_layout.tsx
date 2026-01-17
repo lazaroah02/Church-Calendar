@@ -7,10 +7,12 @@ import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Ionicons } from "@expo/vector-icons";
 import { useSession } from "@/hooks/auth/useSession";
 import { useMyNavigationBar } from "@/hooks/useMyNavigationBar";
+import { usePlatform } from "@/hooks/usePlatform";
 
 export default function TabLayout() {
   const { session } = useSession();
   useMyNavigationBar({})
+  const {isWeb} = usePlatform()
   return (
     <Tabs
       screenOptions={{
@@ -63,7 +65,7 @@ export default function TabLayout() {
         name="notifications"
         options={{
           title: "Notificaciones",
-          href: session ? "/notifications" : null,
+          href: session && !isWeb? "/notifications" : null,
           tabBarIcon: ({ color }) => (
             <Ionicons name="notifications-outline" size={28} color={color} />
           ),

@@ -12,11 +12,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useVersionsUpdates } from "@/hooks/useVersionUpdates";
 import { openBrowserAsync } from "expo-web-browser";
 import { MyCustomText } from "@/components/MyCustomText";
+import { usePlatform } from "@/hooks/usePlatform";
 
 export default function Settings() {
   const { signOut } = useSession();
   const styles = useThemeStyles(settingsStyles);
   const { themeName, setThemeName } = useAppTheme();
+  const {isWeb} = usePlatform()
+  
   const {
     checkForUpdate,
     checkingForUpdates,
@@ -24,6 +27,7 @@ export default function Settings() {
     lastCheck,
     updateInfo,
   } = useVersionsUpdates();
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
@@ -44,46 +48,48 @@ export default function Settings() {
         </Collapsible>
 
         {/*About the app*/}
-        <Collapsible
-          title="Acerca de la Aplicación"
-          style={styles.optionCollapsible}
-        >
-          <View>
-            <MyCustomText style={styles.text}>
-              Versión Actual: {Constants.expoConfig?.version}
-            </MyCustomText>
-            {lastCheck && (
-              <View style={{ marginTop: 10 }}>
-                <MyCustomText style={styles.text}>
-                  Ultima comprobación:
-                </MyCustomText>
-                <MyCustomText style={styles.text}>
-                  {lastCheck.toLocaleDateString()}{" "}
-                  {lastCheck.toLocaleTimeString("es-ES", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  })}
-                </MyCustomText>
-              </View>
-            )}
-            <TouchableOpacity
-              style={styles.checkUpdatesButton}
-              onPress={checkForUpdate}
-            >
-              <Ionicons name="download-outline" size={22} />
+        {!isWeb && (
+          <Collapsible
+            title="Acerca de la Aplicación"
+            style={styles.optionCollapsible}
+          >
+            <View>
               <MyCustomText style={styles.text}>
-                {checkingForUpdates
-                  ? "Buscando Actualizaciones ..."
-                  : "Buscar Actualizaciones"}
+                Versión Actual: {Constants.expoConfig?.version}
               </MyCustomText>
-            </TouchableOpacity>
-            {confirmUpdate({
-              title: "Nueva versión encontrada!",
-              message: `Una nueva versión de la aplicación (v${updateInfo.version}) está disponible. ¿Deseas descargarla?`,
-            })}
-          </View>
-        </Collapsible>
+              {lastCheck && (
+                <View style={{ marginTop: 10 }}>
+                  <MyCustomText style={styles.text}>
+                    Ultima comprobación:
+                  </MyCustomText>
+                  <MyCustomText style={styles.text}>
+                    {lastCheck.toLocaleDateString()}{" "}
+                    {lastCheck.toLocaleTimeString("es-ES", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </MyCustomText>
+                </View>
+              )}
+              <TouchableOpacity
+                style={styles.checkUpdatesButton}
+                onPress={checkForUpdate}
+              >
+                <Ionicons name="download-outline" size={22} />
+                <MyCustomText style={styles.text}>
+                  {checkingForUpdates
+                    ? "Buscando Actualizaciones ..."
+                    : "Buscar Actualizaciones"}
+                </MyCustomText>
+              </TouchableOpacity>
+              {confirmUpdate({
+                title: "Nueva versión encontrada!",
+                message: `Una nueva versión de la aplicación (v${updateInfo.version}) está disponible. ¿Deseas descargarla?`,
+              })}
+            </View>
+          </Collapsible>
+        )}
 
         {/*Support*/}
         <Collapsible
@@ -112,7 +118,7 @@ export default function Settings() {
 
       {/*Close Session Button*/}
       <Button
-        style={{ width:250, marginBottom: 20, borderRadius: 20 }}
+        style={{ width: 250, marginBottom: 20, borderRadius: 20 }}
         text="Cerrar Sesión"
         variant="cancel"
         onPress={() => {
