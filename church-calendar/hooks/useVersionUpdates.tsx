@@ -9,7 +9,9 @@ import { usePathname } from "expo-router";
 import { usePlatform } from "./usePlatform";
 
 const STORAGE_KEY = "last-check-for-updates";
-const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const THREE_DAYS_MS = 3 * ONE_DAY_MS; 
+const ONE_WEEK_MS = 7 * ONE_DAY_MS;
 const IGNORED_PATHS = ["/", "/welcome", "/splash", "/settings"];
 
 export function useVersionsUpdates() {
@@ -108,7 +110,7 @@ export function useVersionsUpdates() {
         if (lastCheck) {
           const now = Date.now();
           const last = lastCheck.getTime();
-          if (now - last > ONE_WEEK_MS) {
+          if (now - last > THREE_DAYS_MS) {
             await checkForUpdate();
             return;
           }

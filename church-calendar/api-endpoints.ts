@@ -20,4 +20,4 @@ export const MANAGE_GROUPS_URL = `${BASE_URL}/api/church-groups/manage/`
 export const USER_NOTIFICATION_TOKEN_URL = `${BASE_URL}/api/notification/user-devices-notification-info/`
 export const NOTIFY_ABOUT_EVENT_URL = `${BASE_URL}/api/notification/send-notification-about-event/`
 
-export const VERSIONS_FILE_URL = "https://laresurreccioncalendar.pythonanywhere.com/static/versions.json"
+export const VERSIONS_FILE_URL = `${BASE_URL}/static/versions.json`
