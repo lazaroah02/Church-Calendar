@@ -187,7 +187,8 @@ const signInStyles = (theme: AppTheme) =>({
     marginBottom: 10,
   },
   loginButton: {
-    width: 350,
+    minWidth: 200,
+    width: "100%",
     height: 55,
     backgroundColor: "#fff",
     display: "flex",

@@ -1,4 +1,4 @@
-import { View, Pressable, TouchableOpacity } from "react-native";
+import { View, Pressable, TouchableOpacity, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import { navigate } from "expo-router/build/global-state/routing";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
@@ -11,51 +11,68 @@ import { useMyNavigationBar } from "@/hooks/useMyNavigationBar";
 
 export default function Welcome() {
   const styles = useThemeStyles(welcomeStyles);
-  useMyNavigationBar({backgroundColor:"rgba(236, 161, 0, 1)", buttonsStyle:"dark"})
+  useMyNavigationBar({
+    backgroundColor: "rgba(236, 161, 0, 1)",
+    buttonsStyle: "dark",
+  });
   const { updateGuestStatus } = useSession();
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View
-        style={{ height: 350, justifyContent: "center", alignItems: "center" }}
-      >
-        <Image
-          source={require("@/assets/images/Logo.png")}
-          style={styles.logo}
-        />
-        <MyCustomText style={styles.title}>Calendario La Resurrección</MyCustomText>
-      </View>
-      <View style={styles.container}>
-        <MyCustomText style={styles.containerTitle}>Bienvenido</MyCustomText>
-        <MyCustomText style={styles.containerwelcomeMessage}>
-          Aquí encontrarás todos los eventos disponibles de forma fácil y
-          rápida.
-        </MyCustomText>
-        <Pressable
-          style={styles.loginButton}
-          onPress={() => {
-            navigate("/sign-in");
+      <ScrollView style={{flex: 1, flexDirection:"column"}}>
+        <View
+          style={{
+            height: 350,
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <MyCustomText style={styles.logginButtonText}>Iniciar Sesión</MyCustomText>
-        </Pressable>
-        <Pressable
-          style={styles.registerButton}
-          onPress={() => {
-            navigate("/register");
-          }}
-        >
-          <MyCustomText style={styles.registerButtonText}>Crear Cuenta</MyCustomText>
-        </Pressable>
-        <TouchableOpacity
-          onPress={() => {
-            updateGuestStatus(true);
-            router.replace("/(tabs)/calendar");
-          }}
-          style={styles.continueLikeGuest}
-        >
-          <MyCustomText style={styles.continueLikeGuestText}>Continuar como invitado</MyCustomText>
-        </TouchableOpacity>
-      </View>
+          <Image
+            source={require("@/assets/images/Logo.png")}
+            style={styles.logo}
+          />
+          <MyCustomText style={styles.title}>
+            Calendario La Resurrección
+          </MyCustomText>
+        </View>
+        <View style={styles.container}>
+          <MyCustomText style={styles.containerTitle}>Bienvenido</MyCustomText>
+          <MyCustomText style={styles.containerwelcomeMessage}>
+            Aquí encontrarás todos los eventos disponibles de forma fácil y
+            rápida.
+          </MyCustomText>
+          <Pressable
+            style={styles.loginButton}
+            onPress={() => {
+              navigate("/sign-in");
+            }}
+          >
+            <MyCustomText style={styles.logginButtonText}>
+              Iniciar Sesión
+            </MyCustomText>
+          </Pressable>
+          <Pressable
+            style={styles.registerButton}
+            onPress={() => {
+              navigate("/register");
+            }}
+          >
+            <MyCustomText style={styles.registerButtonText}>
+              Crear Cuenta
+            </MyCustomText>
+          </Pressable>
+          <TouchableOpacity
+            onPress={() => {
+              updateGuestStatus(true);
+              router.replace("/(tabs)/calendar");
+            }}
+            style={styles.continueLikeGuest}
+          >
+            <MyCustomText style={styles.continueLikeGuestText}>
+              Continuar como invitado
+            </MyCustomText>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -75,6 +92,7 @@ const welcomeStyles = (theme: AppTheme) => ({
   },
   container: {
     flex: 1,
+    minHeight:"60%",
     display: "flex",
     gap: 10,
     alignItems: "center",
@@ -107,7 +125,8 @@ const welcomeStyles = (theme: AppTheme) => ({
     marginBottom: 10,
   },
   loginButton: {
-    width: 350,
+    minWidth: 200,
+    width: "100%",
     height: 55,
     backgroundColor: "#fff",
     display: "flex",
@@ -128,7 +147,8 @@ const welcomeStyles = (theme: AppTheme) => ({
     fontFamily: "InterVariable",
   },
   registerButton: {
-    width: 350,
+    minWidth: 200,
+    width: "100%",
     height: 55,
     backgroundColor: "#AD5A00",
     display: "flex",
@@ -150,7 +170,7 @@ const welcomeStyles = (theme: AppTheme) => ({
   continueLikeGuest: {
     marginTop: 10,
   },
-  continueLikeGuestText:{
+  continueLikeGuestText: {
     fontSize: theme.fontSizes.sm,
     fontWeight: 500,
     fontFamily: "LexendBold",
@@ -160,6 +180,6 @@ const welcomeStyles = (theme: AppTheme) => ({
     textShadowRadius: 4,
     color: "#fff",
     opacity: 0.7,
-    padding:1
-  }
+    padding: 1,
+  },
 });

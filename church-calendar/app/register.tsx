@@ -1,11 +1,6 @@
 import { router } from "expo-router";
-import {
-  View,
-  Pressable,
-  ActivityIndicator,
-} from "react-native";
-import DateTimePicker, {
-} from "@react-native-community/datetimepicker";
+import { View, Pressable, ActivityIndicator } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { useSession } from "@/hooks/auth/useSession";
 import { Label } from "@react-navigation/elements";
@@ -34,7 +29,7 @@ type RegisterErrors = {
 export default function Register() {
   const { register } = useSession();
   const styles = useThemeStyles(registerStyles);
-  useMyNavigationBar({buttonsStyle:"dark", backgroundColor:"#EAEAEA"})
+  useMyNavigationBar({ buttonsStyle: "dark", backgroundColor: "#EAEAEA" });
 
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -102,12 +97,17 @@ export default function Register() {
 
           {/*Register Info*/}
           <View style={styles.formSection}>
-            <Label allowFontScaling={false} style={[styles.label, styles.formSectionTitle]}>
+            <Label
+              allowFontScaling={false}
+              style={[styles.label, styles.formSectionTitle]}
+            >
               Información de Registro
             </Label>
 
             <View>
-              <Label allowFontScaling={false} style={styles.label}>Correo</Label>
+              <Label allowFontScaling={false} style={styles.label}>
+                Correo
+              </Label>
               <CustomInput
                 inputStyle={styles.input}
                 value={formValues.email}
@@ -118,7 +118,9 @@ export default function Register() {
             </View>
 
             <View>
-              <Label allowFontScaling={false} style={styles.label}>Contraseña</Label>
+              <Label allowFontScaling={false} style={styles.label}>
+                Contraseña
+              </Label>
               <CustomInput
                 isPassword={true}
                 inputStyle={styles.input}
@@ -129,7 +131,9 @@ export default function Register() {
             </View>
 
             <View>
-              <Label allowFontScaling={false} style={styles.label}>Repetir Contraseña</Label>
+              <Label allowFontScaling={false} style={styles.label}>
+                Repetir Contraseña
+              </Label>
               <CustomInput
                 isPassword={true}
                 inputStyle={styles.input}
@@ -142,12 +146,17 @@ export default function Register() {
 
           {/*Contact Info*/}
           <View style={styles.formSection}>
-            <Label allowFontScaling={false} style={[styles.label, styles.formSectionTitle]}>
+            <Label
+              allowFontScaling={false}
+              style={[styles.label, styles.formSectionTitle]}
+            >
               Información de Contacto
             </Label>
 
             <View>
-              <Label allowFontScaling={false} style={styles.label}>Nombre Completo</Label>
+              <Label allowFontScaling={false} style={styles.label}>
+                Nombre Completo
+              </Label>
               <CustomInput
                 error={errors?.full_name}
                 inputStyle={styles.input}
@@ -158,7 +167,9 @@ export default function Register() {
             </View>
 
             <View>
-              <Label allowFontScaling={false} style={styles.label}>Número de Teléfono</Label>
+              <Label allowFontScaling={false} style={styles.label}>
+                Número de Teléfono
+              </Label>
               <CustomInput
                 inputStyle={styles.input}
                 error={errors?.phone_number}
@@ -169,7 +180,8 @@ export default function Register() {
             </View>
 
             <View>
-              <Label allowFontScaling={false}
+              <Label
+                allowFontScaling={false}
                 style={styles.label}
                 onPress={() => setShowDatePicker(true)}
               >
@@ -219,7 +231,10 @@ export default function Register() {
           </View>
 
           <View style={styles.formSection}>
-            <Label allowFontScaling={false} style={[styles.label, styles.formSectionTitle]}>
+            <Label
+              allowFontScaling={false}
+              style={[styles.label, styles.formSectionTitle]}
+            >
               Grupos a los que perteneces
             </Label>
             <ChurchGroupsPicker
@@ -234,16 +249,18 @@ export default function Register() {
               }
             />
           </View>
+
+          <View style={[styles.formSection, {alignItems:"center"}]}>
+            <Pressable style={styles.registerButton} onPress={handleSubmit}>
+              <MyCustomText style={styles.registerButtonText}>
+                {!loading ? "Crear Cuenta" : "Creando cuenta"}
+              </MyCustomText>
+              {loading && <ActivityIndicator size="small" color="#fff" />}
+            </Pressable>
+          </View>
+
         </View>
       </KeyboardAwareScrollView>
-      <View style={{ flexDirection: "row", gap: 10, justifyContent: "center" }}>
-        <Pressable style={styles.registerButton} onPress={handleSubmit}>
-          <MyCustomText style={styles.registerButtonText}>
-            {!loading ? "Crear Cuenta" : "Creando cuenta"}
-          </MyCustomText>
-          {loading && <ActivityIndicator size="small" color="#fff" />}
-        </Pressable>
-      </View>
     </SafeAreaView>
   );
 }
@@ -299,7 +316,8 @@ const registerStyles = (theme: AppTheme) => ({
     opacity: 0.8,
   },
   registerButton: {
-    width: 330,
+    minWidth: 200,
+    width: "100%",
     height: 55,
     backgroundColor: "#AD5A00",
     flexDirection: "row",

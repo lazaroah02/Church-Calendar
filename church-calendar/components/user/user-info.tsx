@@ -203,6 +203,7 @@ const userInfoStyles = (theme: AppTheme) => {
     },
     groupsContainer: {
       flexDirection: "row",
+      flexWrap: "wrap",
       gap: 10,
       marginBottom: 20,
     },
