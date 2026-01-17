@@ -70,7 +70,7 @@ export function updateGroup({
         error instanceof TypeError &&
         error.message === "Network request failed"
       ) {
-        error.general = "Error en la operación. Revisa tu conexión de internet."
+        throw {general: "Error en la operación. Revisa tu conexión de internet."}
       }
       throw error
     });
