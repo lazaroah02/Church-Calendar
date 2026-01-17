@@ -21,6 +21,10 @@ export default function Root() {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    if (!persister) {
+      setHydrated(true);
+      return;
+    }
     persister.restoreClient(queryClient).finally(() => setHydrated(true));
   }, []);
 

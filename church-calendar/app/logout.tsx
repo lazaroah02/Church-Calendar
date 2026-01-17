@@ -2,6 +2,7 @@ import { MyCustomText } from "@/components/MyCustomText";
 import { useCalendarEventsContext } from "@/contexts/calendar-context/calendarContext";
 import { useNotifications } from "@/contexts/notifications-context";
 import { useSession } from "@/hooks/auth/useSession";
+import { usePlatform } from "@/hooks/usePlatform";
 import { useThemeStyles } from "@/hooks/useThemedStyles";
 import { getMonthIntervalFromDate } from "@/lib/calendar/calendar-utils";
 import { persister, queryClient } from "@/lib/query-client";
@@ -21,6 +22,7 @@ export default function Logout() {
   const { session, updateGuestStatus, updateSession } = useSession();
   const {FCMPushToken} = useNotifications()
   const styles = useThemeStyles(logoutStyles)
+  const {isWeb} = usePlatform()
 
   const handleSignOut = useCallback(async () => {
     // first unsubscribe user from notifications
@@ -54,7 +56,7 @@ export default function Logout() {
       });
 
     //remove persisted client data
-    await persister.removeClient();
+    if(!isWeb) await persister.removeClient();
 
     setLoading(false);
   }, [
@@ -65,7 +67,8 @@ export default function Logout() {
     today,
     todaysDate,
     setInterval,
-    FCMPushToken
+    FCMPushToken,
+    isWeb
   ]);
 
   useEffect(() => {
