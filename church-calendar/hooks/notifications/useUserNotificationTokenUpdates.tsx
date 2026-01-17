@@ -6,14 +6,16 @@ import { useNetworkStatus } from "../useNetworkStatus";
 import { DevicePushNotificationInfo } from "@/types/notification";
 import { Platform } from "react-native";
 import Constants from "expo-constants";
+import { usePlatform } from "../usePlatform";
 
 export function useUserDeviceNotificationInfoUpdates() {
   const { session, updateSession } = useSession();
   const { FCMPushToken } = useNotifications();
   const isConnected = useNetworkStatus()
+  const {isWeb} = usePlatform()
 
   useEffect(() => {
-    if (!session || !FCMPushToken || !isConnected) return;
+    if (!session || !FCMPushToken || !isConnected || isWeb) return;
 
     const currentDeviceTimezone =
       Intl.DateTimeFormat().resolvedOptions().timeZone;
