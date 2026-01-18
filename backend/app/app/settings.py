@@ -233,7 +233,16 @@ AUTHENTICATION_BACKENDS = (
 
 
 # cors
-CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=False, cast=bool)
+CORS_ALLOW_ALL_ORIGINS = config(
+    'CORS_ALLOW_ALL_ORIGINS',
+    default=False,
+    cast=bool
+    )
+CORS_ALLOWED_ORIGINS = config(
+    "CORS_ALLOWED_ORIGINS",
+    default="",
+    cast=Csv()
+)
 CORS_ALLOW_HEADERS = config(
     "CORS_ALLOW_HEADERS",
     default="",
